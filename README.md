@@ -21,3 +21,6 @@ thanks for the consideration to participate in this volume. What I think that ca
 
 ```
 
+chapter handbook equal pay
+
+* Branched - jciturras
