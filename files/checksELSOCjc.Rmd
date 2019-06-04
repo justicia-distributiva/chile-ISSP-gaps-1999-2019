@@ -1,0 +1,394 @@
+# Percepción y justificación de desigualdad salariales/personales(status) ELSOC 2016-2017
+
+Juan Carlos Castillo, 27 Marzo 2018
+
+## 1. Directory, encoding & libraries ####
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+knitr::opts_knit$set(root.dir = "~/Dropbox/proyectos y papers compartidos/Meritocracy and preferences/ELSOC2018meritocracia") 
+```
+
+
+``` {r}
+Sys.setlocale("LC_ALL", 'en_US.UTF-8') # encoding
+
+pacman::p_load(dplyr,  # data management
+                 haven,   # read external data (ej: read_stata)
+                 tidyverse,
+                 tidyr,
+                 corrplot,
+                 ggplot2,
+                 Hmisc, # rcorr
+                 descr,
+                 stargazer,
+               sjPlot)
+```
+
+
+## 2. Data objects
+
+```{r}
+  setwd("~/Dropbox/proyectos y papers compartidos/Meritocracy and preferences/ELSOC2018meritocracia")
+  elsocw1 <- read_stata("data/COESW1_Stata14_V3.dta")
+  elsocw2 <- read_stata("data/Base_Lineal_COES2_corregida.dta")
+
+```
+
+## 3. Limpieza y merge variables de percepcion y justificación de desigualdad de salarios  ####
+  
+  (En ELSOC W1)
+    - d3_a: percibido gerente
+    - d3_b: percibido obrero
+    - d4_a: justo gerente
+    - d4_b: justo obrero
+  
+```{r, eval=FALSE}
+  names(elsocw1)
+  names(elsocw2)
+```
+  
+* cambian las variable labels en W2, terminan en _esp)  
+  
+Subsets para cada año
+
+```{r, results='asis'}
+  salarw1=elsocw1 %>% select(id,d3_a,d3_b,d4_a,d4_b)
+  salarw2=elsocw2 %>% select(idencuesta,d3_a_esp,d3_b_esp,d4_a_esp,d4_b_esp)
+  
+  stargazer(as.data.frame(salarw1[2:5]), type = "html",digits=0, median = TRUE,
+              mean.sd = FALSE)
+  
+  stargazer(as.data.frame(salarw2[2:5]), type = "html",digits=0, median = TRUE,
+              mean.sd = FALSE)
+```
+
+Rename sustantivo y homologado para merge
+
+```{r}
+  salarw1 <- rename(salarw1, 
+                    perge=d3_a,
+                    perob=d3_b,
+                    jusge=d4_a,
+                    jusob=d4_b)
+  
+  salarw2 <- rename(salarw2, 
+                    id=idencuesta,
+                    perge=d3_a_esp,
+                    perob=d3_b_esp,
+                    jusge=d4_a_esp,
+                    jusob=d4_b_esp)
+```
+
+
+Add wave variable
+
+```{r}
+  salarw1$year=2016
+  salarw2$year=2017
+  salarw1$wave=1
+  salarw2$wave=1 # para luego filtrar por casos con ambas olas
+  names(salarw1)
+  names(salarw2)
+```
+
+Append datasets long (para limpieza unificada)
+
+```{r}
+  elsocsal=rbind(salarw1,salarw2)
+  dim(elsocsal)
+  elsocsal %>% summarise_all(funs(sum(is.na(.))))
+```
+
+Descriptivos
+
+```{r}
+plot
+  freq(elsocsal$perge)
+  freq(elsocsal$perob)
+  freq(elsocsal$jusge)
+  freq(elsocsal$jusob) 
+```
+
+- Sacar NAs, valores de menos de 50.000 y más de cien millones 
+```{r}
+  elsocsal[2:5][elsocsal[2:5] ==88888] <- NA #missing encuesta
+  elsocsal[2:5][elsocsal[2:5] <50000] <- NA
+  elsocsal[2:5][elsocsal[2:5] >1000000000] <- NA
+  elsocsal %>% group_by(year) %>%   summarise_all(funs(sum(is.na(.))))
+```
+
+* Se puede observar que hay muchos más valores extremos en 2017 que eb 2016 
+
+- Pasar a Wide
+```{r}
+    elsocsalw= elsocsal %>% 
+      gather(variable, value, -(c(id,year))) %>%
+      unite(temp, variable, year) %>% # puede ser year primero y queda al principio de la variable
+      spread(temp,value)
+  
+  names(elsocsalw)
+  dim(elsocsalw)
+  
+  elsocsalw %>% summarise_all(funs(sum(!is.na(.))))
+    
+    names(elsocsalw)
+    summary(elsocsalw)
+```
+
+- Datos casos ambas olas (w=waves)
+
+```{r}
+dim(elsocsalw)
+elsocsalwk = elsocsalw %>% filter(wave_2017==1) 
+dim(elsocsalwk)
+```
+## Descriptivos
+ 
+Tablas 
+```{r,results='asis'}
+  stargazer(as.data.frame(elsocsal[2:5]), 
+            type = 'html', digits=0, median = TRUE,
+            mean.sd = FALSE, min.max = FALSE, title = "Medianas salarios percibido y justo agregados (2 olas" )
+  
+  stargazer(as.data.frame(elsocsalwk[2:9]), 
+            type = 'html', digits=0, median = TRUE,
+            mean.sd = FALSE, min.max = FALSE, title = "Medianas de salarios por año")
+```
+ 
+Correlaciones
+    
+```{r}
+   # Correlaciones obrero/gerente percibido/justo por año
+
+  sjt.corr(elsocsalwk[2:9], triangle = "lower",na.deletion = c("pairwise")) 
+
+    cormat1=cor(elsocsalwk[2:9], use ="na.or.complete", method = "pearson")
+    cormat1
+    corrplot.mixed(cormat1)
+    
+  # Log
+    cor(log(elsocsalwk$perob_2016),log(elsocsalwk$perob_2017), use ="na.or.complete", method = "pearson")
+```
+
+
+... Aquí hay un problema, ver por ejemplo matriz de correlaciones de otro estudio panel 2 olas del FONDECYT "Justicia distributiva y participación ciudadana" (2013-2015, PI Juan Carlos Castillo), donde:
+
+- p7b=percibido gerente
+- p7d=percibido obrero
+- p9b=justo gerente
+- p9d=justo obrero
+
+<img src="/media/ntfs/Dropbox/proyectos y papers compartidos/Meritocracy and preferences/ELSOC2018meritocracia/corrplotFondecyt.png" />
+
+Gran diferencia con ELSOC, donde la correlación entreolas del salario percibido obrero es 0.018, mientras en la encuesta FONDECYT es de 0.47. En ambos casos los filtros de casos extremos aplicados son los mismos (<50000 y >1000000000 a missing).
+
+Opción: eliminar más casos extremos ELSOC específicamente en relación a las diferencias en las variables de percepción obrero. Para ello, se genera una variable con la diferencia (absoluta) entre olas 
+
+```{r}
+  elsocsalwk$difperob=
+    abs(elsocsalwk$perob_2017-elsocsalwk$perob_2016)
+  summary(elsocsalwk$difperob)
+
+  elsocsalwk %>% 
+    select(id,perob_2016,perob_2017,difperob) %>%
+    filter(difperob>200000) 
+```
+
+Existen 183 casos donde la diferencia en la percepción del salario del obrero es mayor a 200.000. Ahora, con este filtro, ver si mejora la correlación:
+
+```{r}
+  elsocsalwkf = elsocsalwk %>% filter(difperob<200000) 
+
+  cormat_perob_f=cor(elsocsalwkf[2:9], use ="na.or.complete", method = "pearson")
+    sjt.corr(elsocsalwkf[2:9], triangle = "lower",na.deletion = c("pairwise")) 
+  cormat_perob_f
+  corrplot.mixed(cormat_perob_f) 
+```
+
+Lo que sucede es que eliminando los 183 casos se puede efectivamente subir la correlación entre olas de percepción salario gerente a 0.42. Ahora bien, estos 183 casos lamentablemente son específicos a esta correlación particular, no se refleja ningún cambio en las otras correlaciones. Por ejemplo, en la encuesta FONDECYT la correlación entre las variables de salario justo de obrero es de 0.88, y aquí sigue siendo extremadamente baja (-0.004)!. Se puede intentar también el ejercicio de eliminar los casos inconsistentes en esta correlación:
+
+```{r}
+  elsocsalwk$difjusob=abs(elsocsalwk$jusob_2017-elsocsalwk$jusob_2016)
+  
+  summary(elsocsalwk$difjusob)
+  
+  elsocsalwk %>% select(id,jusob_2016,jusob_2017,difjusob) %>%  filter(difjusob>500000)
+```
+
+Aquí hay 196 casos de alta inconsistencia ... filtrando la matriz completa por esto:
+
+```{r}
+  elsocsalwkf2 = elsocsalwk %>% filter(difjusob<500000) 
+```
+
+Y las correlaciones:
+
+```{r}
+    sjt.corr(elsocsalwkf2[2:9], triangle = "lower",na.deletion = c("pairwise"))
+```
+
+Con esto sube considerablemente a 0.5, aunque todavía lejos de la encuesta FONDECYT de referencia, que es casi el doble (0.88)
+  
+Ahora, cuantos casos se pierden al filtrar por ambos pares de correlación?
+
+```{r}
+elsocsalwk %>% select(difjusob,difperob) %>%  filter(difperob>200000 | difjusob>500000)
+```
+Se pierden 339 casos ... sumando los que se perdían anteriormente por separad (196 + 183= 379) nos muestra que la mayor parte de los casos inconsistentes no son comunes, sino que específicos a cada par de variables. Por lo tanto, requeriría una estrategia de ir eliminando casos por cada par de variables que se incluya, haciendo poco viables los análisis que vayan más allá de lo bivariado.
+
+# Estatus subjetivo 
+
+Veamos ahora si lo que sucede con las variables de brechas se aplica también a otras variables, ya que a lo mejor es algo específico a la digitación de las respuestas de salarios.
+
+- d1_01: estatus subjetivo (ssta) 0-10
+- d1_02: ssta familia origen 0-10
+- d1_03: ssta hijos 0-10
+
+```{r}
+  sstatw1=elsocw1 %>% select(id,d1_01,d1_02,d1_03)
+  sstatw2=elsocw2 %>% select(idencuesta,d1_01,d1_02,d1_03)
+```
+
+Rename sustantivo y homologado para merge
+
+```{r}
+  sstatw1 <- rename(sstatw1, 
+                    sstat=d1_01,
+                    fssta=d1_02,
+                    hssta=d1_03)
+  
+  sstatw2 <- rename(sstatw2,
+                    id=idencuesta,
+                    sstat=d1_01,
+                    fssta=d1_02,
+                    hssta=d1_03)
+
+  # add wave variable
+  sstatw1$year=2016
+  sstatw2$year=2017
+  sstatw1$wave=1
+  sstatw2$wave=1 # para luego filtrar por casos con ambas olas
+  names(sstatw1)
+  names(sstatw2)  
+  
+```
+
+Append datasets long (para limpieza unificada)
+
+```{r}
+  elsocsstat=rbind(sstatw1,sstatw2)
+  dim(elsocsstat)
+  elsocsstat %>% summarise_all(funs(sum(is.na(.))))
+  summary(elsocsstat)
+  freq(elsocsstat$sstat)
+  freq(elsocsstat$fssta)
+  freq(elsocsstat$hssta)
+
+```
+
+
+Missings
+```{r}
+elsocsstat[2:4][elsocsstat[2:4] > 10] <- NA #missing encuesta
+
+summary(elsocsstat)
+
+elsocsstat %>% group_by(year) %>%   summarise_all(funs(sum(is.na(.))))
+
+```
+
+- Pasar a Wide
+```{r}
+    elsocsstatw= elsocsstat %>% 
+      gather(variable, value, -(c(id,year))) %>%
+      unite(temp, variable, year) %>% # puede ser year primero y queda al principio de la variable
+      spread(temp,value)
+  
+  names(elsocsstatw)
+  dim(elsocsstatw)
+  
+  elsocsstatw %>% summarise_all(funs(sum(!is.na(.))))
+    
+    names(elsocsstatw)
+    summary(elsocsstatw)
+
+```
+
+- Datos casos ambas olas (w=waves)
+
+```{r}
+dim(elsocsstatw)
+elsocsstatwk = elsocsstatw %>% filter(wave_2017==1) 
+dim(elsocsstatwk)
+elsocsstat %>% group_by(year) %>% select(Año=year,"Personal"=sstat,"Familiar"=fssta,"Hijos"= hssta) %>%   summarise_all(funs(mean(., na.rm = TRUE)))
+
+```
+
+- Correlaciones (sin sstatus hijos para comparar con FONDECYT)
+
+```{r}
+sjt.corr(elsocsstatwk[,c("sstat_2016","fssta_2016","sstat_2017","fssta_2017")], triangle = "lower",na.deletion = c("pairwise")) 
+
+```
+
+
+Contraste con Fondecyt:
+
+```{r}
+ load("fond_sstat.rda")
+
+
+sjt.corr(fond_sstat, triangle = "lower",na.deletion = c("pairwise"),var.labels = c("sstat_o1","fssta_o1","sstat_o2","fssta_o2"))
+```
+
+
+Nuevamente tenemos que las correlaciones con la encuesta de referencia (FONDECYT) son más del doble que ELSOC cuando se comparan las correlaciones ENTRE OLAS. Cuando se comparan dentro de una misma ola igual son menores, pero el contraste no es tan grande. 
+
+Propuestas:
+
+* revisar nuevamente ELSOC y asegurarse que las correlaciones/merge estén bien
+
+* considerar otra encuesta externa de referencia, de preferencia internacinoal con variables similares y también con otras variables (ej: confianza en instituciones)
+
+* revisar con Microdatos temas de folios, supervisión, etc.
+
+
+
+
+
+
+
+############################
+
+```{r eval=FALSE, echo=FALSE}
+
+... otros análisis (brechas)
+
+
+# Brechas justa y percibida por años
+elsocsalwk$pergap16= 
+  elsocsalwk$perge_2016/elsocsalwk$perob_2016 # percibida 2016
+elsocsalwk$jusgap16= 
+  elsocsalwk$jusge_2016/elsocsalwk$jusob_2016 # justa 2016
+elsocsalwk$pergap17= 
+  elsocsalwk$perge_2017/elsocsalwk$perob_2017 # percibida 2017
+elsocsalwk$jusgap17= 
+  elsocsalwk$jusge_2017/elsocsalwk$jusob_2017 # justa 2017          
+  # Descriptivos
+  names(elsocsalwk) 
+  
+
+  
+  stargazer(as.data.frame(elsocsalwk[10:13]), 
+            type = 'html', digits=0, median = TRUE,
+            mean.sd = FALSE, min.max = FALSE)
+
+  cormat2=cor(elsocsalwk[10:13], use="pairwise.complete.obs")
+  corrplot.mixed(cormat2)
+  
+  ggplot(elsocsalwk, 
+    aes(x=perob_2017, y=perob_2016)) + 
+    geom_point()
+
+```
