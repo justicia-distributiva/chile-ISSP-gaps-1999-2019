@@ -1,0 +1,14 @@
+---
+title: ''
+author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
+output: html_document
+---
+
+```{r}
+Sys.setlocale("LC_ALL", 'en_US.UTF-8') # encoding
+{
+  library(haven)
+  library(dplyr)
+}
+```
+
