@@ -81,7 +81,7 @@ salarios$n20t_obr_p <- ntile(x = salarios$salperobr,n = 20) # 20 grupos percepci
 salarios$n20t_ger_j <- ntile(x = salarios$saljusger,n = 20) # 20 grupos percepción de salario gerente
 salarios$n20t_obr_j <- ntile(x = salarios$saljusobr,n = 20) # 20 grupos percepción de salario obrero
 
-# Dolar observado en 2009 = Promedio agosto = $540,42
+# Dolar observado en 2009 = Promedio agosto = $540,42 
 
 dolar= 540.42
 
