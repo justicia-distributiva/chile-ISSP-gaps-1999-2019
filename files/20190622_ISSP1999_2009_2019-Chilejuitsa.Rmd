@@ -1,0 +1,269 @@
+---
+title: 'ISSP Chile 1999, 2009 & 2019 - Salary Gap & meritocracy'
+author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
+output: 
+html_document: 
+code_folding: show
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE,warning = FALSE,message = FALSE)
+rm(list=ls())
+```
+
+
+
+```{r }
+{
+  library(dplyr)
+  library(here)
+  library(sjlabelled)
+  library(sjPlot)
+  library(ggplot2)
+  library(knitr)
+  library(kableExtra)
+}
+```
+
+```{r data, include=FALSE,cache=TRUE}
+issp99<- read_stata(path = here("data","issp1999.dta"))
+issp09<- read_stata(path = here("data","issp2009.dta"))
+issp19<- read_stata(path = here("data","issp2019.dta"))
+
+
+sjPlot::view_df(issp09,max.len = 45)
+options(scipen=999)
+```
+
+```{r seleccionar Chile}
+cl99 <- issp99 %>% filter(v3==30)
+cl09 <- issp09 %>% filter(V4==152)
+cl19 <- issp19
+
+names(cl99) <- toupper(names(cl99))
+```
+
+# Brechas salarios percibida y justa
+
+```{r salario percibido y justo 1999}
+salarios99 <- cl99 %>% select(V3,
+                              V21,V16,    # Salario percibio obrero y gerente
+                              V31,V26)# Salario justo    obrero y gerente
+
+ 
+
+# M2_P2_PRESIDENTE cuanto gana GERENTE
+# M2_P2_OBRERO cuanto gana OBRERO
+
+# M2_P3_PRESIDENTE cuanto deberia ganar GERENTE
+# M2_P3_OBRERO cuanto deberia ganar OBRERO
+
+# table(salarios99$V21) #  99999999999
+# table(salarios99$V16) #  99999999998 99999999999
+# 
+# table(salarios99$V31) # 99999999998 99999999999 
+# table(salarios99$V26) # 99999999998 99999999999 
+
+
+salarios99$V21[salarios99$V21 %in% c(99999999998,99999999999)] <- NA
+salarios99$V16[salarios99$V16 %in% c(99999999998,99999999999)] <- NA
+salarios99$V31[salarios99$V31 %in% c(99999999998,99999999999)] <- NA
+salarios99$V26[salarios99$V26 %in% c(99999999998,99999999999)] <- NA
+
+salarios99$V3 <- as_character(salarios99$V3)
+
+#--- Nombres sustantivos para analisis
+salarios99 <- rename(salarios99,
+                   pais=V3,
+                   salperger=V16,
+                   salperobr=V21,
+                   saljusger=V26,
+                   saljusobr=V31)
+
+```
+
+
+```{r gap salario 1999}
+#---Brecha salarial percibida
+
+salarios99$gap_perc   <-  as.numeric(salarios99$salperger/salarios99$salperobr) # diferencia total
+salarios99$lngap_perc <-  as.numeric(log(salarios99$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios99$gap_just   <-  as.numeric(salarios99$saljusger/salarios99$saljusobr) # diferencia total
+salarios99$lngap_just <-  as.numeric(log(salarios99$gap_just))                # diferencia log
+```
+
+
+
+```{r salario percibido y justo 2009}
+salarios09 <- cl09 %>% select(V5,
+                              V23,V25, # Salario percibio obrero y gerente
+                              V28,V30) # Salario justo    obrero y gerente
+
+
+# table(salarios09$V23) # cuanto gana GERENTE
+# table(salarios09$V25) # cuanto gana OBRERO
+# table(salarios09$V28) # cuando deberia ganar GERENTE
+# table(salarios09$V30) # cuanto deberia ganar OBRERO
+
+
+salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
+salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
+salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
+salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
+
+
+
+salarios09$V5 <- as_character(salarios09$V5)
+
+#--- Nombres sustantivos para analisis
+salarios09 <- rename(salarios09,
+                   pais=V5,
+                   salperger=V23,
+                   salperobr=V25,
+                   saljusger=V28,
+                   saljusobr=V30)
+
+```
+
+```{r gap salario 2009}
+#---Brecha salarial percibida
+
+salarios09$gap_perc   <-  as.numeric(salarios09$salperger/salarios09$salperobr) # diferencia total
+salarios09$lngap_perc <-  as.numeric(log(salarios09$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios09$gap_just   <-  as.numeric(salarios09$saljusger/salarios09$saljusobr) # diferencia total
+salarios09$lngap_just <-  as.numeric(log(salarios09$gap_just))                # diferencia log
+```
+
+```{r salario percibido y justo 2019}
+salarios19 <- cl19 %>% select(M2_P2_PRESIDENTE,M2_P2_OBRERO,  # Salario percibio obrero y gerente
+                              M2_P3_PRESIDENTE,M2_P3_OBRERO) # Salario justo    obrero y gerente
+
+
+# table(salarios19$M2_P2_PRESIDENTE) # cuanto gana GERENTE
+# table(salarios19$M2_P2_OBRERO)     # cuanto gana OBRERO
+# table(salarios19$M2_P3_PRESIDENTE) # cuando deberia ganar GERENTE
+# table(salarios19$M2_P3_OBRERO )    # cuanto deberia ganar OBRERO
+
+
+# salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
+# salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
+
+#--- Nombres sustantivos para analisis
+salarios19 <- rename(salarios19,
+                   salperger=M2_P2_PRESIDENTE,
+                   salperobr=M2_P2_OBRERO,
+                   saljusger=M2_P3_PRESIDENTE,
+                   saljusobr=M2_P3_OBRERO)
+
+```
+
+```{r gap salario 2019}
+#---Brecha salarial percibida
+
+salarios19$gap_perc   <-  as.numeric(salarios19$salperger/salarios19$salperobr) # diferencia total
+salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) # diferencia total
+salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
+```
+
+
+
+```{r Tablas descriptivos}
+
+# Descriptivos gap salario percibido
+table1<- salarios99 %>% summarise(Year=1999,
+                                      M=mean(lngap_perc,na.rm = TRUE),
+                                      ME=median(lngap_perc,na.rm = TRUE),
+                                      SD=sd(lngap_perc,na.rm = TRUE),
+                                      Min=min(lngap_perc,na.rm = TRUE),
+                                      Max=max(lngap_perc,na.rm = TRUE))
+
+table2<- salarios09 %>% summarise(Year=2009,
+                                  M=mean(lngap_perc,na.rm = TRUE),
+                                ME=median(lngap_perc,na.rm = TRUE),
+                                SD=sd(lngap_perc,na.rm = TRUE),
+                                Min=min(lngap_perc,na.rm = TRUE),
+                                Max=max(lngap_perc,na.rm = TRUE))
+
+table3<- salarios19 %>% summarise(Year=2019,
+                                  M=mean(lngap_perc,na.rm = TRUE),
+                                ME=median(lngap_perc,na.rm = TRUE),
+                                SD=sd(lngap_perc,na.rm = TRUE),
+                                Min=min(lngap_perc,na.rm = TRUE),
+                                Max=max(lngap_perc,na.rm = TRUE))
+
+
+
+
+
+table4<- salarios99 %>% summarise(Year=1999,
+                                  M=mean(lngap_just,na.rm = TRUE), 
+                                     ME=median(lngap_just,na.rm = TRUE),
+                                     SD=sd(lngap_just,na.rm = TRUE),
+                                     Min=min(lngap_just,na.rm = TRUE),
+                                     Max=max(lngap_just,na.rm = TRUE))
+
+table5<- salarios09 %>% summarise(Year=2009,
+                                  M=mean(lngap_just,na.rm = TRUE), 
+                                     ME=median(lngap_just,na.rm = TRUE),
+                                     SD=sd(lngap_just,na.rm = TRUE),
+                                     Min=min(lngap_just,na.rm = TRUE),
+                                     Max=max(lngap_just,na.rm = TRUE))
+
+table6<- salarios19 %>% summarise(Year=2019,M=mean(lngap_just,na.rm = TRUE), 
+                                   ME=median(lngap_just,na.rm = TRUE),
+                                   SD=sd(lngap_just,na.rm = TRUE),
+                                   Min=min(lngap_just,na.rm = TRUE),
+                                   Max=max(lngap_just,na.rm = TRUE))
+
+
+
+kable(
+  x = rbind(table1, table2, table3),
+  caption = "Brecha ln(salario percibida) Chile, olas 1999, 2009 y 2019",
+  format = "html",
+  digits = 2) %>% kable_styling()
+
+kable(
+  x = rbind(table4, table5, table6),
+  caption = "Brecha ln(salario justo) Chile, olas 1999, 2009 y 2019",
+  format = "html",
+  digits = 2) %>% kable_styling()
+
+
+```
+
+
+# Meritocracia
+
+```{r}
+
+# issp2009r$effort=rec(issp2009r$effort, rec = "rev") # Reverse code, sjmisc 
+# merito <- issp09 %>% select(V5,V7:V20)
+# 
+# 1 Essential
+# 2 Very important
+# 3 Fairly important
+# 4 Not very important
+# 5 Not important at all
+# 8 Cant choose
+# 9	NA
+
+```
+
+
+

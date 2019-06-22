@@ -1,9 +1,10 @@
 ---
 title: 'ISSP 2009 - Salary Gap & meritocracy'
 author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
-output: html_document
+output: 
+html_document: 
+code_folding: show
 ---
-
 
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, cache = FALSE,warning = FALSE,message = FALSE)
@@ -14,7 +15,6 @@ rm(list=ls())
 
 ```{r }
 {
-  library(haven)
   library(dplyr)
   library(here)
   library(sjlabelled)
@@ -24,14 +24,6 @@ rm(list=ls())
   library(kableExtra)
 }
 ```
-
-```{r data, include=FALSE}
-issp09<- read_dta(file = here("data","ZA5400_v4-0-0.dta"))
-
-sjPlot::view_df(issp09,max.len = 45)
-options(scipen=999)
-```
-
 
 # Salarios
 
@@ -72,6 +64,13 @@ salarios$lngap_just <-  as.numeric(log(salarios$gap_just))                # dife
 ```
 
 
+
+
+
+<button href="#tabla1" data-toggle="collapse" style="text-align: right;">Tablas</button>
+
+<div id="tabla1" class="collapse">
+  
 ```{r Salarios 20tiles }
 
 salarios$n20t_ger_p <- ntile(x = salarios$salperger,n = 20) # 20 grupos percepción de salario gerente
@@ -116,6 +115,8 @@ kable(x = table_jobr,format = "html",digits = 0,caption = "Salario justo Gerente
 kable(x = table_jobr,format = "html",digits = 0,caption = "Salario justo Obrero")      %>% kable_styling(full_width = FALSE)
 ```
 
+</div>
+
 ```{r}
 # sjp.frq(var.cnt = salarios$lngap_perc,type = "histogram", show.mean = TRUE)
 # sjp.frq(var.cnt = salarios$lngap_just,type = "histogram", show.mean = TRUE)
@@ -129,10 +130,10 @@ table1<- salarios %>% group_by(Pais=as_factor(pais)) %>% summarise(M=mean(lngap_
                                                                       Max=max(lngap_perc,na.rm = TRUE))
 
 table2<- salarios %>% group_by(Pais=as_factor(pais)) %>% summarise(M=mean(lngap_just,na.rm = TRUE), 
-                                                                      ME=median(lngap_perc,na.rm = TRUE),
-                                                                      SD=sd(lngap_perc,na.rm = TRUE),
-                                                                      Min=min(lngap_perc,na.rm = TRUE),
-                                                                      Max=max(lngap_perc,na.rm = TRUE))
+                                                                      ME=median(lngap_just,na.rm = TRUE),
+                                                                      SD=sd(lngap_just,na.rm = TRUE),
+                                                                      Min=min(lngap_just,na.rm = TRUE),
+                                                                      Max=max(lngap_just,na.rm = TRUE))
 
 kable(x = table1,format = "html",digits = 2) %>% kable_styling()
 kable(x = table2,format = "html",digits = 2) %>% kable_styling()
