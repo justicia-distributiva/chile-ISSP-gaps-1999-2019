@@ -1,0 +1,403 @@
+---
+title: 'ISSP Chile 1999, 2009 & 2019 - Salary Gap & meritocracy'
+author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
+output: 
+html_document: 
+code_folding: show
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE,warning = FALSE,message = FALSE)
+rm(list=ls())
+```
+
+
+
+```{r }
+{
+  library(dplyr)
+  library(here)
+  library(sjlabelled)
+  library(sjPlot)
+  library(ggplot2)
+  library(knitr)
+  library(kableExtra)
+}
+```
+
+```{r data, include=FALSE,cache=TRUE}
+issp99<- read_stata(path = here("data","issp1999.dta"))
+issp09<- read_stata(path = here("data","issp2009.dta"))
+issp19<- read_stata(path = here("data","issp2019.dta"))
+
+
+sjPlot::view_df(issp09,max.len = 45)
+options(scipen=999)
+```
+
+```{r seleccionar Chile}
+cl99 <- issp99 %>% filter(v3==30)
+cl09 <- issp09 %>% filter(V4==152)
+cl19 <- issp19
+
+names(cl99) <- toupper(names(cl99))
+```
+
+# Brechas salarios percibida y justa
+
+```{r salario percibido y justo 1999}
+salarios99 <- cl99 %>% select(V3,
+                              V21,V16,    # Salario percibio obrero y gerente
+                              V31,V26)# Salario justo    obrero y gerente
+
+ 
+
+# M2_P2_PRESIDENTE cuanto gana GERENTE
+# M2_P2_OBRERO cuanto gana OBRERO
+
+# M2_P3_PRESIDENTE cuanto deberia ganar GERENTE
+# M2_P3_OBRERO cuanto deberia ganar OBRERO
+
+# table(salarios99$V21) #  99999999999
+# table(salarios99$V16) #  99999999998 99999999999
+# 
+# table(salarios99$V31) # 99999999998 99999999999 
+# table(salarios99$V26) # 99999999998 99999999999 
+
+
+salarios99$V21[salarios99$V21 %in% c(99999999998,99999999999)] <- NA
+salarios99$V16[salarios99$V16 %in% c(99999999998,99999999999)] <- NA
+salarios99$V31[salarios99$V31 %in% c(99999999998,99999999999)] <- NA
+salarios99$V26[salarios99$V26 %in% c(99999999998,99999999999)] <- NA
+
+salarios99$V3 <- as_character(salarios99$V3)
+
+#--- Nombres sustantivos para analisis
+salarios99 <- rename(salarios99,
+                   pais=V3,
+                   salperger=V16,
+                   salperobr=V21,
+                   saljusger=V26,
+                   saljusobr=V31)
+
+```
+
+
+```{r gap salario 1999}
+#---Brecha salarial percibida
+
+salarios99$gap_perc   <-  as.numeric(salarios99$salperger/salarios99$salperobr) # diferencia total
+salarios99$lngap_perc <-  as.numeric(log(salarios99$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios99$gap_just   <-  as.numeric(salarios99$saljusger/salarios99$saljusobr) # diferencia total
+salarios99$lngap_just <-  as.numeric(log(salarios99$gap_just))                # diferencia log
+```
+
+
+
+```{r salario percibido y justo 2009}
+salarios09 <- cl09 %>% select(V5,
+                              V23,V25, # Salario percibio obrero y gerente
+                              V28,V30) # Salario justo    obrero y gerente
+
+
+# table(salarios09$V23) # cuanto gana GERENTE
+# table(salarios09$V25) # cuanto gana OBRERO
+# table(salarios09$V28) # cuando deberia ganar GERENTE
+# table(salarios09$V30) # cuanto deberia ganar OBRERO
+
+
+salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
+salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
+salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
+salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
+
+
+
+salarios09$V5 <- as_character(salarios09$V5)
+
+#--- Nombres sustantivos para analisis
+salarios09 <- rename(salarios09,
+                   pais=V5,
+                   salperger=V23,
+                   salperobr=V25,
+                   saljusger=V28,
+                   saljusobr=V30)
+
+```
+
+```{r gap salario 2009}
+#---Brecha salarial percibida
+
+salarios09$gap_perc   <-  as.numeric(salarios09$salperger/salarios09$salperobr) # diferencia total
+salarios09$lngap_perc <-  as.numeric(log(salarios09$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios09$gap_just   <-  as.numeric(salarios09$saljusger/salarios09$saljusobr) # diferencia total
+salarios09$lngap_just <-  as.numeric(log(salarios09$gap_just))                # diferencia log
+```
+
+```{r salario percibido y justo 2019}
+salarios19 <- cl19 %>% select(M2_P2_PRESIDENTE,M2_P2_OBRERO,  # Salario percibio obrero y gerente
+                              M2_P3_PRESIDENTE,M2_P3_OBRERO) # Salario justo    obrero y gerente
+
+
+# table(salarios19$M2_P2_PRESIDENTE) # cuanto gana GERENTE
+# table(salarios19$M2_P2_OBRERO)     # cuanto gana OBRERO
+# table(salarios19$M2_P3_PRESIDENTE) # cuando deberia ganar GERENTE
+# table(salarios19$M2_P3_OBRERO )    # cuanto deberia ganar OBRERO
+
+
+# salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
+# salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
+
+#--- Nombres sustantivos para analisis
+salarios19 <- rename(salarios19,
+                   salperger=M2_P2_PRESIDENTE,
+                   salperobr=M2_P2_OBRERO,
+                   saljusger=M2_P3_PRESIDENTE,
+                   saljusobr=M2_P3_OBRERO)
+
+```
+
+```{r gap salario 2019}
+#---Brecha salarial percibida
+
+salarios19$gap_perc   <-  as.numeric(salarios19$salperger/salarios19$salperobr) # diferencia total
+salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) # diferencia total
+salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
+```
+
+```{r Tablas descriptivos}
+
+# Descriptivos gap salario percibido
+table1<- salarios99 %>% summarise(Year=1999,
+                                      M=mean(lngap_perc,na.rm = TRUE),
+                                      ME=median(lngap_perc,na.rm = TRUE),
+                                      SD=sd(lngap_perc,na.rm = TRUE),
+                                      Min=min(lngap_perc,na.rm = TRUE),
+                                      Max=max(lngap_perc,na.rm = TRUE))
+
+table2<- salarios09 %>% summarise(Year=2009,
+                                  M=mean(lngap_perc,na.rm = TRUE),
+                                ME=median(lngap_perc,na.rm = TRUE),
+                                SD=sd(lngap_perc,na.rm = TRUE),
+                                Min=min(lngap_perc,na.rm = TRUE),
+                                Max=max(lngap_perc,na.rm = TRUE))
+
+table3<- salarios19 %>% summarise(Year=2019,
+                                  M=mean(lngap_perc,na.rm = TRUE),
+                                ME=median(lngap_perc,na.rm = TRUE),
+                                SD=sd(lngap_perc,na.rm = TRUE),
+                                Min=min(lngap_perc,na.rm = TRUE),
+                                Max=max(lngap_perc,na.rm = TRUE))
+
+
+
+
+
+table4<- salarios99 %>% summarise(Year=1999,
+                                  M=mean(lngap_just,na.rm = TRUE), 
+                                     ME=median(lngap_just,na.rm = TRUE),
+                                     SD=sd(lngap_just,na.rm = TRUE),
+                                     Min=min(lngap_just,na.rm = TRUE),
+                                     Max=max(lngap_just,na.rm = TRUE))
+
+table5<- salarios09 %>% summarise(Year=2009,
+                                  M=mean(lngap_just,na.rm = TRUE), 
+                                     ME=median(lngap_just,na.rm = TRUE),
+                                     SD=sd(lngap_just,na.rm = TRUE),
+                                     Min=min(lngap_just,na.rm = TRUE),
+                                     Max=max(lngap_just,na.rm = TRUE))
+
+table6<- salarios19 %>% summarise(Year=2019,M=mean(lngap_just,na.rm = TRUE), 
+                                   ME=median(lngap_just,na.rm = TRUE),
+                                   SD=sd(lngap_just,na.rm = TRUE),
+                                   Min=min(lngap_just,na.rm = TRUE),
+                                   Max=max(lngap_just,na.rm = TRUE))
+
+
+
+kable(
+  x = rbind(table1, table2, table3),
+  caption = "Brecha ln(salario percibida) Chile, olas 1999, 2009 y 2019",
+  format = "html",
+  digits = 2) %>% kable_styling()
+
+kable(
+  x = rbind(table4, table5, table6),
+  caption = "Brecha ln(salario justo) Chile, olas 1999, 2009 y 2019",
+  format = "html",
+  digits = 2) %>% kable_styling()
+
+```
+
+
+
+```{r}
+ggplot() + 
+  geom_density(data = salarios99,aes(x = lngap_just,fill="1999")) + 
+  geom_density(data = salarios09,aes(x = lngap_just,fill="2009")) +
+  geom_density(data = salarios19,aes(x = lngap_just,fill="2019")) +
+  geom_vline(xintercept = median(salarios99$lngap_just,na.rm = TRUE), linetype="dashed",color = "black", size=1.5)+
+  geom_vline(xintercept = median(salarios09$lngap_just,na.rm = TRUE), linetype="dotted",color = "navyblue", size=1.5)+
+  geom_vline(xintercept = median(salarios19$lngap_just,na.rm = TRUE), linetype="dotted",color = "darkgreen", size=1.5)+
+  xlab(label = "Salario justo Ln(Gerente/Obrero)")+
+  theme_classic()
+```
+
+
+# Meritocracia
+
+
+## 1999
+
+### Percepción 
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- v4: Importancia para surgir: provenir familia rica     
+
+- V5: Importancia para surgir: Conocer personas adecuadas
+
+
+**(1) Muy de acuerdo - Muy en desacuerdo (5)** (8 no sabe, 9 no responde)
+
+- v6: Recompensas: En Chile las personas son remuneradas por sus esfuerzos 
+
+- v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades
+
+- v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. 
+
+### Preferencia
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo
+
+- v50:Importancia para pagar: numero de años dedicados a educación y capacitación
+
+- v51:Importancia para pagar: si el trabajo requiere que se supervise a otras personas
+
+- v52:Importancia para pagar: Lo que se necesita para mantener a una familia
+
+- v53:Importancia para pagar: Que una persona tenga hijos que mantener
+
+- v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo
+
+- v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo
+
+## 2009
+
+### Percepción 
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- V6 : Importancia para surgir: provenir de familia rica
+
+- V7 : Importancia para surgir: tener padres con buen nivel de educación
+
+- V8 : Importancia para surgir: que UD tenga un buen nivel de educación 
+
+- V9 : Importancia para surgir: Tener ambición
+
+- V10: Importancia para surgir: trabajo duro 
+
+- V11: Importancia para surgir: conocer a las personas adecuadas 
+
+- V12: Importancia para surgir: tener contactos políticos 
+
+- V13: Importancia para surgir: pagar coimas 
+
+- V14: Importancia para surgir: la raza u origen étnico de las personas 
+
+- V15: Importancia para surgir: la religión que tengan las personas 
+
+- V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer
+
+
+### Preferencia
+
+- V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo
+
+- V48:Importancia para pagar: el numero de años dedicados a la educación y capacitación
+
+- V49:Importancia para pagar: lo que se necesita para mantener una familia
+
+- V50:Importancia para pagar: El que la persona tenga hijos que mantener
+
+- V51:Importancia para pagar: lo bien que él o ella realiza su tabajo
+
+- V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo
+
+
+## 2019
+
+### Percepción
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- M2_P1_1 : Para surgir en la vida:  Tener ambición   
+
+- M2_P1_2 : Para surgir en la vida:  Provenir de una familia rica    
+
+- M2_P1_3 : Para surgir en la vida:  Tener padres con buen nivel de educación    
+
+- M2_P1_4 : Para surgir en la vida:  Que UD tenga un buen nivel de educación   
+
+- M2_P1_5 : Para surgir en la vida:  El Trabajo Duro    
+
+- M2_P1_6 : Para surgir en la vida:  Conocer a la personas adecuadas    
+
+- M2_P1_7 : Para surgir en la vida:  Tener contactos políticos    
+
+- M2_P1_8 : Para surgir en la vida:  Pagar coimas   
+
+- M2_P1_9 : Para surgir en la vida:  La raza u origen étnico de la persona 
+
+- M2_P1_10: Para surgir en la vida:  la religión de las personas   
+
+- M2_P1_11: Para surgir en la vida:  el sexo de las personas    
+
+### Preferencia
+
+- M2_P14_1: Importancia para ganar:  El nivel de responsabilidad que tiene su trabajo
+
+- M2_P14_2: Importancia para ganar:  El número de años dedicados a educación y capacitación
+
+- M2_P14_3: Importancia para ganar:  El que la persona tenga hijos que mantener
+
+- M2_P14_4: Importancia para ganar:  D.	Lo bien que él o ella realiza su trabajo
+
+
+
+
+```{r}
+
+# issp2009r$effort=rec(issp2009r$effort, rec = "rev") # Reverse code, sjmisc 
+# merito <- issp09 %>% select(V5,V7:V20)
+# 
+# 1 Essential
+# 2 Very important
+# 3 Fairly important
+# 4 Not very important
+# 5 Not important at all
+# 8 Cant choose
+# 9	NA
+
+```
+
+
+
