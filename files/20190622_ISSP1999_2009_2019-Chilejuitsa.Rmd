@@ -180,11 +180,7 @@ salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) 
 salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
 ```
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```{r Tablas descriptivos}
 
 # Descriptivos gap salario percibido
@@ -247,7 +243,6 @@ kable(
   format = "html",
   digits = 2) %>% kable_styling()
 
-<<<<<<< HEAD
 ```
 
 
@@ -262,9 +257,7 @@ ggplot() +
   geom_vline(xintercept = median(salarios19$lngap_just,na.rm = TRUE), linetype="dotted",color = "darkgreen", size=1.5)+
   xlab(label = "Salario justo Ln(Gerente/Obrero)")+
   theme_classic()
-=======
 
->>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```
 
 
@@ -394,8 +387,6 @@ ggplot() +
 
 
 
-=======
->>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```{r}
 
 # issp2009r$effort=rec(issp2009r$effort, rec = "rev") # Reverse code, sjmisc 
