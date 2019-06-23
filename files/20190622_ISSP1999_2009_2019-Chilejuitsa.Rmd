@@ -180,8 +180,11 @@ salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) 
 salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
 ```
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```{r Tablas descriptivos}
 
 # Descriptivos gap salario percibido
@@ -244,12 +247,155 @@ kable(
   format = "html",
   digits = 2) %>% kable_styling()
 
+<<<<<<< HEAD
+```
 
+
+
+```{r}
+ggplot() + 
+  geom_density(data = salarios99,aes(x = lngap_just,fill="1999")) + 
+  geom_density(data = salarios09,aes(x = lngap_just,fill="2009")) +
+  geom_density(data = salarios19,aes(x = lngap_just,fill="2019")) +
+  geom_vline(xintercept = median(salarios99$lngap_just,na.rm = TRUE), linetype="dashed",color = "black", size=1.5)+
+  geom_vline(xintercept = median(salarios09$lngap_just,na.rm = TRUE), linetype="dotted",color = "navyblue", size=1.5)+
+  geom_vline(xintercept = median(salarios19$lngap_just,na.rm = TRUE), linetype="dotted",color = "darkgreen", size=1.5)+
+  xlab(label = "Salario justo Ln(Gerente/Obrero)")+
+  theme_classic()
+=======
+
+>>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```
 
 
 # Meritocracia
 
+<<<<<<< HEAD
+
+## 1999
+
+### Percepción 
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- v4: Importancia para surgir: provenir familia rica     
+
+- V5: Importancia para surgir: Conocer personas adecuadas
+
+
+**(1) Muy de acuerdo - Muy en desacuerdo (5)** (8 no sabe, 9 no responde)
+
+- v6: Recompensas: En Chile las personas son remuneradas por sus esfuerzos 
+
+- v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades
+
+- v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. 
+
+### Preferencia
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo
+
+- v50:Importancia para pagar: numero de años dedicados a educación y capacitación
+
+- v51:Importancia para pagar: si el trabajo requiere que se supervise a otras personas
+
+- v52:Importancia para pagar: Lo que se necesita para mantener a una familia
+
+- v53:Importancia para pagar: Que una persona tenga hijos que mantener
+
+- v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo
+
+- v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo
+
+## 2009
+
+### Percepción 
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- V6 : Importancia para surgir: provenir de familia rica
+
+- V7 : Importancia para surgir: tener padres con buen nivel de educación
+
+- V8 : Importancia para surgir: que UD tenga un buen nivel de educación 
+
+- V9 : Importancia para surgir: Tener ambición
+
+- V10: Importancia para surgir: trabajo duro 
+
+- V11: Importancia para surgir: conocer a las personas adecuadas 
+
+- V12: Importancia para surgir: tener contactos políticos 
+
+- V13: Importancia para surgir: pagar coimas 
+
+- V14: Importancia para surgir: la raza u origen étnico de las personas 
+
+- V15: Importancia para surgir: la religión que tengan las personas 
+
+- V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer
+
+
+### Preferencia
+
+- V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo
+
+- V48:Importancia para pagar: el numero de años dedicados a la educación y capacitación
+
+- V49:Importancia para pagar: lo que se necesita para mantener una familia
+
+- V50:Importancia para pagar: El que la persona tenga hijos que mantener
+
+- V51:Importancia para pagar: lo bien que él o ella realiza su tabajo
+
+- V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo
+
+
+## 2019
+
+### Percepción
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- M2_P1_1 : Para surgir en la vida:  Tener ambición   
+
+- M2_P1_2 : Para surgir en la vida:  Provenir de una familia rica    
+
+- M2_P1_3 : Para surgir en la vida:  Tener padres con buen nivel de educación    
+
+- M2_P1_4 : Para surgir en la vida:  Que UD tenga un buen nivel de educación   
+
+- M2_P1_5 : Para surgir en la vida:  El Trabajo Duro    
+
+- M2_P1_6 : Para surgir en la vida:  Conocer a la personas adecuadas    
+
+- M2_P1_7 : Para surgir en la vida:  Tener contactos políticos    
+
+- M2_P1_8 : Para surgir en la vida:  Pagar coimas   
+
+- M2_P1_9 : Para surgir en la vida:  La raza u origen étnico de la persona 
+
+- M2_P1_10: Para surgir en la vida:  la religión de las personas   
+
+- M2_P1_11: Para surgir en la vida:  el sexo de las personas    
+
+### Preferencia
+
+- M2_P14_1: Importancia para ganar:  El nivel de responsabilidad que tiene su trabajo
+
+- M2_P14_2: Importancia para ganar:  El número de años dedicados a educación y capacitación
+
+- M2_P14_3: Importancia para ganar:  El que la persona tenga hijos que mantener
+
+- M2_P14_4: Importancia para ganar:  D.	Lo bien que él o ella realiza su trabajo
+
+
+
+
+=======
+>>>>>>> 82cee2534f13b631c2ef553054bfea08bfd146ff
 ```{r}
 
 # issp2009r$effort=rec(issp2009r$effort, rec = "rev") # Reverse code, sjmisc 
