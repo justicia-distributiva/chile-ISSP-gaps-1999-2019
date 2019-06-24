@@ -1,13 +1,13 @@
 ---
 title: 'ISSP Chile 1999, 2009 & 2019 - Salary Gap & meritocracy'
 author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
-output: 
-html_document: 
-code_folding: show
+output:
+  html_document
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, cache = FALSE,warning = FALSE,message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE,message = FALSE)
+options(scipen=999)
 rm(list=ls())
 ```
 
@@ -25,14 +25,10 @@ rm(list=ls())
 }
 ```
 
-```{r data, include=FALSE,cache=TRUE}
+```{r data, include=FALSE,cache=FALSE}
 issp99<- read_stata(path = here("data","issp1999.dta"))
 issp09<- read_stata(path = here("data","issp2009.dta"))
 issp19<- read_stata(path = here("data","issp2019.dta"))
-
-
-sjPlot::view_df(issp09,max.len = 45)
-options(scipen=999)
 ```
 
 ```{r seleccionar Chile}
@@ -134,7 +130,6 @@ salarios09 <- rename(salarios09,
 
 salarios09$gap_perc   <-  as.numeric(salarios09$salperger/salarios09$salperobr) # diferencia total
 salarios09$lngap_perc <-  as.numeric(log(salarios09$gap_perc))                # diferencia log
-
 
 #---Brecha salarial justa
 
@@ -263,90 +258,237 @@ ggplot() +
 
 # Meritocracia
 
-<<<<<<< HEAD
-
-## 1999
+## 1999 {.tabset}
 
 ### Percepción 
 
 **(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
 
-- v4: Importancia para surgir: provenir familia rica     
+- v4: Importancia para surgir: provenir familia rica  (wfami)   
 
-- V5: Importancia para surgir: Conocer personas adecuadas
+- V5: Importancia para surgir: Conocer personas adecuadas (knope)
 
 
 **(1) Muy de acuerdo - Muy en desacuerdo (5)** (8 no sabe, 9 no responde)
 
-- v6: Recompensas: En Chile las personas son remuneradas por sus esfuerzos 
+- v6: Recompensas: En Chile las personas son remuneradas por sus esfuerzos (refor)
 
-- v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades
+- v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades (rinte)
 
-- v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. 
+- v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. (corru)
+
+```{r}
+merit99 <- cl99 %>% select(V4:V8,V49:V55)
+
+merit99$V4 <- car::recode(merit99$V4,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V5 <- car::recode(merit99$V5,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V6 <- car::recode(merit99$V6,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V7 <- car::recode(merit99$V7,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V8 <- car::recode(merit99$V8,"c(8,9)=NA",as.numeric = TRUE)
+
+merit99$V4 <- sjmisc::rec(merit99$V4,rec="rev")
+merit99$V5 <- sjmisc::rec(merit99$V5,rec="rev")
+merit99$V6 <- sjmisc::rec(merit99$V6,rec="rev")
+merit99$V7 <- sjmisc::rec(merit99$V7,rec="rev")
+merit99$V8 <- sjmisc::rec(merit99$V8,rec="rev")
+
+
+merit99 <- rename(merit99,
+                  wfami = V4,
+                  knope = V5,
+                  refor = V6,
+                  rinte = V7,
+                  corru = V8)
+
+poly99a <- psych::polychoric(select(merit99,c(wfami,knope,refor,rinte,corru)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ de Meritocracia para Chile ISSP 1999**"}
+corrplot::corrplot.mixed(poly99a$rho,order = "AOE")
+```
+
 
 ### Preferencia
 
 **(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
 
-- v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo
+- v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo (respo)
 
-- v50:Importancia para pagar: numero de años dedicados a educación y capacitación
+- v50:Importancia para pagar: numero de años dedicados a educación y capacitación (neduc)
 
-- v51:Importancia para pagar: si el trabajo requiere que se supervise a otras personas
+- v51:Importancia para pagar: si el trabajo requiere que se supervise a otras personas (suprv)
 
-- v52:Importancia para pagar: Lo que se necesita para mantener a una familia
+- v52:Importancia para pagar: Lo que se necesita para mantener a una familia (mafam)
 
-- v53:Importancia para pagar: Que una persona tenga hijos que mantener
+- v53:Importancia para pagar: Que una persona tenga hijos que mantener (hchil)
 
-- v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo
+- v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo (gdwrk)
 
-- v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo
+- v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo (effor)
 
-## 2009
+```{r}
+
+merit99$V49 <- car::recode(merit99$V49,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V50 <- car::recode(merit99$V50,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V51 <- car::recode(merit99$V51,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V52 <- car::recode(merit99$V52,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V53 <- car::recode(merit99$V53,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V54 <- car::recode(merit99$V54,"c(8,9)=NA",as.numeric = TRUE)
+merit99$V55 <- car::recode(merit99$V55,"c(8,9)=NA",as.numeric = TRUE)
+
+merit99$V49 <-sjmisc::rec(merit99$V49,rec="rev")
+merit99$V50 <-sjmisc::rec(merit99$V50,rec="rev")
+merit99$V51 <-sjmisc::rec(merit99$V51,rec="rev")
+merit99$V52 <-sjmisc::rec(merit99$V52,rec="rev")
+merit99$V53 <-sjmisc::rec(merit99$V53,rec="rev")
+merit99$V54 <-sjmisc::rec(merit99$V54,rec="rev")
+merit99$V55 <-sjmisc::rec(merit99$V55,rec="rev")
+
+
+merit99 <- rename(merit99,
+                  respo=V49,
+                  neduc=V50,
+                  suprv=V51,
+                  mafam=V52,
+                  hchil=V53,
+                  gdwrk=V54,
+                  effor=V55)
+   
+
+poly99b<- psych::polychoric(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
+```
+
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 1999**"}
+corrplot::corrplot.mixed(poly99b$rho,order = "AOE")
+```
+
+
+
+## 2009 {.tabset}
 
 ### Percepción 
 
 **(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
 
-- V6 : Importancia para surgir: provenir de familia rica
+- V6 : Importancia para surgir: provenir de familia rica (wfami)
 
-- V7 : Importancia para surgir: tener padres con buen nivel de educación
+- V7 : Importancia para surgir: tener padres con buen nivel de educación (edpar)
 
-- V8 : Importancia para surgir: que UD tenga un buen nivel de educación 
+- V8 : Importancia para surgir: que UD tenga un buen nivel de educación (slfed)
 
-- V9 : Importancia para surgir: Tener ambición
+- V9 : Importancia para surgir: Tener ambición (ambit)
 
-- V10: Importancia para surgir: trabajo duro 
+- V10: Importancia para surgir: trabajo duro (hwork)
 
-- V11: Importancia para surgir: conocer a las personas adecuadas 
+- V11: Importancia para surgir: conocer a las personas adecuadas (knope)
 
-- V12: Importancia para surgir: tener contactos políticos 
+- V12: Importancia para surgir: tener contactos políticos (polco)
 
-- V13: Importancia para surgir: pagar coimas 
+- V13: Importancia para surgir: pagar coimas (corru)
 
-- V14: Importancia para surgir: la raza u origen étnico de las personas 
+- V14: Importancia para surgir: la raza u origen étnico de las personas (etnic)
 
-- V15: Importancia para surgir: la religión que tengan las personas 
+- V15: Importancia para surgir: la religión que tengan las personas (relig)
 
-- V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer
+- V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer (gendr)
 
+```{r}
+merit09 <- cl09 %>% select(V6:V16,V47:V52)
+
+merit09$V6  <- car::recode(merit09$V6 ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit09$V7  <- car::recode(merit09$V7 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V8  <- car::recode(merit09$V8 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V9  <- car::recode(merit09$V9 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V10 <- car::recode(merit09$V10,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V11 <- car::recode(merit09$V11,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V12 <- car::recode(merit09$V12,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V13 <- car::recode(merit09$V13,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V14 <- car::recode(merit09$V14,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V15 <- car::recode(merit09$V15,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V16 <- car::recode(merit09$V16,"c(8,9)=NA",as.numeric = TRUE)
+
+merit09$V6  <-sjmisc::rec(merit09$V6 ,rec="rev")# invertir sentido escala
+merit09$V7  <-sjmisc::rec(merit09$V7 ,rec="rev")# invertir sentido escala
+merit09$V8  <-sjmisc::rec(merit09$V8 ,rec="rev")# invertir sentido escala
+merit09$V9  <-sjmisc::rec(merit09$V9 ,rec="rev")# invertir sentido escala
+merit09$V10 <-sjmisc::rec(merit09$V10,rec="rev")# invertir sentido escala
+merit09$V11 <-sjmisc::rec(merit09$V11,rec="rev")# invertir sentido escala
+merit09$V12 <-sjmisc::rec(merit09$V12,rec="rev")# invertir sentido escala
+merit09$V13 <-sjmisc::rec(merit09$V13,rec="rev")# invertir sentido escala
+merit09$V14 <-sjmisc::rec(merit09$V14,rec="rev")# invertir sentido escala
+merit09$V15 <-sjmisc::rec(merit09$V15,rec="rev")# invertir sentido escala
+merit09$V16 <-sjmisc::rec(merit09$V16,rec="rev")# invertir sentido escala
+
+merit09<- rename(merit09,
+                 wfami=V6 ,
+                 edpar=V7 ,
+                 slfed=V8 ,
+                 ambit=V9 ,
+                 hwork=V10,
+                 knope=V11,
+                 polco=V12,
+                 corru=V13,
+                 etnic=V14,
+                 relig=V15,
+                 gendr=V16)
+
+
+poly09a <- psych::polychoric(select(merit09,c(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2009**"}
+corrplot::corrplot.mixed(poly09a$rho,order = "AOE")
+```
 
 ### Preferencia
 
-- V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo
+- V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo (respo)
 
-- V48:Importancia para pagar: el numero de años dedicados a la educación y capacitación
+- V48:Importancia para pagar: el numero de años dedicados a la educación y capacitación (neduc)
 
-- V49:Importancia para pagar: lo que se necesita para mantener una familia
+- V49:Importancia para pagar: lo que se necesita para mantener una familia (mafam)
 
-- V50:Importancia para pagar: El que la persona tenga hijos que mantener
+- V50:Importancia para pagar: El que la persona tenga hijos que mantener (hchil)
 
-- V51:Importancia para pagar: lo bien que él o ella realiza su tabajo
+- V51:Importancia para pagar: lo bien que él o ella realiza su tabajo (gdwrk)
 
-- V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo
+- V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo (effor)
+
+```{r}
+
+merit09$V47  <- car::recode(merit09$V47,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit09$V48  <- car::recode(merit09$V48,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V49  <- car::recode(merit09$V49,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V50  <- car::recode(merit09$V50,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V51  <- car::recode(merit09$V51,"c(8,9)=NA",as.numeric = TRUE)
+merit09$V52  <- car::recode(merit09$V52,"c(8,9)=NA",as.numeric = TRUE)
 
 
-## 2019
+merit09$V47  <-sjmisc::rec(merit09$V47 ,rec="rev")# invertir sentido escala
+merit09$V48  <-sjmisc::rec(merit09$V48 ,rec="rev")# invertir sentido escala
+merit09$V49  <-sjmisc::rec(merit09$V49 ,rec="rev")# invertir sentido escala
+merit09$V50  <-sjmisc::rec(merit09$V50 ,rec="rev")# invertir sentido escala
+merit09$V51  <-sjmisc::rec(merit09$V51 ,rec="rev")# invertir sentido escala
+merit09$V52  <-sjmisc::rec(merit09$V52 ,rec="rev")# invertir sentido escala
+
+merit09<- rename(merit09,
+                 respo=V47,
+                 neduc=V48,
+                 mafam=V49,
+                 hchil=V50,
+                 gdwrk=V51,
+                 effor=V52)
+
+
+poly09b <- psych::polychoric(select(merit09,c(respo,neduc,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2009**"}
+corrplot::corrplot.mixed(poly09b$rho,order = "AOE")
+```
+
+## 2019 {.tabset}
 
 ### Percepción
 
@@ -374,6 +516,59 @@ ggplot() +
 
 - M2_P1_11: Para surgir en la vida:  el sexo de las personas    
 
+```{r}
+merit19 <- cl19 %>% select(M2_P1_1:M2_P1_11,M2_P14_1:M2_P14_4)
+
+merit19$M2_P1_1  <- car::recode(merit19$M2_P1_1  ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit19$M2_P1_2  <- car::recode(merit19$M2_P1_2  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_3  <- car::recode(merit19$M2_P1_3  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_4  <- car::recode(merit19$M2_P1_4  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_5  <- car::recode(merit19$M2_P1_5  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_6  <- car::recode(merit19$M2_P1_6  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_7  <- car::recode(merit19$M2_P1_7  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_8  <- car::recode(merit19$M2_P1_8  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_9  <- car::recode(merit19$M2_P1_9  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_10 <- car::recode(merit19$M2_P1_10 ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P1_11 <- car::recode(merit19$M2_P1_11 ,"c(8,9)=NA",as.numeric = TRUE)
+
+merit19$M2_P1_1  <-sjmisc::rec(merit19$M2_P1_1 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_2  <-sjmisc::rec(merit19$M2_P1_2 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_3  <-sjmisc::rec(merit19$M2_P1_3 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_4  <-sjmisc::rec(merit19$M2_P1_4 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_5  <-sjmisc::rec(merit19$M2_P1_5 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_6  <-sjmisc::rec(merit19$M2_P1_6 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_7  <-sjmisc::rec(merit19$M2_P1_7 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_8  <-sjmisc::rec(merit19$M2_P1_8 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_9  <-sjmisc::rec(merit19$M2_P1_9 ,rec="rev")# invertir sentido escala
+merit19$M2_P1_10 <-sjmisc::rec(merit19$M2_P1_10,rec="rev")# invertir sentido escala
+merit19$M2_P1_11 <-sjmisc::rec(merit19$M2_P1_11,rec="rev")# invertir sentido escala
+
+
+
+
+merit19<- rename(merit19,
+                 ambit=M2_P1_1 ,
+                 wfami=M2_P1_2 ,
+                 edpar=M2_P1_3 ,
+                 slfed=M2_P1_4 ,
+                 hwork=M2_P1_5 ,
+                 knope=M2_P1_6 ,
+                 polco=M2_P1_7 ,
+                 corru=M2_P1_8 ,
+                 etnic=M2_P1_9 ,
+                 relig=M2_P1_10,
+                 gendr=M2_P1_11 )
+
+
+poly19a <- psych::polychoric(select(merit19,c(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2019**"}
+corrplot::corrplot.mixed(poly19a$rho,order = "AOE")
+```
+
+
+
 ### Preferencia
 
 - M2_P14_1: Importancia para ganar:  El nivel de responsabilidad que tiene su trabajo
@@ -382,25 +577,34 @@ ggplot() +
 
 - M2_P14_3: Importancia para ganar:  El que la persona tenga hijos que mantener
 
-- M2_P14_4: Importancia para ganar:  D.	Lo bien que él o ella realiza su trabajo
-
-
+- M2_P14_4: Importancia para ganar:  Lo bien que él o ella realiza su trabajo
 
 
 ```{r}
+merit19$M2_P14_1  <- car::recode(merit19$M2_P14_1,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit19$M2_P14_2  <- car::recode(merit19$M2_P14_2,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P14_3  <- car::recode(merit19$M2_P14_3,"c(8,9)=NA",as.numeric = TRUE)
+merit19$M2_P14_4  <- car::recode(merit19$M2_P14_4,"c(8,9)=NA",as.numeric = TRUE)
 
-# issp2009r$effort=rec(issp2009r$effort, rec = "rev") # Reverse code, sjmisc 
-# merito <- issp09 %>% select(V5,V7:V20)
-# 
-# 1 Essential
-# 2 Very important
-# 3 Fairly important
-# 4 Not very important
-# 5 Not important at all
-# 8 Cant choose
-# 9	NA
 
+
+merit19$M2_P14_1  <-sjmisc::rec(merit19$M2_P14_1 ,rec="rev")# invertir sentido escala
+merit19$M2_P14_2  <-sjmisc::rec(merit19$M2_P14_2 ,rec="rev")# invertir sentido escala
+merit19$M2_P14_3  <-sjmisc::rec(merit19$M2_P14_3 ,rec="rev")# invertir sentido escala
+merit19$M2_P14_4  <-sjmisc::rec(merit19$M2_P14_4 ,rec="rev")# invertir sentido escala
+
+merit19<- rename(merit19,
+                respo=M2_P14_1,
+                neduc=M2_P14_2,
+                hchil=M2_P14_3,
+                gdwrk=M2_P14_4)
+
+
+poly19b <- psych::polychoric(select(merit19,c(respo,neduc,hchil,gdwrk)),na.rm = TRUE)
 ```
 
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2019**"}
+corrplot::corrplot.mixed(poly19b$rho,order = "AOE")
+```
 
-
+# Meritocracia y Brecha Salarial Justa
