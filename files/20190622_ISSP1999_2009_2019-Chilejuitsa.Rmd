@@ -1,8 +1,7 @@
 ---
 title: 'ISSP Chile 1999, 2009 & 2019 - Salary Gap & meritocracy'
 author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
-output:
-  html_document
+output: rmdformats::html_clean  
 ---
 
 ```{r include=FALSE}
@@ -10,7 +9,6 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE,message = FALSE)
 options(scipen=999)
 rm(list=ls())
 ```
-
 
 
 ```{r }
@@ -22,21 +20,37 @@ rm(list=ls())
   library(ggplot2)
   library(knitr)
   library(kableExtra)
+  library(GPArotation)
+  library(lavaan)
+  library(semPlot)
+  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
 }
 ```
 
 ```{r data, include=FALSE,cache=FALSE}
-issp99<- read_stata(path = here("data","issp1999.dta"))
-issp09<- read_stata(path = here("data","issp2009.dta"))
-issp19<- read_stata(path = here("data","issp2019.dta"))
+# issp99<- read_stata(path = here("data","issp1999.dta"))
+# issp09<- read_stata(path = here("data","issp2009.dta"))
+# issp19<- read_stata(path = here("data","issp2019.dta"))
 ```
 
 ```{r seleccionar Chile}
-cl99 <- issp99 %>% filter(v3==30)
-cl09 <- issp09 %>% filter(V4==152)
-cl19 <- issp19
+# cl99 <- issp99 %>% filter(v3==30)
+# cl09 <- issp09 %>% filter(V4==152)
+# cl19 <- issp19
+# names(cl99) <- toupper(names(cl99))
+# save(cl99,file = here("data","issp1999CL.RData"))
+# save(cl09,file = here("data","issp2009CL.RData"))
+# save(cl19,file = here("data","issp2019CL.RData"))
+# # Load data ***************************************************************
+# load(file = here("data","issp1999CL.RData"))
+# load(file = here("data","issp2009CL.RData"))
+# load(file = here("data","issp2019CL.RData"))
+```
 
-names(cl99) <- toupper(names(cl99))
+```{r load data}
+load(file = here("data","issp1999CL.RData"))
+load(file = here("data","issp2009CL.RData"))
+load(file = here("data","issp2019CL.RData"))
 ```
 
 # Brechas salarios percibida y justa
@@ -45,22 +59,14 @@ names(cl99) <- toupper(names(cl99))
 salarios99 <- cl99 %>% select(V3,
                               V21,V16,    # Salario percibio obrero y gerente
                               V31,V26)# Salario justo    obrero y gerente
-
- 
-
 # M2_P2_PRESIDENTE cuanto gana GERENTE
 # M2_P2_OBRERO cuanto gana OBRERO
-
 # M2_P3_PRESIDENTE cuanto deberia ganar GERENTE
 # M2_P3_OBRERO cuanto deberia ganar OBRERO
-
 # table(salarios99$V21) #  99999999999
 # table(salarios99$V16) #  99999999998 99999999999
-# 
 # table(salarios99$V31) # 99999999998 99999999999 
 # table(salarios99$V26) # 99999999998 99999999999 
-
-
 salarios99$V21[salarios99$V21 %in% c(99999999998,99999999999)] <- NA
 salarios99$V16[salarios99$V16 %in% c(99999999998,99999999999)] <- NA
 salarios99$V31[salarios99$V31 %in% c(99999999998,99999999999)] <- NA
@@ -69,30 +75,31 @@ salarios99$V26[salarios99$V26 %in% c(99999999998,99999999999)] <- NA
 salarios99$V3 <- as_character(salarios99$V3)
 
 #--- Nombres sustantivos para analisis
-salarios99 <- rename(salarios99,
-                   pais=V3,
-                   salperger=V16,
-                   salperobr=V21,
-                   saljusger=V26,
-                   saljusobr=V31)
-
+salarios99 <- rename(salarios99,pais=V3,salperger=V16,salperobr=V21,saljusger=V26,saljusobr=V31)
 ```
 
+```{r remover outliers 1999, include=FALSE}
+table(salarios99$salperobr) # <22000000 120000000 
+table(salarios99$saljusobr) # <30000000
+table(salarios99$salperger)
+table(salarios99$saljusger)
+#Quitar outliers *************************
+sal99 <- salarios99 %>% filter(salperobr<22000000 & saljusobr<30000000)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal99$gap_perc  <-  as.numeric(sal99$salperger/sal99$salperobr) # brecha total salario percibido 
+sal99$gap_just  <-  as.numeric(sal99$saljusger/sal99$saljusobr) # brecha total salario justo
+```
 
 ```{r gap salario 1999}
 #---Brecha salarial percibida
-
 salarios99$gap_perc   <-  as.numeric(salarios99$salperger/salarios99$salperobr) # diferencia total
-salarios99$lngap_perc <-  as.numeric(log(salarios99$gap_perc))                # diferencia log
-
+salarios99$lngap_perc <-  as.numeric(log(salarios99$gap_perc))                 # diferencia log
 
 #---Brecha salarial justa
-
 salarios99$gap_just   <-  as.numeric(salarios99$saljusger/salarios99$saljusobr) # diferencia total
 salarios99$lngap_just <-  as.numeric(log(salarios99$gap_just))                # diferencia log
 ```
-
-
 
 ```{r salario percibido y justo 2009}
 salarios09 <- cl09 %>% select(V5,
@@ -104,8 +111,6 @@ salarios09 <- cl09 %>% select(V5,
 # table(salarios09$V25) # cuanto gana OBRERO
 # table(salarios09$V28) # cuando deberia ganar GERENTE
 # table(salarios09$V30) # cuanto deberia ganar OBRERO
-
-
 salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
 salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
 salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
@@ -116,23 +121,28 @@ salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
 salarios09$V5 <- as_character(salarios09$V5)
 
 #--- Nombres sustantivos para analisis
-salarios09 <- rename(salarios09,
-                   pais=V5,
-                   salperger=V23,
-                   salperobr=V25,
-                   saljusger=V28,
-                   saljusobr=V30)
+salarios09 <- rename(salarios09,pais=V5,salperger=V23,salperobr=V25,saljusger=V28,saljusobr=V30)
+```
 
+```{r remover outliers 2009, include=FALSE}
+table(salarios09$salperobr) #   80     150     158     160     180     190     200     300
+table(salarios09$saljusobr) #   190      230      250      300      350      500
+table(salarios09$salperger) # 5000     10000     20000
+table(salarios09$saljusger)
+#Quitar outliers *************************
+sal09 <- salarios09 %>% filter(salperobr>300 & saljusobr>500 & salperger >=100000 & saljusger >=100000)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal09$gap_perc  <-  as.numeric(sal09$salperger/sal09$salperobr) # brecha total salario percibido 
+sal09$gap_just  <-  as.numeric(sal09$saljusger/sal09$saljusobr) # brecha total salario justo
 ```
 
 ```{r gap salario 2009}
 #---Brecha salarial percibida
-
 salarios09$gap_perc   <-  as.numeric(salarios09$salperger/salarios09$salperobr) # diferencia total
 salarios09$lngap_perc <-  as.numeric(log(salarios09$gap_perc))                # diferencia log
 
 #---Brecha salarial justa
-
 salarios09$gap_just   <-  as.numeric(salarios09$saljusger/salarios09$saljusobr) # diferencia total
 salarios09$lngap_just <-  as.numeric(log(salarios09$gap_just))                # diferencia log
 ```
@@ -141,126 +151,161 @@ salarios09$lngap_just <-  as.numeric(log(salarios09$gap_just))                # 
 salarios19 <- cl19 %>% select(M2_P2_PRESIDENTE,M2_P2_OBRERO,  # Salario percibio obrero y gerente
                               M2_P3_PRESIDENTE,M2_P3_OBRERO) # Salario justo    obrero y gerente
 
-
 # table(salarios19$M2_P2_PRESIDENTE) # cuanto gana GERENTE
 # table(salarios19$M2_P2_OBRERO)     # cuanto gana OBRERO
 # table(salarios19$M2_P3_PRESIDENTE) # cuando deberia ganar GERENTE
 # table(salarios19$M2_P3_OBRERO )    # cuanto deberia ganar OBRERO
-
-
 # salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
 # salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
 # salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
 # salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
 
 #--- Nombres sustantivos para analisis
-salarios19 <- rename(salarios19,
-                   salperger=M2_P2_PRESIDENTE,
-                   salperobr=M2_P2_OBRERO,
-                   saljusger=M2_P3_PRESIDENTE,
-                   saljusobr=M2_P3_OBRERO)
+salarios19 <- rename(salarios19,salperger=M2_P2_PRESIDENTE,salperobr=M2_P2_OBRERO,
+                     saljusger=M2_P3_PRESIDENTE,saljusobr=M2_P3_OBRERO)
+```
 
+```{r remover outliers 2019, include=FALSE}
+table(salarios19$salperobr) # 500
+table(salarios19$saljusobr) # 300     500     600     800
+table(salarios19$salperger) # ok 
+table(salarios19$saljusger) # ok
+#Quitar outliers *************************
+sal19 <- salarios19 %>% filter(salperobr>500 & saljusobr>800)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal19$gap_perc  <-  as.numeric(sal19$salperger/sal19$salperobr) # brecha total salario percibido 
+sal19$gap_just  <-  as.numeric(sal19$saljusger/sal19$saljusobr) # brecha total salario justo
 ```
 
 ```{r gap salario 2019}
 #---Brecha salarial percibida
-
 salarios19$gap_perc   <-  as.numeric(salarios19$salperger/salarios19$salperobr) # diferencia total
-salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                # diferencia log
+salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                  # diferencia log
 
 
 #---Brecha salarial justa
-
 salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) # diferencia total
 salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
 ```
 
+## Brecha total 
 
-```{r Tablas descriptivos}
+```{r descriptivos brecha total 1999-2019}
+# Tabla 1 ****************************************************************************************
 
-# Descriptivos gap salario percibido
-table1<- salarios99 %>% summarise(Year=1999,
-                                      M=mean(lngap_perc,na.rm = TRUE),
-                                      ME=median(lngap_perc,na.rm = TRUE),
-                                      SD=sd(lngap_perc,na.rm = TRUE),
-                                      Min=min(lngap_perc,na.rm = TRUE),
-                                      Max=max(lngap_perc,na.rm = TRUE))
+table1<- rbind(psych::describe(salarios99$gap_perc),
+               psych::describe(salarios09$gap_perc),
+               psych::describe(salarios19$gap_perc))
 
-table2<- salarios09 %>% summarise(Year=2009,
-                                  M=mean(lngap_perc,na.rm = TRUE),
-                                ME=median(lngap_perc,na.rm = TRUE),
-                                SD=sd(lngap_perc,na.rm = TRUE),
-                                Min=min(lngap_perc,na.rm = TRUE),
-                                Max=max(lngap_perc,na.rm = TRUE))
+rownames(table1) <- c("1999","2009","2019")
+table1 <- table1 %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table1,row.names = TRUE, digits = 2,caption = "Brecha total de salario percibido por año") %>% kable_styling()
 
-table3<- salarios19 %>% summarise(Year=2019,
-                                  M=mean(lngap_perc,na.rm = TRUE),
-                                ME=median(lngap_perc,na.rm = TRUE),
-                                SD=sd(lngap_perc,na.rm = TRUE),
-                                Min=min(lngap_perc,na.rm = TRUE),
-                                Max=max(lngap_perc,na.rm = TRUE))
+# Tabla 2 ****************************************************************************************
 
+table2<- rbind(psych::describe(salarios99$gap_just),
+               psych::describe(salarios09$gap_just),
+               psych::describe(salarios19$gap_just))
 
+rownames(table2) <- c("1999","2009","2019")
+table2 <- table2 %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table2,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario justo por año") %>% kable_styling()
 
 
+# Tabla 3 ****************************************************************************************
 
-table4<- salarios99 %>% summarise(Year=1999,
-                                  M=mean(lngap_just,na.rm = TRUE), 
-                                     ME=median(lngap_just,na.rm = TRUE),
-                                     SD=sd(lngap_just,na.rm = TRUE),
-                                     Min=min(lngap_just,na.rm = TRUE),
-                                     Max=max(lngap_just,na.rm = TRUE))
+table3<- rbind(psych::describe(sal99$gap_just),
+               psych::describe(sal09$gap_just),
+               psych::describe(sal19$gap_just))
 
-table5<- salarios09 %>% summarise(Year=2009,
-                                  M=mean(lngap_just,na.rm = TRUE), 
-                                     ME=median(lngap_just,na.rm = TRUE),
-                                     SD=sd(lngap_just,na.rm = TRUE),
-                                     Min=min(lngap_just,na.rm = TRUE),
-                                     Max=max(lngap_just,na.rm = TRUE))
+rownames(table3) <- c("1999","2009","2019")
+table3 <- table3 %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table3,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario justo por año") %>% kable_styling() %>% 
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
 
-table6<- salarios19 %>% summarise(Year=2019,M=mean(lngap_just,na.rm = TRUE), 
-                                   ME=median(lngap_just,na.rm = TRUE),
-                                   SD=sd(lngap_just,na.rm = TRUE),
-                                   Min=min(lngap_just,na.rm = TRUE),
-                                   Max=max(lngap_just,na.rm = TRUE))
+# Tabla 4 ****************************************************************************************
+
+table4<- rbind(psych::describe(sal99$gap_perc),
+               psych::describe(sal09$gap_perc),
+               psych::describe(sal19$gap_perc))
+
+rownames(table4) <- c("1999","2009","2019")
+table4 <- table4 %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table4,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario percibido por año") %>% kable_styling() %>% 
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+```
+
+## Brecha estimada (log)
+
+```{r Tablas descriptivos ln(gaps)}
+# Tabla 1 ****************************************************************************************
+table1b<- rbind(psych::describe(log(salarios99$gap_perc)),
+               psych::describe(log(salarios09$gap_perc)),
+               psych::describe(log(salarios19$gap_perc)))
+rownames(table1b) <- c("1999","2009","2019")
+table1b <- table1b %>% select(n,mean,sd,median,trimmed,min,max)
+kable(table1b,row.names = TRUE, digits = 2,caption = "Brecha total de ln(salario percibido) por año") %>% kable_styling()
+
+# Tabla 2 ****************************************************************************************
+table2b<- rbind(psych::describe(log(salarios99$gap_just)),
+               psych::describe(log(salarios09$gap_just)),
+               psych::describe(log(salarios19$gap_just)))
+rownames(table2b) <- c("1999","2009","2019")
+table2b <- table2b %>% select(n,mean,sd,median,trimmed,min,max)
+kable(table2b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling()
 
 
+# Tabla 3 ****************************************************************************************
 
-kable(
-  x = rbind(table1, table2, table3),
-  caption = "Brecha ln(salario percibida) Chile, olas 1999, 2009 y 2019",
-  format = "html",
-  digits = 2) %>% kable_styling()
+table3b<- rbind(psych::describe(log(sal99$gap_just)),
+               psych::describe(log(sal09$gap_just)),
+               psych::describe(log(sal19$gap_just)))
 
-kable(
-  x = rbind(table4, table5, table6),
-  caption = "Brecha ln(salario justo) Chile, olas 1999, 2009 y 2019",
-  format = "html",
-  digits = 2) %>% kable_styling()
+rownames(table3b) <- c("1999","2009","2019")
+table3b <- table3b %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table3b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling() %>% 
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+
+# Tabla 4 ****************************************************************************************
+
+table4b<- rbind(psych::describe(log(sal99$gap_perc)),
+               psych::describe(log(sal09$gap_perc)),
+               psych::describe(log(sal19$gap_perc)))
+
+rownames(table4b) <- c("1999","2009","2019")
+table4b <- table4b %>% select(n,mean,sd,median,trimmed,min,max)
+        
+kable(table4b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario percibido) por año") %>% kable_styling() %>% 
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
 
 ```
 
 
-
-```{r}
+```{r, fig.align='center', fig.width=10}
 ggplot() + 
-  geom_density(data = salarios99,aes(x = lngap_just,fill="1999")) + 
-  geom_density(data = salarios09,aes(x = lngap_just,fill="2009")) +
-  geom_density(data = salarios19,aes(x = lngap_just,fill="2019")) +
-  geom_vline(xintercept = median(salarios99$lngap_just,na.rm = TRUE), linetype="dashed",color = "black", size=1.5)+
-  geom_vline(xintercept = median(salarios09$lngap_just,na.rm = TRUE), linetype="dotted",color = "navyblue", size=1.5)+
-  geom_vline(xintercept = median(salarios19$lngap_just,na.rm = TRUE), linetype="dotted",color = "darkgreen", size=1.5)+
+  geom_density(data = sal99,aes(x = log(gap_just),fill="1999", alpha=0.9)) + 
+  geom_density(data = sal09,aes(x = log(gap_just),fill="2009", alpha=0.5)) +
+  geom_density(data = sal19,aes(x = log(gap_just),fill="2019", alpha=0.5)) +
+  geom_vline(xintercept = median(log(sal99$gap_just),na.rm = TRUE), linetype="dashed",color = "black",    size=1.5)+
+  geom_vline(xintercept = median(log(sal09$gap_just),na.rm = TRUE), linetype="dotted",color = "navyblue", size=1.5)+
+  geom_vline(xintercept = median(log(sal19$gap_just),na.rm = TRUE), linetype="dotted",color = "darkgreen",size=1.5)+
   xlab(label = "Salario justo Ln(Gerente/Obrero)")+
+  guides(fill = guide_legend("Año"), alpha=FALSE) +
   theme_classic()
-
 ```
 
 
-# Meritocracia
+# Meritocracia {.tabset}
 
 ## 1999 {.tabset}
 
-### Percepción 
+### Percepción {.tabset}
 
 **(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
 
@@ -307,11 +352,29 @@ poly99a <- psych::polychoric(select(merit99,c(wfami,knope,refor,rinte,corru)),na
 corrplot::corrplot.mixed(poly99a$rho,order = "AOE")
 ```
 
+```{r analisis factorial 1999 percepcion}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit99,c(wfami,knope,refor,rinte)),
+               method = "wls",
+               nmbr.fctr = 2, 
+               title="Analisis Factorial 1999 Percepcion")
+```
+
+```{r analisis factorial confirmatorio 199}
+
+m1per99 <- '
+gah_nmerit=~wfami+knope+corru
+recom=~refor+rinte
+'
+fit1 <- cfa(model = m1per99,data = merit99)
+summary(fit1, fit.measures=TRUE, standardized=TRUE)
+```
+
 
 ### Preferencia
 
 **(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
-
+OO
 - v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo (respo)
 
 - v50:Importancia para pagar: numero de años dedicados a educación y capacitación (neduc)
@@ -361,6 +424,25 @@ poly99b<- psych::polychoric(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk
 
 ```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 1999**"}
 corrplot::corrplot.mixed(poly99b$rho,order = "AOE")
+```
+
+```{r analisis factorial 1999 preferencia}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),
+               method = "wls",
+               nmbr.fctr = 3,
+               title="Analisis Factorial 1999 Preferencia")
+```
+
+```{r analisis factorial confirmatorio 1999 preferencia}
+
+m1pref99 <- '
+resp=~respo+neduc+suprv
+fami=~mafam+hchil
+merit=~gdwrk+effor
+'
+fit2 <- cfa(model = m1pref99,data = merit99, ordered = c("respo","neduc","suprv","mafam","hchil","gdwrk","effor"))
+summary(fit2, fit.measures=TRUE, standardized=TRUE)
 ```
 
 
@@ -441,6 +523,16 @@ poly09a <- psych::polychoric(select(merit09,c(wfami,edpar,slfed,ambit,hwork,knop
 corrplot::corrplot.mixed(poly09a$rho,order = "AOE")
 ```
 
+
+```{r analisis factorial 2009 percepcion}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit09,c(wfami,edpar,slfed,ambit,hwork,polco,corru,etnic,relig,gendr)),
+               method = "wls",
+               nmbr.fctr = 4,
+               title = "Analisis Factorial 2009 Percepcion")
+```
+
+
 ### Preferencia
 
 - V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo (respo)
@@ -486,6 +578,14 @@ poly09b <- psych::polychoric(select(merit09,c(respo,neduc,mafam,hchil,gdwrk,effo
 
 ```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2009**"}
 corrplot::corrplot.mixed(poly09b$rho,order = "AOE")
+```
+
+```{r analisis factorial 2009 preferencia}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit09,c(respo,neduc,mafam,hchil,gdwrk,effor)),
+               method = "wls",
+               nmbr.fctr = 2,
+               title = "Analisis Factorial 2009 Preferencia")
 ```
 
 ## 2019 {.tabset}
@@ -567,6 +667,13 @@ poly19a <- psych::polychoric(select(merit19,c(wfami,edpar,slfed,ambit,hwork,knop
 corrplot::corrplot.mixed(poly19a$rho,order = "AOE")
 ```
 
+```{r analisis factorial 2019 percepcion}
+
+sjPlot::sjt.fa(select(merit19,c(wfami,edpar,slfed,hwork,polco,corru,etnic,relig,gendr)),
+               method = "wls",
+               nmbr.fctr = 4,
+               title = "Analisis Factorial 2019 Percepción")
+```
 
 
 ### Preferencia
@@ -608,3 +715,18 @@ corrplot::corrplot.mixed(poly19b$rho,order = "AOE")
 ```
 
 # Meritocracia y Brecha Salarial Justa
+
+
+```{r}
+
+```
+
+
+
+
+```{r}
+file.remove(here("index.html"))
+file.copy(from = here("files","20190622_ISSP1999_2009_2019-Chilejuitsa.html"),
+          to   = here("index.html"))
+```
+
