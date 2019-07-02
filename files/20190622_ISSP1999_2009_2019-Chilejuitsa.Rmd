@@ -367,8 +367,25 @@ gah_nmerit=~wfami+knope+corru
 recom=~refor+rinte
 '
 fit1 <- cfa(model = m1per99,data = merit99)
-summary(fit1, fit.measures=TRUE, standardized=TRUE)
+
+
 ```
+
+```{r Tabla: CFA, results='asis'}
+semTable::semTable(fit1, columns = c("estse", "p"),
+                     fits = c("chisq","cfi", "rmsea"),type = "html") 
+```
+
+```{r plot CFA 1}
+semPlot::semPaths(fit1, "std", 
+                  edge.color = "black", 
+                  style = "ram", 
+                  exoVar = TRUE, 
+                  intercepts = F,
+                  thresholds = F,
+                  fade =F)
+```
+
 
 
 ### Preferencia
