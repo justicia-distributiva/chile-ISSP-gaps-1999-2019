@@ -22,7 +22,6 @@ rm(list=ls())
   library(kableExtra)
   library(GPArotation)
   library(lavaan)
-  library(semPlot)
   library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
 }
 ```
@@ -369,11 +368,6 @@ recom=~refor+rinte
 fit1 <- cfa(model = m1per99,data = merit99)
 
 
-```
-
-```{r Tabla: CFA, results='asis'}
-semTable::semTable(fit1, columns = c("estse", "p"),
-                     fits = c("chisq","cfi", "rmsea"),type = "html") 
 ```
 
 ```{r plot CFA 1}
@@ -734,16 +728,7 @@ corrplot::corrplot.mixed(poly19b$rho,order = "AOE")
 # Meritocracia y Brecha Salarial Justa
 
 
-```{r}
-
-```
-
-
-
-
-```{r}
-file.remove(here("index.html"))
-file.copy(from = here("files","20190622_ISSP1999_2009_2019-Chilejuitsa.html"),
-          to   = here("index.html"))
+```{r render, eval=FALSE, include=FALSE}
+rmarkdown::render(input = here("files","20190622_ISSP1999_2009_2019-Chilejuitsa.Rmd"))
 ```
 
