@@ -1,26 +1,11 @@
-# equal_pay
+# The role of meritocratic beliefs on the justification of pay differentials over time
 
-Chapter handbook equal pay.
+First abstract version: Request for "Equal Payment" book from Anders Örtenblad, submission out of deadline.
+Second version: for edited book "Perceptions and Misperceptions of Fairness and Inequality" (Nova Publishers), requested by Nadya Columbus. Abstract deadline: 10 August (sent):
 
-## Request mail:
+## Abstract
 
-I am Anders Örtenblad, a Swedish scholar working at a university in Norway. The reason why I contact you is that I have a book series (for Palgrave Macmillan) that publishes anthologies of a “debating” format, that is, in each book scholars debate a common theme (for instance, some may be “for”, others “against”, and yet others “in between for and against”). I am about to start up a project on an anthology on “equal payment for all”, that is, where scholars debate the reasonable and valuable in letting all people – no matter what they work with (and even if they don’t have a job) – have the exact same compensation. If arguing against equal pay for all, then one could clarify which parameters that should be used to decide salaries (such as “the market”, “level of responsibility”, “length of education” etc.)  I have found online that you have touched upon similar topics in your previous writings, and for this reason I was wondering if you maybe would like to contribute to the book with a chapter?
+The growing income concentration has brought about several concerns regarding the fairness of economic differences. Whereas in general terms equality seems to be a justice ideal, on the other hand the differences in income are largely justified based on meritocratic norms of personal effort and talent. In this regard: Are meritocratic beliefs related with differences in perception and justification of unequal payment? Using the social inequality module of the International Social Survey Programme for 1999, 2009 and 2019, this chapter begins describing the perception and justification of salary gaps over 20 years in Chile, followed by an analysis of the role of meritocratic beliefs as predictors of justified salary gaps. A focus of this chapter are the changes in the association between meritocratic beliefs and just salary gaps over time in a society with decreasing poverty as well as high economic inequality as Chile.
 
-Anders Örtenblad
-Professor of Work Life Science
-UiA School of Business and Law
-Tlf: +47 37 23 31 85 // Mob: +47 94 16 85 30
-www.uia.no
+Deadline for final chapter: November 10th
 
-
-## Initial prpoposal
-
-thanks for the consideration to participate in this volume. What I think that can be a contribution from my side is an analysis of justice perceptions and preferences of salary gaps in different countries based on survey data such as the ISSP. What I have found so far is that overall people prefer equality in general terms, but when it comes to salary gaps there are many contradictions.
-
-```{r echo=FALSE}
-
-```
-
-chapter handbook equal pay
-
-* Branched - jciturras
