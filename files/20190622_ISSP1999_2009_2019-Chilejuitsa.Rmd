@@ -11,19 +11,16 @@ rm(list=ls())
 ```
 
 
-```{r }
-{
-  library(dplyr)
-  library(here)
-  library(sjlabelled)
-  library(sjPlot)
-  library(ggplot2)
-  library(knitr)
-  library(kableExtra)
-  library(GPArotation)
-  library(lavaan)
-  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
-}
+```{r}
+library(dplyr)
+library(here)
+library(sjlabelled)
+library(sjPlot)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(GPArotation)
+library(lavaan)
 ```
 
 ```{r data, include=FALSE,cache=FALSE}
@@ -54,10 +51,14 @@ load(file = here("data","issp2019CL.RData"))
 
 # Brechas salarios percibida y justa
 
+- Hacer un par de boxplot para cada variable de Obrero Gerente (hacer pull luego de esto).
+- CASEN (2009,2011,2013,2015,2017): Cálculo de los salarios por ocupación (media y mediana).
+    - Emplear diseño muestral complejo
+
 ```{r salario percibido y justo 1999}
 salarios99 <- cl99 %>% select(V3,
-                              V21,V16,    # Salario percibio obrero y gerente
-                              V31,V26)# Salario justo    obrero y gerente
+                              V21,V16, # Salario percibio obrero y gerente
+                              V31,V26) # Salario justo    obrero y gerente
 # M2_P2_PRESIDENTE cuanto gana GERENTE
 # M2_P2_OBRERO cuanto gana OBRERO
 # M2_P3_PRESIDENTE cuanto deberia ganar GERENTE
@@ -105,7 +106,6 @@ salarios09 <- cl09 %>% select(V5,
                               V23,V25, # Salario percibio obrero y gerente
                               V28,V30) # Salario justo    obrero y gerente
 
-
 # table(salarios09$V23) # cuanto gana GERENTE
 # table(salarios09$V25) # cuanto gana OBRERO
 # table(salarios09$V28) # cuando deberia ganar GERENTE
@@ -114,8 +114,6 @@ salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
 salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
 salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
 salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
-
-
 
 salarios09$V5 <- as_character(salarios09$V5)
 
@@ -188,6 +186,66 @@ salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) 
 salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
 ```
 
+
+# Gráficos
+
+```{r}
+sal99$year <- 1999
+sal09$year <- 2009
+sal19$year <- 2019
+sal99$pais <- NULL
+sal09$pais <- NULL
+
+sal <- rbind(sal99,sal09,sal19)
+sal$year <- as.factor(sal$year)
+```
+
+## Boxplot salario percibido
+
+```{r boxplot salario percibido obrero}
+boxplot(salperobr~year,data=sal,horizontal=TRUE,
+        main="Salario percibido Obrero (outliers visualizados)")
+boxplot(salperobr~year,data=sal, horizontal=TRUE, outline=FALSE,
+        main="Salario percibido Obrero (outliers no visualizados)")
+```
+
+```{r boxplot salario percibido gerente}
+boxplot(salperger~year,data=sal,horizontal=TRUE,
+        main="Salario percibido Gerente (outliers visualizados)")
+boxplot(salperger~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Salario percibido Gerente (outliers no visualizados)")
+```
+
+```{r boxplot gap salario percibido}
+boxplot(gap_perc~year,data=sal,horizontal=TRUE,
+        main="Brecha Salario percibido (outliers visualizados)")
+boxplot(gap_perc~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Brecha Salario percibido (outliers no visualizados)")
+```
+
+## Boxplot salario justo
+
+```{r boxplot salario just obrero}
+boxplot(saljusobr~year,data=sal,horizontal=TRUE,
+        main="Salario justo Obrero (outliers visualizados)")
+boxplot(saljusobr~year,data=sal, horizontal=TRUE, outline=FALSE,
+        main="Salario justo Obrero (outliers no visualizados)")
+```
+
+```{r boxplot salario justo gerente}
+boxplot(saljusger~year,data=sal,horizontal=TRUE,
+        main="Salario justo Gerente (outliers visualizados)")
+boxplot(saljusger~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Salario justo Gerente (outliers no visualizados)")
+```
+
+```{r boxplot gap salario justo}
+boxplot(gap_just~year,data=sal,horizontal=TRUE,
+        main="Brecha Salario justo (outliers visualizados)")
+boxplot(gap_just~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Brecha Salario justo (outliers no visualizados)")
+```
+
 ## Brecha total 
 
 ```{r descriptivos brecha total 1999-2019}
@@ -213,7 +271,9 @@ table2 <- table2 %>% select(n,mean,sd,median,trimmed,min,max)
         
 kable(table2,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario justo por año") %>% kable_styling()
 
+```
 
+```{r descriptivos brecha total (trimmed) 1999-2019}
 # Tabla 3 ****************************************************************************************
 
 table3<- rbind(psych::describe(sal99$gap_just),
@@ -336,7 +396,6 @@ merit99$V6 <- sjmisc::rec(merit99$V6,rec="rev")
 merit99$V7 <- sjmisc::rec(merit99$V7,rec="rev")
 merit99$V8 <- sjmisc::rec(merit99$V8,rec="rev")
 
-
 merit99 <- rename(merit99,
                   wfami = V4,
                   knope = V5,
@@ -366,8 +425,6 @@ gah_nmerit=~wfami+knope+corru
 recom=~refor+rinte
 '
 fit1 <- cfa(model = m1per99,data = merit99)
-
-
 ```
 
 ```{r plot CFA 1}
@@ -379,8 +436,6 @@ semPlot::semPaths(fit1, "std",
                   thresholds = F,
                   fade =F)
 ```
-
-
 
 ### Preferencia
 
@@ -401,7 +456,6 @@ OO
 - v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo (effor)
 
 ```{r}
-
 merit99$V49 <- car::recode(merit99$V49,"c(8,9)=NA",as.numeric = TRUE)
 merit99$V50 <- car::recode(merit99$V50,"c(8,9)=NA",as.numeric = TRUE)
 merit99$V51 <- car::recode(merit99$V51,"c(8,9)=NA",as.numeric = TRUE)
@@ -410,13 +464,13 @@ merit99$V53 <- car::recode(merit99$V53,"c(8,9)=NA",as.numeric = TRUE)
 merit99$V54 <- car::recode(merit99$V54,"c(8,9)=NA",as.numeric = TRUE)
 merit99$V55 <- car::recode(merit99$V55,"c(8,9)=NA",as.numeric = TRUE)
 
-merit99$V49 <-sjmisc::rec(merit99$V49,rec="rev")
-merit99$V50 <-sjmisc::rec(merit99$V50,rec="rev")
-merit99$V51 <-sjmisc::rec(merit99$V51,rec="rev")
-merit99$V52 <-sjmisc::rec(merit99$V52,rec="rev")
-merit99$V53 <-sjmisc::rec(merit99$V53,rec="rev")
-merit99$V54 <-sjmisc::rec(merit99$V54,rec="rev")
-merit99$V55 <-sjmisc::rec(merit99$V55,rec="rev")
+merit99$V49 <- sjmisc::rec(merit99$V49,rec="rev")
+merit99$V50 <- sjmisc::rec(merit99$V50,rec="rev")
+merit99$V51 <- sjmisc::rec(merit99$V51,rec="rev")
+merit99$V52 <- sjmisc::rec(merit99$V52,rec="rev")
+merit99$V53 <- sjmisc::rec(merit99$V53,rec="rev")
+merit99$V54 <- sjmisc::rec(merit99$V54,rec="rev")
+merit99$V55 <- sjmisc::rec(merit99$V55,rec="rev")
 
 
 merit99 <- rename(merit99,
@@ -429,7 +483,7 @@ merit99 <- rename(merit99,
                   effor=V55)
    
 
-poly99b<- psych::polychoric(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
+poly99b <- psych::polychoric(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
 ```
 
 
@@ -446,7 +500,6 @@ sjPlot::sjt.fa(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),
 ```
 
 ```{r analisis factorial confirmatorio 1999 preferencia}
-
 m1pref99 <- '
 resp=~respo+neduc+suprv
 fami=~mafam+hchil
@@ -455,7 +508,6 @@ merit=~gdwrk+effor
 fit2 <- cfa(model = m1pref99,data = merit99, ordered = c("respo","neduc","suprv","mafam","hchil","gdwrk","effor"))
 summary(fit2, fit.measures=TRUE, standardized=TRUE)
 ```
-
 
 
 ## 2009 {.tabset}
@@ -654,9 +706,6 @@ merit19$M2_P1_9  <-sjmisc::rec(merit19$M2_P1_9 ,rec="rev")# invertir sentido esc
 merit19$M2_P1_10 <-sjmisc::rec(merit19$M2_P1_10,rec="rev")# invertir sentido escala
 merit19$M2_P1_11 <-sjmisc::rec(merit19$M2_P1_11,rec="rev")# invertir sentido escala
 
-
-
-
 merit19<- rename(merit19,
                  ambit=M2_P1_1 ,
                  wfami=M2_P1_2 ,
@@ -679,7 +728,6 @@ corrplot::corrplot.mixed(poly19a$rho,order = "AOE")
 ```
 
 ```{r analisis factorial 2019 percepcion}
-
 sjPlot::sjt.fa(select(merit19,c(wfami,edpar,slfed,hwork,polco,corru,etnic,relig,gendr)),
                method = "wls",
                nmbr.fctr = 4,
@@ -704,8 +752,6 @@ merit19$M2_P14_2  <- car::recode(merit19$M2_P14_2,"c(8,9)=NA",as.numeric = TRUE)
 merit19$M2_P14_3  <- car::recode(merit19$M2_P14_3,"c(8,9)=NA",as.numeric = TRUE)
 merit19$M2_P14_4  <- car::recode(merit19$M2_P14_4,"c(8,9)=NA",as.numeric = TRUE)
 
-
-
 merit19$M2_P14_1  <-sjmisc::rec(merit19$M2_P14_1 ,rec="rev")# invertir sentido escala
 merit19$M2_P14_2  <-sjmisc::rec(merit19$M2_P14_2 ,rec="rev")# invertir sentido escala
 merit19$M2_P14_3  <-sjmisc::rec(merit19$M2_P14_3 ,rec="rev")# invertir sentido escala
@@ -716,7 +762,6 @@ merit19<- rename(merit19,
                 neduc=M2_P14_2,
                 hchil=M2_P14_3,
                 gdwrk=M2_P14_4)
-
 
 poly19b <- psych::polychoric(select(merit19,c(respo,neduc,hchil,gdwrk)),na.rm = TRUE)
 ```
