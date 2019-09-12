@@ -1,3 +1,13 @@
+/*
+para evitar que aparezca el titulo del YAML al princio de cada página
+*/
+
+h1.title {
+  font-size: 0px;
+}
+
+
+
 
 /*
 html, body {
@@ -14,17 +24,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1.title {
-  color: #FFFFFF;  
+  color: #FFFFFF;
   font-size: 30px;
-  
+
   }
 
 h1 {
   font-size: 32px;
 }
-h1.title {
-  font-size: 32px;
-}
+
 h2 {
   font-size: 28px;
 }
@@ -52,11 +60,12 @@ img-circle {
 }
 
 
-/*  
+
+/*
  *  colors
  */
- 
- 
+
+
 :root {
   /* site colors */
   --light-blue: #0DC8F6;
@@ -84,8 +93,8 @@ img-circle {
 }
 
 
-.navbar-default .navbar-nav>.active>a, 
-.navbar-default .navbar-nav>.active>a:hover, 
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
 .navbar-default .navbar-nav>.active>a:focus {
   color: var(--white);
   background-color: #0471de;
