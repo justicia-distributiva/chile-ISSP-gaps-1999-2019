@@ -1,0 +1,180 @@
+---
+title: 'ISSP 2009 - Salary Gap & meritocracy'
+author: "Julio César Iturra Sanhueza - jciturra@uc.cl"
+output: 
+html_document: 
+code_folding: show
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE,warning = FALSE,message = FALSE)
+rm(list=ls())
+```
+
+
+
+```{r }
+{
+  library(dplyr)
+  library(here)
+  library(sjlabelled)
+  library(sjPlot)
+  library(ggplot2)
+  library(knitr)
+  library(kableExtra)
+}
+```
+
+# Salarios
+
+```{r salario percibido y justo}
+salarios <- issp09 %>% select(V5,
+                              V23,V25, # Salario percibio obrero y gerente
+                              V28,V30) # Salario justo    obrero y gerente
+
+salarios[1:ncol(salarios)][salarios[1:ncol(salarios)] == -98] <- NA # Limpieza de missing data
+salarios[1:ncol(salarios)][salarios[1:ncol(salarios)] == -99] <- NA # 
+salarios[1:ncol(salarios)][salarios[1:ncol(salarios)] == -97] <- NA # 
+salarios[1:ncol(salarios)][salarios[1:ncol(salarios)] == 99999995] <- NA # 
+salarios[1:ncol(salarios)][salarios[1:ncol(salarios)] == 999999999996] <- NA # 
+
+salarios$V5 <- as_character(salarios$V5)
+
+#--- Nombres sustantivos para analisis
+salarios <- rename(salarios,
+                   pais=V5,
+                   salperger=V23,
+                   salperobr=V25,
+                   saljusger=V28,
+                   saljusobr=V30)
+
+```
+
+```{r gap salario}
+#---Brecha salarial percibida
+
+salarios$gap_perc   <-  as.numeric(salarios$salperger/salarios$salperobr) # diferencia total
+salarios$lngap_perc <-  as.numeric(log(salarios$gap_perc))                # diferencia log
+
+
+#---Brecha salarial justa
+
+salarios$gap_just   <-  as.numeric(salarios$saljusger/salarios$saljusobr) # diferencia total
+salarios$lngap_just <-  as.numeric(log(salarios$gap_just))                # diferencia log
+```
+
+
+
+
+
+<button href="#tabla1" data-toggle="collapse" style="text-align: right;">Tablas</button>
+
+<div id="tabla1" class="collapse">
+  
+```{r Salarios 20tiles }
+
+salarios$n20t_ger_p <- ntile(x = salarios$salperger,n = 20) # 20 grupos percepción de salario gerente
+salarios$n20t_obr_p <- ntile(x = salarios$salperobr,n = 20) # 20 grupos percepción de salario obrero
+
+
+salarios$n20t_ger_j <- ntile(x = salarios$saljusger,n = 20) # 20 grupos percepción de salario gerente
+salarios$n20t_obr_j <- ntile(x = salarios$saljusobr,n = 20) # 20 grupos percepción de salario obrero
+
+# Dolar observado en 2009 = Promedio agosto = $540,42 
+
+dolar= 540.42
+
+# Salario percibido
+
+table_pger <- salarios %>% group_by(n20t_ger_p) %>% summarise(M=mean (salperger, na.rm = TRUE)*dolar,
+                                                              Med=median(salperger, na.rm = TRUE)*dolar,
+                                                              min=min(salperger,na.rm = TRUE) *dolar,
+                                                              max=max(salperger,na.rm = TRUE) *dolar) 
+
+table_pobr <- salarios %>% group_by(n20t_obr_p) %>% summarise(M=mean (salperobr, na.rm = TRUE)*dolar,
+                                                              Med=median(salperobr, na.rm = TRUE)*dolar,
+                                                              min=min(salperobr,na.rm = TRUE) *dolar,
+                                                              max=max(salperobr,na.rm = TRUE) *dolar) 
+
+# Salario justo
+
+table_jger <- salarios %>% group_by(n20t_ger_j) %>% summarise(M=mean (saljusger, na.rm = TRUE)*dolar,
+                                                              Med=median(saljusger, na.rm = TRUE)*dolar,
+                                                              min=min(saljusger,na.rm = TRUE) *dolar,
+                                                              max=max(saljusger,na.rm = TRUE) *dolar)
+
+table_jobr <- salarios %>% group_by(n20t_obr_j) %>% summarise(M=mean (saljusobr, na.rm = TRUE)*dolar,
+                                                              Med=median(saljusobr, na.rm = TRUE)*dolar,
+                                                              min=min(saljusobr,na.rm = TRUE) *dolar,
+                                                              max=max(saljusobr,na.rm = TRUE) *dolar,)
+
+
+kable(x = table_pger,format = "html",digits = 0,caption = "Salario percibido Gerente") %>% kable_styling(full_width = FALSE)
+kable(x = table_pobr,format = "html",digits = 0,caption = "Salario percibido Obrero")  %>% kable_styling(full_width = FALSE)
+kable(x = table_jobr,format = "html",digits = 0,caption = "Salario justo Gerente")     %>% kable_styling(full_width = FALSE)
+kable(x = table_jobr,format = "html",digits = 0,caption = "Salario justo Obrero")      %>% kable_styling(full_width = FALSE)
+```
+
+</div>
+
+```{r}
+# sjp.frq(var.cnt = salarios$lngap_perc,type = "histogram", show.mean = TRUE)
+# sjp.frq(var.cnt = salarios$lngap_just,type = "histogram", show.mean = TRUE)
+```
+
+```{r include=FALSE}
+table1<- salarios %>% group_by(Pais=as_factor(pais)) %>% summarise(M=mean(lngap_perc,na.rm = TRUE), 
+                                                                      ME=median(lngap_perc,na.rm = TRUE),
+                                                                      SD=sd(lngap_perc,na.rm = TRUE),
+                                                                      Min=min(lngap_perc,na.rm = TRUE),
+                                                                      Max=max(lngap_perc,na.rm = TRUE))
+
+table2<- salarios %>% group_by(Pais=as_factor(pais)) %>% summarise(M=mean(lngap_just,na.rm = TRUE), 
+                                                                      ME=median(lngap_just,na.rm = TRUE),
+                                                                      SD=sd(lngap_just,na.rm = TRUE),
+                                                                      Min=min(lngap_just,na.rm = TRUE),
+                                                                      Max=max(lngap_just,na.rm = TRUE))
+
+kable(x = table1,format = "html",digits = 2) %>% kable_styling()
+kable(x = table2,format = "html",digits = 2) %>% kable_styling()
+```
+
+```{r, fig.width=12,fig.height=8}
+ggplot(table1, aes(x=reorder(Pais,+M), y=M, fill=Pais, label =round(M,1))) +
+  geom_bar(stat="identity",fill="grey", color="black",width = 0.8) +
+  geom_text(vjust=0.5,hjust=-1, size=3.5, color="red", fontface="bold") +
+  guides(fill=FALSE) + 
+  coord_flip() +
+  theme_classic() +
+  ylab("ln(Salario percibido)")+
+  xlab("") +
+  ggtitle(label = "Brecha de Salario percibido")
+
+ggplot(table2, aes(x=reorder(Pais,+M), y=M, fill=Pais, label =round(M,1))) +
+  geom_bar(stat="identity",fill="grey", color="black",width = 0.8) +
+  geom_text(vjust=0.5,hjust=-1, size=3.5, color="red", fontface="bold") +
+  guides(fill=FALSE) + 
+  coord_flip() +
+  theme_classic() +
+  ylab("ln(Salario justo)")+
+  xlab("") +
+  ggtitle(label = "Brecha de Salario justo")
+```
+
+# Meritocracia
+
+```{r}
+# merito <- issp09 %>% select(V5,V7:V20)
+# 
+# 1 Essential
+# 2 Very important
+# 3 Fairly important
+# 4 Not very important
+# 5 Not important at all
+# 8 Cant choose
+# 9	NA
+
+```
+
+
+

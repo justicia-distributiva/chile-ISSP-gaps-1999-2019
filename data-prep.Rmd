@@ -1,0 +1,70 @@
+---
+title: 'Data preparation'
+author: ""
+output:
+    html_document:
+        smart: false
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE, cache = TRUE)
+options(scipen=999)
+rm(list=ls())
+```
+
+
+## Libraries
+```{r }
+
+library(sjlabelled,dplyr)
+
+```
+
+
+## Get data 
+```{r results='hide'}
+
+issp99<- read_stata("data/dataraw/issp1999.dta")
+issp09<- read_stata("data/dataraw/issp2009.dta")
+issp19<- read_stata("data/dataraw/issp2019.dta")
+
+```
+
+## Select Chile
+```{r seleccionar Chile}
+
+# 1999
+
+sjmisc::find_var(issp99,"Chile",search = "all")
+sjlabelled::get_labels(issp99$v3,values = "as.name")
+
+cl99 = issp99 %>% dplyr::filter(v3==30)
+
+# 2009
+
+sjmisc::find_var(issp09,"Chile",search = "all")
+sjlabelled::get_labels(issp09$V4,values = "as.name")
+
+cl09 <- issp09 %>% dplyr::filter(V4==152)
+
+# 2019 ... solo Chile
+
+cl19 <- issp19
+
+```
+
+
+## Lowercase & save
+
+```{r}
+bases=c("cl99","cl09","cl19")
+
+for (i in bases) {
+  df.tmp <- get(i)
+  names(df.tmp) <- tolower(names(df.tmp)) 
+  assign(i, df.tmp)
+  save(list=paste(i, sep=""), file = (paste("data/dataproc/", i,".RData", sep="")))
+}
+
+```
+

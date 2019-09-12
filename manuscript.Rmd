@@ -1,0 +1,15 @@
+---
+title: 'manuscript'
+author: ""
+output:
+    html_document:
+        smart: false
+        toc: true
+        toc_float: true
+        number_sections: true
+
+---
+
+
+
+### (here the manuscript)

@@ -1,0 +1,20 @@
+name: "Project"
+output_dir: "."
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    css: 'style.css'
+navbar:
+  title: "Pay differentials Chile ISSP"
+  left:
+  - text: "Data preparation"
+    href: data-prep.html  
+  - text: "Analysis"
+    href: analysis.html
+  - text: "Manuscript"
+    href: manuscript.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/juancarloscastillo/equal_pay    
+    
