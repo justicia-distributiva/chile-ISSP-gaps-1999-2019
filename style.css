@@ -1,0 +1,109 @@
+/*
+para evitar que aparezca el titulo del YAML al princio de cada página
+*/
+
+h1.title {
+  font-size: 0px;
+}
+
+
+
+
+/*
+html, body {
+  font-weight: 500;
+  font-size: 20px;
+  height: 100%;
+  font-family: 'Garamond', serif;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Garamond', serif;
+  font-weight: 600;
+}
+
+h1.title {
+  color: #FFFFFF;
+  font-size: 30px;
+
+  }
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 100;
+}
+h4 {
+  font-size: 20px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+img {
+    display: block;
+    margin: auto;
+}
+
+img-circle {
+    border-radius: 50%;
+}
+
+
+
+/*
+ *  colors
+ */
+
+
+:root {
+  /* site colors */
+  --light-blue: #0DC8F6;
+  --ruby: #E71B23;
+  --pale-red: #E55743;
+  --dark-grey: #626262;
+  --light-grey: #767F7F;
+  --pale-black: #212121;
+  --white: #FFFFFF;
+}
+
+
+
+.navbar-default {
+  background-color: #97b6cc;
+  color: var(--pale-black);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.navbar-default .navbar-brand {
+  color: var(--pale-black);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus {
+  color: var(--white);
+  background-color: #0471de;
+  font-weight: 300;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: var(--pale-black);
+  font-weight: 300;
+}
+
+*/

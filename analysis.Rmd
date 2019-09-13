@@ -1,0 +1,708 @@
+---
+title: 'Analysis'
+author: ""
+output:
+    html_document:
+        smart: true
+        toc: true
+        toc_float: true
+        number_sections: true
+        code_folding: show
+
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE, cache = TRUE)
+options(scipen=999)
+rm(list=ls())
+```
+
+
+# Libraries & data
+
+```{r }
+{
+  library(dplyr)
+  library(sjlabelled)
+  library(sjPlot)
+  library(ggplot2)
+  library(knitr)
+  library(kableExtra)
+  library(GPArotation)
+  library(lavaan)
+  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
+}
+```
+
+
+```{r load data}
+load(file = "data/dataproc/cl09.RData")
+load(file = "data/dataproc/cl99.RData")
+load(file = "data/dataproc/cl19.RData")
+```
+
+# Brechas salarios percibida y justa
+
+- Hacer un par de boxplot para cada variable de Obrero Gerente (hacer pull luego de esto).
+- CASEN (2009,2011,2013,2015,2017): Cálculo de los salarios por ocupación (media y mediana).
+    - Emplear diseño muestral complejo
+
+```{r salario percibido y justo 1999}
+salarios99 <- cl99 %>% select(v3,
+                              v21,v16,    # Salario percibio obrero y gerente
+                              v31,v26)# Salario justo    obrero y gerente
+# M2_P2_PRESIDENTE cuanto gana GERENTE
+# M2_P2_OBRERO cuanto gana OBRERO
+# M2_P3_PRESIDENTE cuanto deberia ganar GERENTE
+# M2_P3_OBRERO cuanto deberia ganar OBRERO
+# table(salarios99$V21) #  99999999999
+# table(salarios99$V16) #  99999999998 99999999999
+# table(salarios99$V31) # 99999999998 99999999999
+# table(salarios99$V26) # 99999999998 99999999999
+salarios99$v21[salarios99$v21 %in% c(99999999998,99999999999)] <- NA
+salarios99$v16[salarios99$v16 %in% c(99999999998,99999999999)] <- NA
+salarios99$v31[salarios99$v31 %in% c(99999999998,99999999999)] <- NA
+salarios99$v26[salarios99$v26 %in% c(99999999998,99999999999)] <- NA
+
+salarios99$v3 <- as_character(salarios99$v3)
+
+#--- Nombres sustantivos para analisis
+salarios99 <- rename(salarios99,pais=v3,salperger=v16,salperobr=v21,saljusger=v26,saljusobr=v31)
+```
+
+```{r remover outliers 1999, include=FALSE}
+table(salarios99$salperobr) # <22000000 120000000
+table(salarios99$saljusobr) # <30000000
+table(salarios99$salperger)
+table(salarios99$saljusger)
+#Quitar outliers *************************
+sal99 <- salarios99 %>% filter(salperobr<22000000 & saljusobr<30000000)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal99$gap_perc  <-  as.numeric(sal99$salperger/sal99$salperobr) # brecha total salario percibido
+sal99$gap_just  <-  as.numeric(sal99$saljusger/sal99$saljusobr) # brecha total salario justo
+```
+
+```{r gap salario 1999}
+#---Brecha salarial percibida
+salarios99$gap_perc   <-  as.numeric(salarios99$salperger/salarios99$salperobr) # diferencia total
+salarios99$lngap_perc <-  as.numeric(log(salarios99$gap_perc))                 # diferencia log
+
+#---Brecha salarial justa
+salarios99$gap_just   <-  as.numeric(salarios99$saljusger/salarios99$saljusobr) # diferencia total
+salarios99$lngap_just <-  as.numeric(log(salarios99$gap_just))                # diferencia log
+```
+
+```{r salario percibido y justo 2009}
+salarios09 <- cl09 %>% select(v5,
+                              v23,v25, # Salario percibio obrero y gerente
+                              v28,v30) # Salario justo    obrero y gerente
+
+# table(salarios09$V23) # cuanto gana GERENTE
+# table(salarios09$V25) # cuanto gana OBRERO
+# table(salarios09$V28) # cuando deberia ganar GERENTE
+# table(salarios09$V30) # cuanto deberia ganar OBRERO
+salarios09$v23[salarios09$v23 %in%c(-99,-98,-97,999999999996)] <- NA
+salarios09$v25[salarios09$v25 %in%c(-99,-98,-97)]              <- NA
+salarios09$v28[salarios09$v28 %in%c(-99,-98,-97)]              <- NA
+salarios09$v30[salarios09$v30 %in%c(-99,-98,-97)]              <- NA
+
+
+
+salarios09$v5 <- as_character(salarios09$v5)
+
+#--- Nombres sustantivos para analisis
+salarios09 <- rename(salarios09,pais=v5,salperger=v23,salperobr=v25,saljusger=v28,saljusobr=v30)
+```
+
+```{r remover outliers 2009, include=FALSE}
+table(salarios09$salperobr) #   80     150     158     160     180     190     200     300
+table(salarios09$saljusobr) #   190      230      250      300      350      500
+table(salarios09$salperger) # 5000     10000     20000
+table(salarios09$saljusger)
+#Quitar outliers *************************
+sal09 <- salarios09 %>% filter(salperobr>300 & saljusobr>500 & salperger >=100000 & saljusger >=100000)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal09$gap_perc  <-  as.numeric(sal09$salperger/sal09$salperobr) # brecha total salario percibido
+sal09$gap_just  <-  as.numeric(sal09$saljusger/sal09$saljusobr) # brecha total salario justo
+```
+
+```{r gap salario 2009}
+#---Brecha salarial percibida
+salarios09$gap_perc   <-  as.numeric(salarios09$salperger/salarios09$salperobr) # diferencia total
+salarios09$lngap_perc <-  as.numeric(log(salarios09$gap_perc))                # diferencia log
+
+#---Brecha salarial justa
+salarios09$gap_just   <-  as.numeric(salarios09$saljusger/salarios09$saljusobr) # diferencia total
+salarios09$lngap_just <-  as.numeric(log(salarios09$gap_just))                # diferencia log
+```
+
+```{r salario percibido y justo 2019}
+salarios19 <- cl19 %>% select(m2_p2_presidente,m2_p2_obrero,  # Salario percibio obrero y gerente
+                              m2_p3_presidente,m2_p3_obrero) # Salario justo    obrero y gerente
+
+# table(salarios19$M2_P2_PRESIDENTE) # cuanto gana GERENTE
+# table(salarios19$M2_P2_OBRERO)     # cuanto gana OBRERO
+# table(salarios19$M2_P3_PRESIDENTE) # cuando deberia ganar GERENTE
+# table(salarios19$M2_P3_OBRERO )    # cuanto deberia ganar OBRERO
+# salarios09$V23[salarios09$V23 %in%c(-99,-98,-97,999999999996)] <- NA
+# salarios09$V25[salarios09$V25 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V28[salarios09$V28 %in%c(-99,-98,-97)]              <- NA
+# salarios09$V30[salarios09$V30 %in%c(-99,-98,-97)]              <- NA
+
+#--- Nombres sustantivos para analisis
+salarios19 <- rename(salarios19,salperger=m2_p2_presidente,salperobr=m2_p2_obrero,
+                     saljusger=m2_p3_presidente,saljusobr=m2_p3_obrero)
+```
+
+```{r remover outliers 2019, include=FALSE}
+table(salarios19$salperobr) # 500
+table(salarios19$saljusobr) # 300     500     600     800
+table(salarios19$salperger) # ok
+table(salarios19$saljusger) # ok
+#Quitar outliers *************************
+sal19 <- salarios19 %>% filter(salperobr>500 & saljusobr>800)
+# Filtrato por outliers < a $22.000.000 en salario percibido obrero
+# Filtrato por outliers < a $30.000.000 en salario justo obrero
+sal19$gap_perc  <-  as.numeric(sal19$salperger/sal19$salperobr) # brecha total salario percibido
+sal19$gap_just  <-  as.numeric(sal19$saljusger/sal19$saljusobr) # brecha total salario justo
+```
+
+```{r gap salario 2019}
+#---Brecha salarial percibida
+salarios19$gap_perc   <-  as.numeric(salarios19$salperger/salarios19$salperobr) # diferencia total
+salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                  # diferencia log
+
+
+#---Brecha salarial justa
+salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) # diferencia total
+salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
+```
+
+## Brecha total
+
+```{r descriptivos brecha total 1999-2019}
+# Tabla 1 ****************************************************************************************
+
+table1<- rbind(psych::describe(salarios99$gap_perc),
+               psych::describe(salarios09$gap_perc),
+               psych::describe(salarios19$gap_perc))
+
+rownames(table1) <- c("1999","2009","2019")
+table1 <- table1 %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table1,row.names = TRUE, digits = 2,caption = "Brecha total de salario percibido por año") %>% kable_styling()
+
+# Tabla 2 ****************************************************************************************
+
+table2<- rbind(psych::describe(salarios99$gap_just),
+               psych::describe(salarios09$gap_just),
+               psych::describe(salarios19$gap_just))
+
+rownames(table2) <- c("1999","2009","2019")
+table2 <- table2 %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table2,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario justo por año") %>% kable_styling()
+
+```
+
+```{r descriptivos brecha total (trimmed) 1999-2019}
+# Tabla 3 ****************************************************************************************
+
+table3<- rbind(psych::describe(sal99$gap_just),
+               psych::describe(sal09$gap_just),
+               psych::describe(sal19$gap_just))
+
+rownames(table3) <- c("1999","2009","2019")
+table3 <- table3 %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table3,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario justo por año") %>% kable_styling() %>%
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+
+# Tabla 4 ****************************************************************************************
+
+table4<- rbind(psych::describe(sal99$gap_perc),
+               psych::describe(sal09$gap_perc),
+               psych::describe(sal19$gap_perc))
+
+rownames(table4) <- c("1999","2009","2019")
+table4 <- table4 %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table4,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de salario percibido por año") %>% kable_styling() %>%
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+```
+
+## Brecha estimada (log)
+
+```{r Tablas descriptivos ln(gaps)}
+# Tabla 1 ****************************************************************************************
+table1b<- rbind(psych::describe(log(salarios99$gap_perc)),
+               psych::describe(log(salarios09$gap_perc)),
+               psych::describe(log(salarios19$gap_perc)))
+rownames(table1b) <- c("1999","2009","2019")
+table1b <- table1b %>% select(n,mean,sd,median,trimmed,min,max)
+kable(table1b,row.names = TRUE, digits = 2,caption = "Brecha total de ln(salario percibido) por año") %>% kable_styling()
+
+# Tabla 2 ****************************************************************************************
+table2b<- rbind(psych::describe(log(salarios99$gap_just)),
+               psych::describe(log(salarios09$gap_just)),
+               psych::describe(log(salarios19$gap_just)))
+rownames(table2b) <- c("1999","2009","2019")
+table2b <- table2b %>% select(n,mean,sd,median,trimmed,min,max)
+kable(table2b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling()
+
+
+# Tabla 3 ****************************************************************************************
+
+table3b<- rbind(psych::describe(log(sal99$gap_just)),
+               psych::describe(log(sal09$gap_just)),
+               psych::describe(log(sal19$gap_just)))
+
+rownames(table3b) <- c("1999","2009","2019")
+table3b <- table3b %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table3b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling() %>%
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+
+# Tabla 4 ****************************************************************************************
+
+table4b<- rbind(psych::describe(log(sal99$gap_perc)),
+               psych::describe(log(sal09$gap_perc)),
+               psych::describe(log(sal19$gap_perc)))
+
+rownames(table4b) <- c("1999","2009","2019")
+table4b <- table4b %>% select(n,mean,sd,median,trimmed,min,max)
+
+kable(table4b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario percibido) por año") %>% kable_styling() %>%
+footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+
+```
+
+
+```{r, fig.align='center', fig.width=10}
+ggplot() +
+  geom_density(data = sal99,aes(x = log(gap_just),fill="1999", alpha=0.9)) +
+  geom_density(data = sal09,aes(x = log(gap_just),fill="2009", alpha=0.5)) +
+  geom_density(data = sal19,aes(x = log(gap_just),fill="2019", alpha=0.5)) +
+  geom_vline(xintercept = median(log(sal99$gap_just),na.rm = TRUE), linetype="dashed",color = "black",    size=1.5)+
+  geom_vline(xintercept = median(log(sal09$gap_just),na.rm = TRUE), linetype="dotted",color = "navyblue", size=1.5)+
+  geom_vline(xintercept = median(log(sal19$gap_just),na.rm = TRUE), linetype="dotted",color = "darkgreen",size=1.5)+
+  xlab(label = "Salario justo Ln(Gerente/Obrero)")+
+  guides(fill = guide_legend("Año"), alpha=FALSE) +
+  theme_classic()
+```
+
+
+# Meritocracia {.tabset}
+
+## 1999 {.tabset}
+
+### Percepción {.tabset}
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- v4: Importancia para surgir: provenir familia rica  (wfami)
+
+- V5: Importancia para surgir: Conocer personas adecuadas (knope)
+
+
+**(1) Muy de acuerdo - Muy en desacuerdo (5)** (8 no sabe, 9 no responde)
+
+- v6: Recompensas: En Chile las personas son remuneradas por sus esfuerzos (refor)
+
+- v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades (rinte)
+
+- v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. (corru)
+
+```{r}
+merit99 <- cl99 %>% select(v4:v8,v49:v55)
+
+merit99$V4 <- car::recode(merit99$v4,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v5 <- car::recode(merit99$v5,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v6 <- car::recode(merit99$v6,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v7 <- car::recode(merit99$v7,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v8 <- car::recode(merit99$v8,"c(8,9)=NA",as.numeric = TRUE)
+
+merit99$v4 <- sjmisc::rec(merit99$v4,rec="rev")
+merit99$v5 <- sjmisc::rec(merit99$v5,rec="rev")
+merit99$v6 <- sjmisc::rec(merit99$v6,rec="rev")
+merit99$v7 <- sjmisc::rec(merit99$v7,rec="rev")
+merit99$v8 <- sjmisc::rec(merit99$v8,rec="rev")
+
+merit99 <- rename(merit99,
+                  wfami = v4,
+                  knope = v5,
+                  refor = v6,
+                  rinte = v7,
+                  corru = v8)
+
+poly99a <- psych::polychoric(select(merit99,c(wfami,knope,refor,rinte,corru)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ de Meritocracia para Chile ISSP 1999**"}
+corrplot::corrplot.mixed(poly99a$rho,order = "AOE")
+```
+
+```{r analisis factorial 1999 percepcion}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit99,c(wfami,knope,refor,rinte)),
+               method = "wls",
+               nmbr.fctr = 2,
+               title="Analisis Factorial 1999 Percepcion")
+```
+
+```{r analisis factorial confirmatorio 199}
+
+m1per99 <- '
+gah_nmerit=~wfami+knope+corru
+recom=~refor+rinte
+'
+fit1 <- cfa(model = m1per99,data = merit99)
+```
+
+```{r plot CFA 1}
+semPlot::semPaths(fit1, "std",
+                  edge.color = "black",
+                  style = "ram",
+                  exoVar = TRUE,
+                  intercepts = F,
+                  thresholds = F,
+                  fade =F)
+```
+
+### Preferencia
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+OO
+- v49:Importancia para pagar: nivel de responsabilidadad asociado al trabajo (respo)
+
+- v50:Importancia para pagar: numero de años dedicados a educación y capacitación (neduc)
+
+- v51:Importancia para pagar: si el trabajo requiere que se supervise a otras personas (suprv)
+
+- v52:Importancia para pagar: Lo que se necesita para mantener a una familia (mafam)
+
+- v53:Importancia para pagar: Que una persona tenga hijos que mantener (hchil)
+
+- v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo (gdwrk)
+
+- v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo (effor)
+
+```{r}
+
+merit99$v49 <- car::recode(merit99$v49,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v50 <- car::recode(merit99$v50,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v51 <- car::recode(merit99$v51,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v52 <- car::recode(merit99$v52,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v53 <- car::recode(merit99$v53,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v54 <- car::recode(merit99$v54,"c(8,9)=NA",as.numeric = TRUE)
+merit99$v55 <- car::recode(merit99$v55,"c(8,9)=NA",as.numeric = TRUE)
+
+merit99$v49 <-sjmisc::rec(merit99$v49,rec="rev")
+merit99$v50 <-sjmisc::rec(merit99$v50,rec="rev")
+merit99$v51 <-sjmisc::rec(merit99$v51,rec="rev")
+merit99$v52 <-sjmisc::rec(merit99$v52,rec="rev")
+merit99$v53 <-sjmisc::rec(merit99$v53,rec="rev")
+merit99$v54 <-sjmisc::rec(merit99$v54,rec="rev")
+merit99$v55 <-sjmisc::rec(merit99$v55,rec="rev")
+
+
+merit99 <- rename(merit99,
+                  respo=v49,
+                  neduc=v50,
+                  suprv=v51,
+                  mafam=v52,
+                  hchil=v53,
+                  gdwrk=v54,
+                  effor=v55)
+
+
+poly99b <- psych::polychoric(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
+```
+
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 1999**"}
+corrplot::corrplot.mixed(poly99b$rho,order = "AOE")
+```
+
+```{r analisis factorial 1999 preferencia}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit99,c(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),
+               method = "wls",
+               nmbr.fctr = 3,
+               title="Analisis Factorial 1999 Preferencia")
+```
+
+```{r analisis factorial confirmatorio 1999 preferencia}
+m1pref99 <- '
+resp=~respo+neduc+suprv
+fami=~mafam+hchil
+merit=~gdwrk+effor
+'
+fit2 <- cfa(model = m1pref99,data = merit99, ordered = c("respo","neduc","suprv","mafam","hchil","gdwrk","effor"))
+summary(fit2, fit.measures=TRUE, standardized=TRUE)
+```
+
+
+## 2009 {.tabset}
+
+### Percepción
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- V6 : Importancia para surgir: provenir de familia rica (wfami)
+
+- V7 : Importancia para surgir: tener padres con buen nivel de educación (edpar)
+
+- V8 : Importancia para surgir: que UD tenga un buen nivel de educación (slfed)
+
+- V9 : Importancia para surgir: Tener ambición (ambit)
+
+- V10: Importancia para surgir: trabajo duro (hwork)
+
+- V11: Importancia para surgir: conocer a las personas adecuadas (knope)
+
+- V12: Importancia para surgir: tener contactos políticos (polco)
+
+- V13: Importancia para surgir: pagar coimas (corru)
+
+- V14: Importancia para surgir: la raza u origen étnico de las personas (etnic)
+
+- V15: Importancia para surgir: la religión que tengan las personas (relig)
+
+- V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer (gendr)
+
+```{r}
+merit09 <- cl09 %>% select(v6:v16,v47:v52)
+
+merit09$v6  <- car::recode(merit09$v6 ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit09$v7  <- car::recode(merit09$v7 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v8  <- car::recode(merit09$v8 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v9  <- car::recode(merit09$v9 ,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v10 <- car::recode(merit09$v10,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v11 <- car::recode(merit09$v11,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v12 <- car::recode(merit09$v12,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v13 <- car::recode(merit09$v13,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v14 <- car::recode(merit09$v14,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v15 <- car::recode(merit09$v15,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v16 <- car::recode(merit09$v16,"c(8,9)=NA",as.numeric = TRUE)
+
+merit09$v6  <-sjmisc::rec(merit09$v6 ,rec="rev")# invertir sentido escala
+merit09$v7  <-sjmisc::rec(merit09$v7 ,rec="rev")# invertir sentido escala
+merit09$v8  <-sjmisc::rec(merit09$v8 ,rec="rev")# invertir sentido escala
+merit09$v9  <-sjmisc::rec(merit09$v9 ,rec="rev")# invertir sentido escala
+merit09$v10 <-sjmisc::rec(merit09$v10,rec="rev")# invertir sentido escala
+merit09$v11 <-sjmisc::rec(merit09$v11,rec="rev")# invertir sentido escala
+merit09$v12 <-sjmisc::rec(merit09$v12,rec="rev")# invertir sentido escala
+merit09$v13 <-sjmisc::rec(merit09$v13,rec="rev")# invertir sentido escala
+merit09$v14 <-sjmisc::rec(merit09$v14,rec="rev")# invertir sentido escala
+merit09$v15 <-sjmisc::rec(merit09$v15,rec="rev")# invertir sentido escala
+merit09$v16 <-sjmisc::rec(merit09$v16,rec="rev")# invertir sentido escala
+
+merit09<- rename(merit09,
+                 wfami=v6 ,
+                 edpar=v7 ,
+                 slfed=v8 ,
+                 ambit=v9 ,
+                 hwork=v10,
+                 knope=v11,
+                 polco=v12,
+                 corru=v13,
+                 etnic=v14,
+                 relig=v15,
+                 gendr=v16)
+
+
+poly09a <- psych::polychoric(select(merit09,c(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2009**"}
+corrplot::corrplot.mixed(poly09a$rho,order = "AOE")
+```
+
+
+```{r analisis factorial 2009 percepcion}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit09,c(wfami,edpar,slfed,ambit,hwork,polco,corru,etnic,relig,gendr)),
+               method = "wls",
+               nmbr.fctr = 4,
+               title = "Analisis Factorial 2009 Percepcion")
+```
+
+
+### Preferencia
+
+- V47:Importancia para pagar: el nivel de responsabilidad que tiene el trabajo (respo)
+
+- V48:Importancia para pagar: el numero de años dedicados a la educación y capacitación (neduc)
+
+- V49:Importancia para pagar: lo que se necesita para mantener una familia (mafam)
+
+- V50:Importancia para pagar: El que la persona tenga hijos que mantener (hchil)
+
+- V51:Importancia para pagar: lo bien que él o ella realiza su tabajo (gdwrk)
+
+- V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo (effor)
+
+```{r}
+
+merit09$v47  <- car::recode(merit09$v47,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit09$v48  <- car::recode(merit09$v48,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v49  <- car::recode(merit09$v49,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v50  <- car::recode(merit09$v50,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v51  <- car::recode(merit09$v51,"c(8,9)=NA",as.numeric = TRUE)
+merit09$v52  <- car::recode(merit09$v52,"c(8,9)=NA",as.numeric = TRUE)
+
+
+merit09$v47  <-sjmisc::rec(merit09$v47 ,rec="rev")# invertir sentido escala
+merit09$v48  <-sjmisc::rec(merit09$v48 ,rec="rev")# invertir sentido escala
+merit09$v49  <-sjmisc::rec(merit09$v49 ,rec="rev")# invertir sentido escala
+merit09$v50  <-sjmisc::rec(merit09$v50 ,rec="rev")# invertir sentido escala
+merit09$v51  <-sjmisc::rec(merit09$v51 ,rec="rev")# invertir sentido escala
+merit09$v52  <-sjmisc::rec(merit09$v52 ,rec="rev")# invertir sentido escala
+
+merit09<- rename(merit09,
+                 respo=v47,
+                 neduc=v48,
+                 mafam=v49,
+                 hchil=v50,
+                 gdwrk=v51,
+                 effor=v52)
+
+
+poly09b <- psych::polychoric(select(merit09,c(respo,neduc,mafam,hchil,gdwrk,effor)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2009**"}
+corrplot::corrplot.mixed(poly09b$rho,order = "AOE")
+```
+
+```{r analisis factorial 2009 preferencia}
+library(GPArotation)
+sjPlot::sjt.fa(select(merit09,c(respo,neduc,mafam,hchil,gdwrk,effor)),
+               method = "wls",
+               nmbr.fctr = 2,
+               title = "Analisis Factorial 2009 Preferencia")
+```
+
+## 2019 {.tabset}
+
+### Percepción
+
+**(1) Esencial - No tiene importancia (5)** (8 no sabe, 9 no responde)
+
+- M2_P1_1 : Para surgir en la vida:  Tener ambición
+
+- M2_P1_2 : Para surgir en la vida:  Provenir de una familia rica
+
+- M2_P1_3 : Para surgir en la vida:  Tener padres con buen nivel de educación
+
+- M2_P1_4 : Para surgir en la vida:  Que UD tenga un buen nivel de educación
+
+- M2_P1_5 : Para surgir en la vida:  El Trabajo Duro
+
+- M2_P1_6 : Para surgir en la vida:  Conocer a la personas adecuadas
+
+- M2_P1_7 : Para surgir en la vida:  Tener contactos políticos
+
+- M2_P1_8 : Para surgir en la vida:  Pagar coimas
+
+- M2_P1_9 : Para surgir en la vida:  La raza u origen étnico de la persona
+
+- M2_P1_10: Para surgir en la vida:  la religión de las personas
+
+- M2_P1_11: Para surgir en la vida:  el sexo de las personas
+
+```{r}
+merit19 <- cl19 %>% select(m2_p1_1:m2_p1_11,m2_p14_1:m2_p14_4)
+
+merit19$m2_p1_1  <- car::recode(merit19$m2_p1_1  ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit19$m2_p1_2  <- car::recode(merit19$m2_p1_2  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_3  <- car::recode(merit19$m2_p1_3  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_4  <- car::recode(merit19$m2_p1_4  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_5  <- car::recode(merit19$m2_p1_5  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_6  <- car::recode(merit19$m2_p1_6  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_7  <- car::recode(merit19$m2_p1_7  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_8  <- car::recode(merit19$m2_p1_8  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_9  <- car::recode(merit19$m2_p1_9  ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_10 <- car::recode(merit19$m2_p1_10 ,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p1_11 <- car::recode(merit19$m2_p1_11 ,"c(8,9)=NA",as.numeric = TRUE)
+
+merit19$m2_p1_1  <-sjmisc::rec(merit19$m2_p1_1 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_2  <-sjmisc::rec(merit19$m2_p1_2 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_3  <-sjmisc::rec(merit19$m2_p1_3 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_4  <-sjmisc::rec(merit19$m2_p1_4 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_5  <-sjmisc::rec(merit19$m2_p1_5 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_6  <-sjmisc::rec(merit19$m2_p1_6 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_7  <-sjmisc::rec(merit19$m2_p1_7 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_8  <-sjmisc::rec(merit19$m2_p1_8 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_9  <-sjmisc::rec(merit19$m2_p1_9 ,rec="rev")# invertir sentido escala
+merit19$m2_p1_10 <-sjmisc::rec(merit19$m2_p1_10,rec="rev")# invertir sentido escala
+merit19$m2_p1_11 <-sjmisc::rec(merit19$m2_p1_11,rec="rev")# invertir sentido escala
+
+merit19<- rename(merit19,
+                 ambit=m2_p1_1 ,
+                 wfami=m2_p1_2 ,
+                 edpar=m2_p1_3 ,
+                 slfed=m2_p1_4 ,
+                 hwork=m2_p1_5 ,
+                 knope=m2_p1_6 ,
+                 polco=m2_p1_7 ,
+                 corru=m2_p1_8 ,
+                 etnic=m2_p1_9 ,
+                 relig=m2_p1_10,
+                 gendr=m2_p1_11 )
+
+
+poly19a <- psych::polychoric(select(merit19,c(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2019**"}
+corrplot::corrplot.mixed(poly19a$rho,order = "AOE")
+```
+
+```{r analisis factorial 2019 percepcion}
+sjPlot::sjt.fa(select(merit19,c(wfami,edpar,slfed,hwork,polco,corru,etnic,relig,gendr)),
+               method = "wls",
+               nmbr.fctr = 4,
+               title = "Analisis Factorial 2019 Percepción")
+```
+
+
+### Preferencia
+
+- M2_P14_1: Importancia para ganar:  El nivel de responsabilidad que tiene su trabajo
+
+- M2_P14_2: Importancia para ganar:  El número de años dedicados a educación y capacitación
+
+- M2_P14_3: Importancia para ganar:  El que la persona tenga hijos que mantener
+
+- M2_P14_4: Importancia para ganar:  Lo bien que él o ella realiza su trabajo
+
+
+```{r}
+merit19$m2_p14_1  <- car::recode(merit19$m2_p14_1,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+merit19$m2_p14_2  <- car::recode(merit19$m2_p14_2,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p14_3  <- car::recode(merit19$m2_p14_3,"c(8,9)=NA",as.numeric = TRUE)
+merit19$m2_p14_4  <- car::recode(merit19$m2_p14_4,"c(8,9)=NA",as.numeric = TRUE)
+
+
+
+merit19$m2_p14_1  <-sjmisc::rec(merit19$m2_p14_1 ,rec="rev")# invertir sentido escala
+merit19$m2_p14_2  <-sjmisc::rec(merit19$m2_p14_2 ,rec="rev")# invertir sentido escala
+merit19$m2_p14_3  <-sjmisc::rec(merit19$m2_p14_3 ,rec="rev")# invertir sentido escala
+merit19$m2_p14_4  <-sjmisc::rec(merit19$m2_p14_4 ,rec="rev")# invertir sentido escala
+
+merit19<- rename(merit19,
+                respo=m2_p14_1,
+                neduc=m2_p14_2,
+                hchil=m2_p14_3,
+                gdwrk=m2_p14_4)
+
+poly19b <- psych::polychoric(select(merit19,c(respo,neduc,hchil,gdwrk)),na.rm = TRUE)
+```
+
+```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2019**"}
+corrplot::corrplot.mixed(poly19b$rho,order = "AOE")
+```
