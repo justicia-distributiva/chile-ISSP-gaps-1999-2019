@@ -12,7 +12,7 @@ output:
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(warning = FALSE,message = FALSE, cache = TRUE)
+knitr::opts_chunk$set(warning = FALSE,message = FALSE, cache = FALSE)
 options(scipen=999)
 rm(list=ls())
 ```
@@ -20,18 +20,16 @@ rm(list=ls())
 
 # Libraries & data
 
-```{r }
-{
-  library(dplyr)
-  library(sjlabelled)
-  library(sjPlot)
-  library(ggplot2)
-  library(knitr)
-  library(kableExtra)
-  library(GPArotation)
-  library(lavaan)
-  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
-}
+```{r}
+library(dplyr)
+library(sjlabelled)
+library(sjPlot)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(GPArotation)
+library(lavaan)
+library(semPlot)
 ```
 
 
@@ -42,10 +40,6 @@ load(file = "data/dataproc/cl19.RData")
 ```
 
 # Brechas salarios percibida y justa
-
-- Hacer un par de boxplot para cada variable de Obrero Gerente (hacer pull luego de esto).
-- CASEN (2009,2011,2013,2015,2017): Cálculo de los salarios por ocupación (media y mediana).
-    - Emplear diseño muestral complejo
 
 ```{r salario percibido y justo 1999}
 salarios99 <- cl99 %>% select(v3,
@@ -179,6 +173,64 @@ salarios19$lngap_perc <-  as.numeric(log(salarios19$gap_perc))                  
 salarios19$gap_just   <-  as.numeric(salarios19$saljusger/salarios19$saljusobr) # diferencia total
 salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # diferencia log
 ```
+
+
+```{r datos para plots}
+sal99$year <- 1999
+sal09$year <- 2009
+sal19$year <- 2019
+sal99$pais <- NULL
+sal09$pais <- NULL
+sal <- rbind(sal99,sal09,sal19)
+sal$year <- as.factor(sal$year)
+```
+
+## Boxplot salario percibido
+
+```{r boxplot salario percibido obrero}
+boxplot(salperobr~year,data=sal,horizontal=TRUE,
+        main="Salario percibido Obrero (outliers visualizados)")
+boxplot(salperobr~year,data=sal, horizontal=TRUE, outline=FALSE,
+        main="Salario percibido Obrero (outliers no visualizados)")
+```
+
+```{r boxplot salario percibido gerente}
+boxplot(salperger~year,data=sal,horizontal=TRUE,
+        main="Salario percibido Gerente (outliers visualizados)")
+boxplot(salperger~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Salario percibido Gerente (outliers no visualizados)")
+```
+
+```{r boxplot gap salario percibido}
+boxplot(gap_perc~year,data=sal,horizontal=TRUE,
+        main="Brecha Salario percibido (outliers visualizados)")
+boxplot(gap_perc~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Brecha Salario percibido (outliers no visualizados)")
+```
+
+## Boxplot salario justo
+
+```{r boxplot salario just obrero}
+boxplot(saljusobr~year,data=sal,horizontal=TRUE,
+        main="Salario justo Obrero (outliers visualizados)")
+boxplot(saljusobr~year,data=sal, horizontal=TRUE, outline=FALSE,
+        main="Salario justo Obrero (outliers no visualizados)")
+```
+
+```{r boxplot salario justo gerente}
+boxplot(saljusger~year,data=sal,horizontal=TRUE,
+        main="Salario justo Gerente (outliers visualizados)")
+boxplot(saljusger~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Salario justo Gerente (outliers no visualizados)")
+```
+
+```{r boxplot gap salario justo}
+boxplot(gap_just~year,data=sal,horizontal=TRUE,
+        main="Brecha Salario justo (outliers visualizados)")
+boxplot(gap_just~year,data=sal,horizontal=TRUE, outline=FALSE,
+        main="Brecha Salario justo (outliers no visualizados)")
+```
+
 
 ## Brecha total
 
