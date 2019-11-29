@@ -1,4 +1,9 @@
+=======
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+data/casen2000.dta
+data/casen2009.dta
+data/casen2011.dta
+data/casen2017.dta
