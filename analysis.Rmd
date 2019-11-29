@@ -268,28 +268,31 @@ table_perger
 
 # Add occupation & year to tables
 
-table_perob$ocup <- c("Obrero")
+table_perob$ocup <-  1 # as.factor(c("Obrero"))
 table_perob$year <- c(1999,2009,2019)
 
-table_perger$ocup <- c("Gerente")
+table_perger$ocup <- 2 # as.factor(c("Gerente"))
 table_perger$year <- c(1999,2009,2019)
 
 table_pertot <-rbind(table_perger,table_perob)
+str(table_pertot)
 table_pertot
 
 
 ggplot(table_pertot, aes(as.factor(year), median)) +
-      geom_bar(aes(fill = ocup), position = "dodge", stat="identity", width=.5)  +
+      geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("Obrero", "Gerente"))), position = "dodge", stat="identity", width=.5)  +
       geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
       theme_bw(base_size = 18) +
       scale_y_continuous(labels = scales::comma) +
       ylab('Salario (mediana)') + xlab('Años') +
       scale_fill_brewer(palette="Paired") +
       theme(legend.position="top") +
-      labs(fill = " ") # quitar nombre leyenda, autoexplicativo
+      labs(fill = " ")
+
++ # quitar nombre leyenda, autoexplicativo +
 
 
-
+      coord_flip()
 
 
 ```
