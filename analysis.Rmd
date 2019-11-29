@@ -279,7 +279,7 @@ str(table_pertot)
 table_pertot
 
 
-ggplot(table_pertot, aes(as.factor(year), median)) +
+bar <- ggplot(table_pertot, aes(as.factor(year),median)) +
       geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("Obrero", "Gerente"))), position = "dodge", stat="identity", width=.5)  +
       geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
       theme_bw(base_size = 18) +
@@ -287,12 +287,25 @@ ggplot(table_pertot, aes(as.factor(year), median)) +
       ylab('Salario (mediana)') + xlab('Años') +
       scale_fill_brewer(palette="Paired") +
       theme(legend.position="top") +
-      labs(fill = " ")
+      labs(fill = " ") # quitar nombre leyenda, autoexplicativo +
 
-+ # quitar nombre leyenda, autoexplicativo +
+bar
+# Horizontal
+
+table_pertot$ocup2 <- factor(table_pertot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
+
+ ggplot(data=table_pertot, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Salario percibido (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
 
 
-      coord_flip()
 
 
 ```
