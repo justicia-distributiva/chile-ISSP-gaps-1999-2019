@@ -232,8 +232,8 @@ salarios19$lngap_just <-  as.numeric(log(salarios19$gap_just))                # 
 ```
 
 # Descriptive analysis
-
-## Perception worker
+## Descriptive perception 
+### Perception worker
 
 ```{r}
 table_perob<- rbind(psych::describe(salarios99$salperobr),
@@ -248,7 +248,7 @@ table_perob
 
 ```
 
-## Perception manager
+### Perception manager
 
 ```{r}
 table_perger<- rbind(psych::describe(salarios99$salperger),
@@ -262,7 +262,7 @@ table_perger
 
 ```
 
-## Graph perception occupation
+### Graph perception occupation
 
 ```{r}
 
@@ -279,7 +279,7 @@ str(table_pertot)
 table_pertot
 
 
-bar <- ggplot(table_pertot, aes(as.factor(year),median)) +
+bar1 <- ggplot(table_pertot, aes(as.factor(year),median)) +
       geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("Obrero", "Gerente"))), position = "dodge", stat="identity", width=.5)  +
       geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
       theme_bw(base_size = 18) +
@@ -289,7 +289,7 @@ bar <- ggplot(table_pertot, aes(as.factor(year),median)) +
       theme(legend.position="top") +
       labs(fill = " ") # quitar nombre leyenda, autoexplicativo +
 
-bar
+bar1
 # Horizontal
 
 table_pertot$ocup2 <- factor(table_pertot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
@@ -310,6 +310,182 @@ table_pertot$ocup2 <- factor(table_pertot$ocup, levels=c(2,1), labels=c("Gerente
 
 ```
 
+
+
+
+
+## Descriptive Justice
+
+### Worker justice 
+
+```{r}
+table_jusob<- rbind(psych::describe(salarios99$saljusobr),
+               psych::describe(salarios09$saljusobr),
+               psych::describe(salarios19$saljusobr))
+
+rownames(table_jusob) <- c("1999","2009","2019")
+
+table_jusob <- table_jusob %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_jusob
+
+```
+
+
+### Justice manager
+
+```{r}
+table_jusger<- rbind(psych::describe(salarios99$saljusger),
+               psych::describe(salarios09$saljusger),
+               psych::describe(salarios19$saljusger))
+
+rownames(table_jusger) <- c("1999","2009","2019")
+table_jusger <- table_jusger %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_jusger
+```
+
+
+### Graphic Justice 
+
+```{r}
+
+# Add occupation & year to tables
+
+table_jusob$ocup <-  1 # as.factor(c("Obrero"))
+table_jusob$year <- c(1999,2009,2019)
+
+table_jusger$ocup <- 2 # as.factor(c("Gerente"))
+table_jusger$year <- c(1999,2009,2019)
+
+table_justot <-rbind(table_jusger,table_jusob)
+str(table_justot)
+table_justot
+
+
+bar2 <- ggplot(table_justot, aes(as.factor(year),median)) +
+      geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("Obrero", "Gerente"))), position = "dodge", stat="identity", width=.5)  +
+      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
+      theme_bw(base_size = 18) +
+      scale_y_continuous(labels = scales::comma) +
+      ylab('Salario (mediana)') + xlab('Años') +
+      scale_fill_brewer(palette="Paired") +
+      theme(legend.position="top") +
+      labs(fill = " ") # quitar nombre leyenda, autoexplicativo +
+
+bar2
+# Horizontal
+
+table_justot$ocup2 <- factor(table_justot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
+
+ ggplot(data=table_justot, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Salario justo (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+
+
+
+```
+
+
+
+## Brechas salariales. 
+
+### Brecha percivida 
+```{r}
+table_gap_perc<- rbind(psych::describe(salarios99$gap_perc),
+               psych::describe(salarios09$gap_perc),
+               psych::describe(salarios19$gap_perc))
+
+rownames(table_gap_perc) <- c("1999","2009","2019")
+
+table_gap_perc <- table_gap_perc %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_gap_perc
+
+```
+### Brecha justa
+```{r}
+table_gap_just<- rbind(psych::describe(salarios99$gap_just),
+               psych::describe(salarios09$gap_just),
+               psych::describe(salarios19$gap_just))
+
+rownames(table_gap_just) <- c("1999","2009","2019")
+
+table_gap_just <- table_gap_just %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_gap_just
+
+```
+
+```{r}
+
+
+# Add occupation & year to tables
+
+table_gap_perc$ocup <-  1 # as.factor(c("Obrero"))
+table_gap_perc$year <- c(1999,2009,2019)
+
+table_gap_just$ocup <- 2 # as.factor(c("Gerente"))
+table_gap_just$year <- c(1999,2009,2019)
+
+table_gap_total <-rbind(table_gap_perc,table_gap_just)
+str(table_gap_total)
+table_gap_total
+
+
+bar3 <- ggplot(table_gap_total, aes(as.factor(year),median)) +
+      geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("percepcion", "justicia"))), position = "dodge", stat="identity", width=.5)  +
+      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
+      theme_bw(base_size = 18) +
+      scale_y_continuous(labels = scales::comma) +
+      ylab('Brecha (mediana)') + xlab('Años') +
+      scale_fill_brewer(palette="Paired") +
+      theme(legend.position="top") +
+      labs(fill = " ") # quitar nombre leyenda, autoexplicativo +
+
+bar3
+# Horizontal
+
+table_gap_total$ocup2 <- factor(table_gap_total$ocup, levels=c(2,1), labels=c("justa", "percibida"))
+
+ ggplot(data=table_gap_total, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Brecha (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Tablas 
 
 
 ```{r descriptivos brecha total 1999-2019}
@@ -362,6 +538,7 @@ kable(table2,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de sala
 # ```
 
 ## Brecha estimada (log)
+```
 
 ```{r Tablas descriptivos ln(gaps)}
 # Tabla 1 ****************************************************************************************
