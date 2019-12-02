@@ -441,7 +441,7 @@ table_gap_total
 
 
 bar3 <- ggplot(table_gap_total, aes(as.factor(year),median)) +
-      geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("percepcion", "justicia"))), position = "dodge", stat="identity", width=.5)  +
+      geom_bar(aes(fill = factor(ocup, levels=c(1,2), labels=c("justa ", "percibida"))), position = "dodge", stat="identity", width=.5)  +
       geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), group="Ocup"), position=position_dodge(width=0.5), vjust=-0.5) +
       theme_bw(base_size = 18) +
       scale_y_continuous(labels = scales::comma) +
