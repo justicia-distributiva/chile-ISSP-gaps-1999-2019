@@ -9,7 +9,93 @@ output:
         number_sections: true
 
 ---
+<div style="text-align: justify">
+
+Los estudios de desigualdad y justicia social han sido nutridos por múltiples perspectivas. Desde la filosofía política, se han dado amplios debates respecto a cuál es la manera normativamente correcta de distribuir los recursos, debate en el cual participan autores como Dworking o Sen. Al respecto, Rawls (1971) señala que los estudios sobre la justicia social deben considerar en su análisis las creencias concretas que poseen los sujetos, no para quedarse ciegamente con ellas, sino para generar un “equilibrio reflexivo”.  Desde esta línea teórica del estudio de la desigualdad, se desprende la importancia de conocer los criterios de justicia de la población. 
+Desde la sociología, se ha dado un acento más empírico al estudio de la desigualdad. Desde esta disciplina, no solo fue temprano el estudio de la distribución objetiva de los recursos en una población, sino que desde el comienzo diciplinar pueden observarse reflexiones en torno al modo en como los sujetos perciben y se justifican la desigualdad existente. Por ejemplo, Max Weber realizo un gran aporte con su concepto de estatus subjetivo, con el que se refiere a la valoración que existe entre distintos grupos sociales. Más actualmente, se han incorporado a este tipo de estudios el concepto de actitudes y percepciones hacia la desigualdad económica, relacionando dichos conceptos con la legitimación de la desigualdad (Huber & Form, 1973; Mason & Kluegel, 2000b; Mau, 1997; Stollte, 1983)
+En suma, a lo largo del desarrollo de los estudios de creencias sobre la desigualdad, se destaca una vertiente que aporta con la importancia de opiniones normativas basadas en criterios de justicias, a las cuales denominaremos preferencias, y otra que destaca el papel de las percepciones de la desigualdad social. En vista de lo anterior, es fundamental trabajar tanto al nivel de percepción como de preferencias. 
+Cabe agregar que al trabajar con justicia de salarios es necesario considerar dos perspectivas la absoluta y la relativa. la primera refiere a si el salario de una ocupación o de un grupo puntual es considerado suficiente en sí mismo, y la segunda refiere a si en comparación a otros grupos dicha recompensa es justa. Para abordar la evaluación de justicia absoluta, revisaremos conjuntamente los salarios percibidos y preferidos, para obreros y gerentes. Luego, para evaluar la justicia relativa, observaremos las brechas salariales justas y percibidas, las cuales corresponden a la división del salario percibido del gerente por el salario percibido para un obrero. Esto nos indicara cuantas veces más creen las personas que gana un gerente en relación con un obrero, así como cantas veces más creen que debería ganar. 
+El utilizar brechas salariales posee ventajas técnicas en términos de medición. Suele suceder al preguntar por desigualdad e injusticia que las personas de Chile responden que perciben mucha desigualdad y que a todos les gustaría que hubiera menos desigualdad. No obstante, este tipo de preguntas generan muy poca variación entre los entrevistados lo que dificulta la posibilidad de analizar y explicar dichas percepciones y preferencias.  Igualmente maneras ambiguas de preguntar sobre desigualdad tienen el problema de que cuando alguien nos señala que percibe mucha desigualdad no queda claro cuanta desigualdad percibe y por ende puede que aunque respondió lo mismo que otras personas tengan ideas completamente distintas. Una manera de medir las percepciones y preferencias de desigualdad que no se ve afectado por la falta de varianza y que logra ser más específico es el método de las brechas salariales, el cual nos ayuda colocando salarios concretos a dicha percepción de desigualdad lo que permite generar más varianza y especificidad. 
+A continuación, nos abocaremos a exponer las percepciones y preferencias de los ciudadanos respecto a las diferencias salariales entre obreros y gerentes. Para ello utilizaremos la mediana reportada por los entrevistados la cual es un buen indicador de tendencia central al no estar afectado por los altos valores de los extremos. 
+
+## Grafico 1:  salario percibido del obrero y el gerente entre 1999 y 2019	
+
+```{r}
+# Horizontal
+
+table_pertot$ocup2 <- factor(table_pertot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
+
+ ggplot(data=table_pertot, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Salario percibido (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+
+```
+
+ 
+	Lo primero que destaca de este grafico es la diferencia entre el salario percibido para el obrero y para el gerente. Ambos salarios perciben un aumento en estos 20 años, aunque, en el gráfico, el aumento del salario del obrero es prácticamente imperceptible, mientras que el salario del gerente presenta un crecimiento más notorio. No obstante, proporcionalmente, el salario del obrero creció más que el del gerente, puesto que mientras el primero se triplico, el segundo no llega a dicho aumento. Aun así, en términos concretos, el salario del obrero solo aumento $210.000, mientras que el del gerente $5.000.000.  
+Resulta interesante que la mediana del salario el obrero coincide en todos los años con el salario mínimo. Esto nos lleva a deducir dos cosas: primero, las personas son conscientes del salario mínimo y, segundo, que asocian el salario del obrero al salario minimo. Dicho lo anterior cabe preguntarse ¿Consideran las personas justo el salario mínimo para un obrero?  Antes de responder esta pregunta, analicemos el salario percibido del gerente. 
+Según los descriptivos, el salario percibido para el gerente posee una mayor varianza que el del obrero, lo que indica que hay un menor acuerdo respecto a cuánto gana un gerente. Esto puede deberse a los distintos tipos de gerente que se están imaginando las personas al responder. Por ejemplo, según el estudio de la empresa internacional Robert Half (2018), encargada de reclutar de gerentes para el área de finanzas, en Chile, el salario de un director de finanzas de una pyme o mediana empresa varía entre $5.000.000 y $9.500.000, mientras que el gerente de una gran empresa (sobre UF100.000) gana entre $6.800.000 y $15.500.000. Esto nos demuestra que existe gran diferencia entre un alto cargo de una empresa pequeña en relación con los altos cargos de una gran empresa.
+	Si comparamos la percepción de los salarios en función de dichos datos, podemos decir que los chilenos poseen una idea a priori bastante acertada respecto a los salarios de los gerentes. En el 2019, la mediana de la percepción del salario se encuentra en los ocho millones de pesos, valor, que se encuentra dentro del rango del salario mínimo y máximo para gerentes de pymes, medianas y grandes empresas. No obstante, existe un grupo de personas que consideran que el salario de un gerente es aun mayor a los quince millones expuestos por la Robert Half.
+	En suma, tenemos que ha aumentado la percepción de ambos salarios. Estos salarios percibidos no escapan radicalmente de la realidad, ya que coinciden con el salario mínimo y con el salario que ganan los gerentes según el estudio señalado.  
+	Conectando estos resultados con el modelo neoliberal, puede decirse que la percepción del crecimiento de los salarios coincide con la idea del chorreo, propia de dicha teoría.  Este chorreo es visible cuando los entrevistados perciben que hay un aumento general que ha implicado una mejoría para los grupos mas vulnerables, sin afectar el crecimiento económico de los grupos más aventajados. En consideración de lo anterior ¿las personas se encuentran de acuerdo con dicha manera de incrementar los salarios y disminuir la desigualdad? Evaluemos para ello, el salario considerado justo para obreros y gerentes.
+
+## Grafico 2:  salario justo para un obrero y un gerente entre 1999 y 2019
+```{r}
+# Horizontal
+
+table_justot$ocup2 <- factor(table_justot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
+
+ ggplot(data=table_justot, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Salario justo (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
 
 
+```
+ 
+Como puede verse en el grafico 2, tanto en los salarios percibidos como en los salarios considerados justos, existe una notoria diferencia entre obreros y gerentes. Esto nos sugiere, que la completa igualdad no es considerada justa por el grueso de la población. No obstante, podemos ver, que los salarios considerados justos para los obreros son siempre mayores que los salarios percibidos para los mismos, los cuales se ajustan al salario mínimo. Esto nos permite responder la pregunta anteriormente planteada: la población no considera justo el salario mínimo para un obrero.
 
-### (here the manuscript)
+Pero ¿Cuál es el salario que consideran justo?  Si tomamos como referencia el año actual, podemos decir que el salario considerado justo para un obrero es de $500.000. Este valor, a diferencia del salario mínimo, se encuentra sobre la línea de la pobreza para una familia de 4 personas, la cual es equivalente a $440.000. Así, con el salario considerado justo para un obrero, alcanza para poder pagar las cosas necesarias, y sobran $60.000 pesos para algunas cosas que no son incluidos en la línea de la pobreza, tales como ahorro, alcohol y servicios consumidos mayoritariamente por el 10% mas rico de la población. Con esto, no queremos decir que las personas son conscientes de la línea de la pobreza establecida periódicamente por el ministerio de desarrollo social, sino que, las personas poseen una idea de cuanto es necesario para vivir y para disfrutar de los ingresos. 
+Respecto al salario considerado justo para los gerentes, podemos ver que es la mitad de lo percibido, es decir, el general de las personas cree que lo que ganan los gerentes en el país esta sobrevalorado, recibiendo el doble de lo justo.  
+En suma, podemos decir en términos absolutos que la población chilena considera que los recursos están mal repartidos. Mientras que el obrero gana prácticamente la mitad de lo que debería, los gerentes ganan el doble. Esta situación puede implicar un sentimiento de injusticia respecto a la distribución de los recursos, lo cual, se transforma en un ambiente propenso para estallidos sociales. 
+Para analizar la distribución de los recursos de manera relativa evaluaremos la relación entre la brecha salarial percibida y la brecha considerada justa.
+
+
+## Grafico 3:  Comparacion de las brechas salariales obrero-gerente, percibida y  justa, entre 1999 y 2019
+
+```{r}
+# Horizontal
+
+table_gap_total$ocup2 <- factor(table_gap_total$ocup, levels=c(2,1), labels=c("justa", "percibida"))
+
+ ggplot(data=table_gap_total, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Brecha (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+
+```
+
+ 
+	 Como muestra el gráfico 3, durante todo el periodo analizado, la brecha considerada justa es menor a la brecha percibida. Además, podemos ver que durante el periodo ambas brechas han disminuido. Si en 1999 las personas consideran que el gerente gana 33,3 veces más que el obrero, en 2019, la percepción de dicha brecha desciende a 23,3. Si recordamos que el salario tanto del obrero como el del gerente crecieron, podemos decir que la disminución de la brecha salarial percibida no se debe a  políticas de redistribución que impliquen una disminución del gerente, sino a que, proporcionalmente, el salario del obrero creció más en estos 20 años que el salario del gerente. Como ya se mencionó, este modo de crecimiento percibido se ajusta bastante a la idea del chorreo, puesto que si bien a disminuido la brecha, esta ha disminuido sin afectar el crecimiento del ingreso de personas de alto estatus y sin lograr elevar el salario percibidos de los obreros por sobre la línea de la pobreza. Ahora, si bien ha disminuido la brecha percibida, esta es tres veces la brecha considerada justa. 
+	Por su parte, las brechas consideradas justas también han disminuido, es decir, las personas cada vez consideran que las diferencias menores de salarios son mas justas.  Mientras en 1999 las personas consideraban justo que un gerente gane 10 veces lo que un obrero, hoy solo consideran justo que gane 7,5 veces más. Dicho de otro modo, si un obrero debería ganar un salario de $500.000, un gerente debería ganar $3.750.000. Esta disminución de la brecha salarial considerada justa, en el contexto de amplias diferencias percibidas, se presenta como un desafío para el país, desafío el cual el Estado debe abordar para evitar sufrir nuevas crisis de legitimidad. 	
+ En suma, en términos absolutos, podemos decir que, si bien se ha percibido un aumento de los salarios, las personas consideran injustos los sueldos tanto de los gerentes como de los obreros, los primeros por sobrevaloración y los segundos por subvaloración. Igualmente, llama la atención que la mediana del salario justo considerado para el obrero es un salario que permite estar por sobre la línea de la pobreza para una familia de 4 personas y la mediana del salario percibido para un gerente se encuentra próximo a las estimaciones de empresas especializadas en los salarios para altos cargos. Ambos puntos dan cuenta de un relativo conocimiento de la economía, que incluye una percepción correcta de los altos salarios, la desigualdad y los ingresos necesarios para vivir. En términos relativos, el 2019, si bien la brecha percibida ha disminuido, la gente percibe que estas son 3 veces mayores a las que se consideran justas. Esto nos indica que las desigualdades percibidas en chile exceden lo que las personas están dispuestas a respaldar, lo cual genera un contexto propicio para grandes movilizaciones contra la desigualdad y acciones estatales en contra de esta. 
+<div/>
