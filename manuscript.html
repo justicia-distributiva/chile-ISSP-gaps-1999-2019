@@ -29,96 +29,6 @@
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  { background-color: #f8f8f8; }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ef2929; } /* Alert */
-code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #c4a000; } /* Attribute */
-code span.bn { color: #0000cf; } /* BaseN */
-code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4e9a06; } /* Char */
-code span.cn { color: #000000; } /* Constant */
-code span.co { color: #8f5902; font-style: italic; } /* Comment */
-code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-code span.dt { color: #204a87; } /* DataType */
-code span.dv { color: #0000cf; } /* DecVal */
-code span.er { color: #a40000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #0000cf; } /* Float */
-code span.fu { color: #000000; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-code span.ot { color: #8f5902; } /* Other */
-code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-code span.sc { color: #000000; } /* SpecialChar */
-code span.ss { color: #4e9a06; } /* SpecialString */
-code span.st { color: #4e9a06; } /* String */
-code span.va { color: #000000; } /* Variable */
-code span.vs { color: #4e9a06; } /* VerbatimString */
-code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 <style type="text/css">
@@ -449,81 +359,38 @@ div.tocify {
 </div>
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">library</span>(sjlabelled)</a>
-<a class="sourceLine" id="cb1-5" title="5">  <span class="kw">library</span>(sjPlot)</a>
-<a class="sourceLine" id="cb1-6" title="6">  <span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-7" title="7">  <span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb1-8" title="8">  <span class="kw">library</span>(kableExtra)</a>
-<a class="sourceLine" id="cb1-9" title="9">  <span class="kw">library</span>(GPArotation)</a>
-<a class="sourceLine" id="cb1-10" title="10">  <span class="kw">library</span>(lavaan)</a>
-<a class="sourceLine" id="cb1-11" title="11">  <span class="kw">library</span>(Cairo);<span class="kw">options</span>(<span class="dt">shiny.usecairo=</span><span class="ot">TRUE</span>) <span class="co"># Para la calidad de los plots</span></a>
-<a class="sourceLine" id="cb1-12" title="12"></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;data/dataproc/cl09.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;data/dataproc/cl99.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;data/dataproc/cl19.RData&quot;</span>)</a></code></pre></div>
 <div style="text-align: justify">
 
-<p>Los estudios de desigualdad y justicia social han sido nutridos por múltiples perspectivas. Desde la filosofía política, se han dado amplios debates respecto a cuál es la manera normativamente correcta de distribuir los recursos, debate en el cual participan autores como Dworking o Sen. Al respecto, Rawls (1971) señala que los estudios sobre la justicia social deben considerar en su análisis las creencias concretas que poseen los sujetos, no para quedarse ciegamente con ellas, sino para generar un “equilibrio reflexivo”. Desde esta línea teórica del estudio de la desigualdad, se desprende la importancia de conocer los criterios de justicia de la población. Desde la sociología, se ha dado un acento más empírico al estudio de la desigualdad. Desde esta disciplina, no solo fue temprano el estudio de la distribución objetiva de los recursos en una población, sino que desde el comienzo diciplinar pueden observarse reflexiones en torno al modo en como los sujetos perciben y se justifican la desigualdad existente. Por ejemplo, Max Weber realizo un gran aporte con su concepto de estatus subjetivo, con el que se refiere a la valoración que existe entre distintos grupos sociales. Más actualmente, se han incorporado a este tipo de estudios el concepto de actitudes y percepciones hacia la desigualdad económica, relacionando dichos conceptos con la legitimación de la desigualdad (Huber &amp; Form, 1973; Mason &amp; Kluegel, 2000b; Mau, 1997; Stollte, 1983) En suma, a lo largo del desarrollo de los estudios de creencias sobre la desigualdad, se destaca una vertiente que aporta con la importancia de opiniones normativas basadas en criterios de justicias, a las cuales denominaremos preferencias, y otra que destaca el papel de las percepciones de la desigualdad social. En vista de lo anterior, es fundamental trabajar tanto al nivel de percepción como de preferencias. Cabe agregar que al trabajar con justicia de salarios es necesario considerar dos perspectivas la absoluta y la relativa. la primera refiere a si el salario de una ocupación o de un grupo puntual es considerado suficiente en sí mismo, y la segunda refiere a si en comparación a otros grupos dicha recompensa es justa. Para abordar la evaluación de justicia absoluta, revisaremos conjuntamente los salarios percibidos y preferidos, para obreros y gerentes. Luego, para evaluar la justicia relativa, observaremos las brechas salariales justas y percibidas, las cuales corresponden a la división del salario percibido del gerente por el salario percibido para un obrero. Esto nos indicara cuantas veces más creen las personas que gana un gerente en relación con un obrero, así como cantas veces más creen que debería ganar. El utilizar brechas salariales posee ventajas técnicas en términos de medición. Suele suceder al preguntar por desigualdad e injusticia que las personas de Chile responden que perciben mucha desigualdad y que a todos les gustaría que hubiera menos desigualdad. No obstante, este tipo de preguntas generan muy poca variación entre los entrevistados lo que dificulta la posibilidad de analizar y explicar dichas percepciones y preferencias. Igualmente maneras ambiguas de preguntar sobre desigualdad tienen el problema de que cuando alguien nos señala que percibe mucha desigualdad no queda claro cuanta desigualdad percibe y por ende puede que aunque respondió lo mismo que otras personas tengan ideas completamente distintas. Una manera de medir las percepciones y preferencias de desigualdad que no se ve afectado por la falta de varianza y que logra ser más específico es el método de las brechas salariales, el cual nos ayuda colocando salarios concretos a dicha percepción de desigualdad lo que permite generar más varianza y especificidad. A continuación, nos abocaremos a exponer las percepciones y preferencias de los ciudadanos respecto a las diferencias salariales entre obreros y gerentes. Para ello utilizaremos la mediana reportada por los entrevistados la cual es un buen indicador de tendencia central al no estar afectado por los altos valores de los extremos.</p>
+<p>Los estudios de desigualdad y justicia social han sido nutridos por múltiples perspectivas. Desde la filosofía política, se han dado amplios debates respecto a cuál es la manera normativamente correcta de distribuir los recursos, debate en el cual participan autores como Dworking o Sen. Al respecto, Rawls (1971) señala que los estudios sobre la justicia social deben considerar en su análisis las creencias concretas que poseen los sujetos, no para quedarse ciegamente con ellas, sino para generar un “equilibrio reflexivo”. Desde esta línea teórica del estudio de la desigualdad, se desprende la importancia de conocer los criterios de justicia de la población.</p>
+<p>Desde la sociología, se ha dado un acento más empírico al estudio de la desigualdad. Desde esta disciplina, no solo fue temprano el estudio de la distribución objetiva de los recursos en una población, sino que desde el comienzo diciplinar pueden observarse reflexiones en torno al modo en como los sujetos perciben y se justifican la desigualdad existente. Por ejemplo, Max Weber realizo un gran aporte con su concepto de estatus subjetivo, con el que se refiere a la valoración que existe entre distintos grupos sociales. Más actualmente, se han incorporado a este tipo de estudios el concepto de actitudes y percepciones hacia la desigualdad económica, relacionando dichos conceptos con la legitimación de la desigualdad (Huber &amp; Form, 1973; Mason &amp; Kluegel, 2000b; Mau, 1997; Stollte, 1983).</p>
+<p>En suma, a lo largo del desarrollo de los estudios de creencias sobre la desigualdad, se destaca una vertiente que aporta con la importancia de opiniones normativas basadas en criterios de justicias, a las cuales denominaremos preferencias, y otra que destaca el papel de las percepciones de la desigualdad social. En vista de lo anterior, es fundamental trabajar tanto al nivel de percepción como de preferencias. Cabe agregar que al trabajar con justicia de salarios es necesario considerar dos perspectivas la absoluta y la relativa. la primera refiere a si el salario de una ocupación o de un grupo puntual es considerado suficiente en sí mismo, y la segunda refiere a si en comparación a otros grupos dicha recompensa es justa. Para abordar la evaluación de justicia absoluta, revisaremos conjuntamente los salarios percibidos y preferidos, para obreros y gerentes. Luego, para evaluar la justicia relativa, observaremos las brechas salariales justas y percibidas, las cuales corresponden a la división del salario percibido del gerente por el salario percibido para un obrero. Esto nos indicara cuantas veces más creen las personas que gana un gerente en relación con un obrero, así como cantas veces más creen que debería ganar.</p>
+<p>El utilizar brechas salariales posee ventajas técnicas en términos de medición. Suele suceder al preguntar por desigualdad e injusticia que las personas de Chile responden que perciben mucha desigualdad y que a todos les gustaría que hubiera menos desigualdad. No obstante, este tipo de preguntas generan muy poca variación entre los entrevistados lo que dificulta la posibilidad de analizar y explicar dichas percepciones y preferencias. Igualmente maneras ambiguas de preguntar sobre desigualdad tienen el problema de que cuando alguien nos señala que percibe mucha desigualdad no queda claro cuanta desigualdad percibe y por ende puede que aunque respondió lo mismo que otras personas tengan ideas completamente distintas. Una manera de medir las percepciones y preferencias de desigualdad que no se ve afectado por la falta de varianza y que logra ser más específico es el método de las brechas salariales, el cual nos ayuda colocando salarios concretos a dicha percepción de desigualdad lo que permite generar más varianza y especificidad.</p>
+<p>A continuación, nos abocaremos a exponer las percepciones y preferencias de los ciudadanos respecto a las diferencias salariales entre obreros y gerentes. Para ello utilizaremos la mediana reportada por los entrevistados la cual es un buen indicador de tendencia central al no estar afectado por los altos valores de los extremos.</p>
 <div id="grafico-1-salario-percibido-del-obrero-y-el-gerente-entre-1999-y-2019" class="section level2">
 <h2><span class="header-section-number">0.1</span> Grafico 1: salario percibido del obrero y el gerente entre 1999 y 2019</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Horizontal</span></a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3">table_pertot<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_pertot<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Gerente&quot;</span>, <span class="st">&quot;Obrero&quot;</span>))</a>
-<a class="sourceLine" id="cb2-4" title="4"></a>
-<a class="sourceLine" id="cb2-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_pertot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Salario percibido (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<p><img src="images/salario_per.png" /></p>
 <pre><code>Lo primero que destaca de este grafico es la diferencia entre el salario percibido para el obrero y para el gerente. Ambos salarios perciben un aumento en estos 20 años, aunque, en el gráfico, el aumento del salario del obrero es prácticamente imperceptible, mientras que el salario del gerente presenta un crecimiento más notorio. No obstante, proporcionalmente, el salario del obrero creció más que el del gerente, puesto que mientras el primero se triplico, el segundo no llega a dicho aumento. Aun así, en términos concretos, el salario del obrero solo aumento $210.000, mientras que el del gerente $5.000.000.  </code></pre>
-<p>Resulta interesante que la mediana del salario el obrero coincide en todos los años con el salario mínimo. Esto nos lleva a deducir dos cosas: primero, las personas son conscientes del salario mínimo y, segundo, que asocian el salario del obrero al salario minimo. Dicho lo anterior cabe preguntarse ¿Consideran las personas justo el salario mínimo para un obrero? Antes de responder esta pregunta, analicemos el salario percibido del gerente. Según los descriptivos, el salario percibido para el gerente posee una mayor varianza que el del obrero, lo que indica que hay un menor acuerdo respecto a cuánto gana un gerente. Esto puede deberse a los distintos tipos de gerente que se están imaginando las personas al responder. Por ejemplo, según el estudio de la empresa internacional Robert Half (2018), encargada de reclutar de gerentes para el área de finanzas, en Chile, el salario de un director de finanzas de una pyme o mediana empresa varía entre $5.000.000 y $9.500.000, mientras que el gerente de una gran empresa (sobre UF100.000) gana entre $6.800.000 y $15.500.000. Esto nos demuestra que existe gran diferencia entre un alto cargo de una empresa pequeña en relación con los altos cargos de una gran empresa. Si comparamos la percepción de los salarios en función de dichos datos, podemos decir que los chilenos poseen una idea a priori bastante acertada respecto a los salarios de los gerentes. En el 2019, la mediana de la percepción del salario se encuentra en los ocho millones de pesos, valor, que se encuentra dentro del rango del salario mínimo y máximo para gerentes de pymes, medianas y grandes empresas. No obstante, existe un grupo de personas que consideran que el salario de un gerente es aun mayor a los quince millones expuestos por la Robert Half. En suma, tenemos que ha aumentado la percepción de ambos salarios. Estos salarios percibidos no escapan radicalmente de la realidad, ya que coinciden con el salario mínimo y con el salario que ganan los gerentes según el estudio señalado.<br />
-Conectando estos resultados con el modelo neoliberal, puede decirse que la percepción del crecimiento de los salarios coincide con la idea del chorreo, propia de dicha teoría. Este chorreo es visible cuando los entrevistados perciben que hay un aumento general que ha implicado una mejoría para los grupos mas vulnerables, sin afectar el crecimiento económico de los grupos más aventajados. En consideración de lo anterior ¿las personas se encuentran de acuerdo con dicha manera de incrementar los salarios y disminuir la desigualdad? Evaluemos para ello, el salario considerado justo para obreros y gerentes.</p>
+<p>Resulta interesante que la mediana del salario el obrero coincide en todos los años con el salario mínimo. Esto nos lleva a deducir dos cosas: primero, las personas son conscientes del salario mínimo y, segundo, que asocian el salario del obrero al salario minimo. Dicho lo anterior cabe preguntarse ¿Consideran las personas justo el salario mínimo para un obrero? Antes de responder esta pregunta, analicemos el salario percibido del gerente.</p>
+<p>Según los descriptivos, el salario percibido para el gerente posee una mayor varianza que el del obrero, lo que indica que hay un menor acuerdo respecto a cuánto gana un gerente. Esto puede deberse a los distintos tipos de gerente que se están imaginando las personas al responder. Por ejemplo, según el estudio de la empresa internacional Robert Half (2018), encargada de reclutar de gerentes para el área de finanzas, en Chile, el salario de un director de finanzas de una pyme o mediana empresa varía entre $5.000.000 y $9.500.000, mientras que el gerente de una gran empresa (sobre UF100.000) gana entre $6.800.000 y $15.500.000. Esto nos demuestra que existe gran diferencia entre un alto cargo de una empresa pequeña en relación con los altos cargos de una gran empresa.</p>
+<pre><code>Si comparamos la percepción de los salarios en función de dichos datos, podemos decir que los chilenos poseen una idea a priori bastante acertada respecto a los salarios de los gerentes. En el 2019, la mediana de la percepción del salario se encuentra en los ocho millones de pesos, valor, que se encuentra dentro del rango del salario mínimo y máximo para gerentes de pymes, medianas y grandes empresas. No obstante, existe un grupo de personas que consideran que el salario de un gerente es aun mayor a los quince millones expuestos por la Robert Half.
+
+En suma, tenemos que ha aumentado la percepción de ambos salarios. Estos salarios percibidos no escapan radicalmente de la realidad, ya que coinciden con el salario mínimo y con el salario que ganan los gerentes según el estudio señalado.  
+
+Conectando estos resultados con el modelo neoliberal, puede decirse que la percepción del crecimiento de los salarios coincide con la idea del chorreo, propia de dicha teoría.  Este chorreo es visible cuando los entrevistados perciben que hay un aumento general que ha implicado una mejoría para los grupos mas vulnerables, sin afectar el crecimiento económico de los grupos más aventajados. En consideración de lo anterior ¿las personas se encuentran de acuerdo con dicha manera de incrementar los salarios y disminuir la desigualdad? Evaluemos para ello, el salario considerado justo para obreros y gerentes.</code></pre>
 </div>
 <div id="grafico-2-salario-justo-para-un-obrero-y-un-gerente-entre-1999-y-2019" class="section level2">
 <h2><span class="header-section-number">0.2</span> Grafico 2: salario justo para un obrero y un gerente entre 1999 y 2019</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Horizontal</span></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3">table_justot<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_justot<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Gerente&quot;</span>, <span class="st">&quot;Obrero&quot;</span>))</a>
-<a class="sourceLine" id="cb4-4" title="4"></a>
-<a class="sourceLine" id="cb4-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_justot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Salario justo (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<p><img src="images/salario_justo.png" /></p>
 <p>Como puede verse en el grafico 2, tanto en los salarios percibidos como en los salarios considerados justos, existe una notoria diferencia entre obreros y gerentes. Esto nos sugiere, que la completa igualdad no es considerada justa por el grueso de la población. No obstante, podemos ver, que los salarios considerados justos para los obreros son siempre mayores que los salarios percibidos para los mismos, los cuales se ajustan al salario mínimo. Esto nos permite responder la pregunta anteriormente planteada: la población no considera justo el salario mínimo para un obrero.</p>
-<p>Pero ¿Cuál es el salario que consideran justo? Si tomamos como referencia el año actual, podemos decir que el salario considerado justo para un obrero es de $500.000. Este valor, a diferencia del salario mínimo, se encuentra sobre la línea de la pobreza para una familia de 4 personas, la cual es equivalente a $440.000. Así, con el salario considerado justo para un obrero, alcanza para poder pagar las cosas necesarias, y sobran $60.000 pesos para algunas cosas que no son incluidos en la línea de la pobreza, tales como ahorro, alcohol y servicios consumidos mayoritariamente por el 10% mas rico de la población. Con esto, no queremos decir que las personas son conscientes de la línea de la pobreza establecida periódicamente por el ministerio de desarrollo social, sino que, las personas poseen una idea de cuanto es necesario para vivir y para disfrutar de los ingresos. Respecto al salario considerado justo para los gerentes, podemos ver que es la mitad de lo percibido, es decir, el general de las personas cree que lo que ganan los gerentes en el país esta sobrevalorado, recibiendo el doble de lo justo.</p>
+<p>Pero ¿Cuál es el salario que consideran justo? Si tomamos como referencia el año actual, podemos decir que el salario considerado justo para un obrero es de $500.000. Este valor, a diferencia del salario mínimo, se encuentra sobre la línea de la pobreza para una familia de 4 personas, la cual es equivalente a $440.000. Así, con el salario considerado justo para un obrero, alcanza para poder pagar las cosas necesarias, y sobran $60.000 pesos para algunas cosas que no son incluidos en la línea de la pobreza, tales como ahorro, alcohol y servicios consumidos mayoritariamente por el 10% mas rico de la población. Con esto, no queremos decir que las personas son conscientes de la línea de la pobreza establecida periódicamente por el ministerio de desarrollo social, sino que, las personas poseen una idea de cuanto es necesario para vivir y para disfrutar de los ingresos.</p>
+<p>Respecto al salario considerado justo para los gerentes, podemos ver que es la mitad de lo percibido, es decir, el general de las personas cree que lo que ganan los gerentes en el país esta sobrevalorado, recibiendo el doble de lo justo.</p>
 <p>En suma, podemos decir en términos absolutos que la población chilena considera que los recursos están mal repartidos. Mientras que el obrero gana prácticamente la mitad de lo que debería, los gerentes ganan el doble. Esta situación puede implicar un sentimiento de injusticia respecto a la distribución de los recursos, lo cual, se transforma en un ambiente propenso para estallidos sociales. Para analizar la distribución de los recursos de manera relativa evaluaremos la relación entre la brecha salarial percibida y la brecha considerada justa.</p>
 </div>
 <div id="grafico-3-comparacion-de-las-brechas-salariales-obrero-gerente-percibida-y-justa-entre-1999-y-2019" class="section level2">
 <h2><span class="header-section-number">0.3</span> Grafico 3: Comparacion de las brechas salariales obrero-gerente, percibida y justa, entre 1999 y 2019</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Horizontal</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3">table_gap_total<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_gap_total<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;justa&quot;</span>, <span class="st">&quot;percibida&quot;</span>))</a>
-<a class="sourceLine" id="cb5-4" title="4"></a>
-<a class="sourceLine" id="cb5-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_gap_total, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Brecha (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<p><img src="images/Brechas.png" /></p>
 <pre><code> Como muestra el gráfico 3, durante todo el periodo analizado, la brecha considerada justa es menor a la brecha percibida. Además, podemos ver que durante el periodo ambas brechas han disminuido. Si en 1999 las personas consideran que el gerente gana 33,3 veces más que el obrero, en 2019, la percepción de dicha brecha desciende a 23,3. Si recordamos que el salario tanto del obrero como el del gerente crecieron, podemos decir que la disminución de la brecha salarial percibida no se debe a  políticas de redistribución que impliquen una disminución del gerente, sino a que, proporcionalmente, el salario del obrero creció más en estos 20 años que el salario del gerente. Como ya se mencionó, este modo de crecimiento percibido se ajusta bastante a la idea del chorreo, puesto que si bien a disminuido la brecha, esta ha disminuido sin afectar el crecimiento del ingreso de personas de alto estatus y sin lograr elevar el salario percibidos de los obreros por sobre la línea de la pobreza. Ahora, si bien ha disminuido la brecha percibida, esta es tres veces la brecha considerada justa. 
+
 Por su parte, las brechas consideradas justas también han disminuido, es decir, las personas cada vez consideran que las diferencias menores de salarios son mas justas.  Mientras en 1999 las personas consideraban justo que un gerente gane 10 veces lo que un obrero, hoy solo consideran justo que gane 7,5 veces más. Dicho de otro modo, si un obrero debería ganar un salario de $500.000, un gerente debería ganar $3.750.000. Esta disminución de la brecha salarial considerada justa, en el contexto de amplias diferencias percibidas, se presenta como un desafío para el país, desafío el cual el Estado debe abordar para evitar sufrir nuevas crisis de legitimidad.   </code></pre>
 En suma, en términos absolutos, podemos decir que, si bien se ha percibido un aumento de los salarios, las personas consideran injustos los sueldos tanto de los gerentes como de los obreros, los primeros por sobrevaloración y los segundos por subvaloración. Igualmente, llama la atención que la mediana del salario justo considerado para el obrero es un salario que permite estar por sobre la línea de la pobreza para una familia de 4 personas y la mediana del salario percibido para un gerente se encuentra próximo a las estimaciones de empresas especializadas en los salarios para altos cargos. Ambos puntos dan cuenta de un relativo conocimiento de la economía, que incluye una percepción correcta de los altos salarios, la desigualdad y los ingresos necesarios para vivir. En términos relativos, el 2019, si bien la brecha percibida ha disminuido, la gente percibe que estas son 3 veces mayores a las que se consideran justas. Esto nos indica que las desigualdades percibidas en chile exceden lo que las personas están dispuestas a respaldar, lo cual genera un contexto propicio para grandes movilizaciones contra la desigualdad y acciones estatales en contra de esta.
 <div/>

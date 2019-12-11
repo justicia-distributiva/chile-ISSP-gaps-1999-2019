@@ -1,1 +1,10 @@
 base
+ggplot2
+dplyr
+sjlabelled
+sjPlot
+knitr
+kableExtra
+GPArotation
+lavaan
+Cairo

@@ -775,7 +775,7 @@ div.tocify {
 <a class="sourceLine" id="cb41-2" title="2"></a>
 <a class="sourceLine" id="cb41-3" title="3">table_pertot<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_pertot<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Gerente&quot;</span>, <span class="st">&quot;Obrero&quot;</span>))</a>
 <a class="sourceLine" id="cb41-4" title="4"></a>
-<a class="sourceLine" id="cb41-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_pertot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-5" title="5">salario_per &lt;-<span class="st">  </span><span class="kw">ggplot</span>(<span class="dt">data=</span>table_pertot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
@@ -784,23 +784,26 @@ div.tocify {
 <a class="sourceLine" id="cb41-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<a class="sourceLine" id="cb41-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a>
+<a class="sourceLine" id="cb41-15" title="15"></a>
+<a class="sourceLine" id="cb41-16" title="16">salario_per</a></code></pre></div>
 <p><img src="analysis_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"> <span class="kw">ggsave</span>(salario_per,<span class="dt">filename =</span> <span class="st">&quot;images/salario_per.png&quot;</span>,<span class="dt">device =</span> <span class="st">&quot;png&quot;</span>,<span class="dt">width =</span> <span class="dv">30</span>,<span class="dt">height =</span> <span class="dv">15</span>,<span class="dt">dpi =</span> <span class="st">&quot;retina&quot;</span>,<span class="dt">units =</span> <span class="st">&quot;cm&quot;</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="descriptive-justice" class="section level2">
 <h2><span class="header-section-number">3.2</span> Descriptive Justice</h2>
 <div id="worker-justice" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Worker justice</h3>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">table_jusob&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>saljusobr),</a>
-<a class="sourceLine" id="cb42-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>saljusobr),</a>
-<a class="sourceLine" id="cb42-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>saljusobr))</a>
-<a class="sourceLine" id="cb42-4" title="4"></a>
-<a class="sourceLine" id="cb42-5" title="5"><span class="kw">rownames</span>(table_jusob) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb42-6" title="6"></a>
-<a class="sourceLine" id="cb42-7" title="7">table_jusob &lt;-<span class="st"> </span>table_jusob <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb42-8" title="8"></a>
-<a class="sourceLine" id="cb42-9" title="9">table_jusob</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">table_jusob&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>saljusobr),</a>
+<a class="sourceLine" id="cb43-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>saljusobr),</a>
+<a class="sourceLine" id="cb43-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>saljusobr))</a>
+<a class="sourceLine" id="cb43-4" title="4"></a>
+<a class="sourceLine" id="cb43-5" title="5"><span class="kw">rownames</span>(table_jusob) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb43-6" title="6"></a>
+<a class="sourceLine" id="cb43-7" title="7">table_jusob &lt;-<span class="st"> </span>table_jusob <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb43-8" title="8"></a>
+<a class="sourceLine" id="cb43-9" title="9">table_jusob</a></code></pre></div>
 <pre><code>##         n     mean         sd median  trimmed   min       max
 ## 1999 1182 777857.9 10697893.6 200000 186939.8 25000 300000000
 ## 2009 1450 385245.7  1089703.9 300000 304887.9   190  25000000
@@ -808,14 +811,14 @@ div.tocify {
 </div>
 <div id="justice-manager" class="section level3">
 <h3><span class="header-section-number">3.2.2</span> Justice manager</h3>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">table_jusger&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>saljusger),</a>
-<a class="sourceLine" id="cb44-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>saljusger),</a>
-<a class="sourceLine" id="cb44-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>saljusger))</a>
-<a class="sourceLine" id="cb44-4" title="4"></a>
-<a class="sourceLine" id="cb44-5" title="5"><span class="kw">rownames</span>(table_jusger) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb44-6" title="6">table_jusger &lt;-<span class="st"> </span>table_jusger <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb44-7" title="7"></a>
-<a class="sourceLine" id="cb44-8" title="8">table_jusger</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">table_jusger&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>saljusger),</a>
+<a class="sourceLine" id="cb45-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>saljusger),</a>
+<a class="sourceLine" id="cb45-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>saljusger))</a>
+<a class="sourceLine" id="cb45-4" title="4"></a>
+<a class="sourceLine" id="cb45-5" title="5"><span class="kw">rownames</span>(table_jusger) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb45-6" title="6">table_jusger &lt;-<span class="st"> </span>table_jusger <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb45-7" title="7"></a>
+<a class="sourceLine" id="cb45-8" title="8">table_jusger</a></code></pre></div>
 <pre><code>##         n    mean       sd  median trimmed   min       max
 ## 1999  861 4281992 21900031 2000000 2506023 80000 600000000
 ## 2009 1320 6298564 15027762 3000000 4096402   500 400000000
@@ -823,16 +826,16 @@ div.tocify {
 </div>
 <div id="graphic-justice" class="section level3">
 <h3><span class="header-section-number">3.2.3</span> Graphic Justice</h3>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="co"># Add occupation &amp; year to tables</span></a>
-<a class="sourceLine" id="cb46-2" title="2"></a>
-<a class="sourceLine" id="cb46-3" title="3">table_jusob<span class="op">$</span>ocup &lt;-<span class="st">  </span><span class="dv">1</span> <span class="co"># as.factor(c(&quot;Obrero&quot;))</span></a>
-<a class="sourceLine" id="cb46-4" title="4">table_jusob<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb46-5" title="5"></a>
-<a class="sourceLine" id="cb46-6" title="6">table_jusger<span class="op">$</span>ocup &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># as.factor(c(&quot;Gerente&quot;))</span></a>
-<a class="sourceLine" id="cb46-7" title="7">table_jusger<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb46-8" title="8"></a>
-<a class="sourceLine" id="cb46-9" title="9">table_justot &lt;-<span class="kw">rbind</span>(table_jusger,table_jusob)</a>
-<a class="sourceLine" id="cb46-10" title="10"><span class="kw">str</span>(table_justot)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># Add occupation &amp; year to tables</span></a>
+<a class="sourceLine" id="cb47-2" title="2"></a>
+<a class="sourceLine" id="cb47-3" title="3">table_jusob<span class="op">$</span>ocup &lt;-<span class="st">  </span><span class="dv">1</span> <span class="co"># as.factor(c(&quot;Obrero&quot;))</span></a>
+<a class="sourceLine" id="cb47-4" title="4">table_jusob<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb47-5" title="5"></a>
+<a class="sourceLine" id="cb47-6" title="6">table_jusger<span class="op">$</span>ocup &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># as.factor(c(&quot;Gerente&quot;))</span></a>
+<a class="sourceLine" id="cb47-7" title="7">table_jusger<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb47-8" title="8"></a>
+<a class="sourceLine" id="cb47-9" title="9">table_justot &lt;-<span class="kw">rbind</span>(table_jusger,table_jusob)</a>
+<a class="sourceLine" id="cb47-10" title="10"><span class="kw">str</span>(table_justot)</a></code></pre></div>
 <pre><code>## Classes &#39;psych&#39;, &#39;describe&#39; and &#39;data.frame&#39;:    6 obs. of  9 variables:
 ##  $ n      : num  861 1320 985 1182 1450 ...
 ##  $ mean   : num  4281992 6298564 6366528 777858 385246 ...
@@ -843,7 +846,7 @@ div.tocify {
 ##  $ max    : num  600000000 400000000 90000000 300000000 25000000 4000000
 ##  $ ocup   : num  2 2 2 1 1 1
 ##  $ year   : num  1999 2009 2019 1999 2009 ...</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">table_justot</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">table_justot</a></code></pre></div>
 <pre><code>##          n      mean         sd  median   trimmed   min       max ocup
 ## 1999   861 4281991.9 21900030.8 2000000 2506023.2 80000 600000000    2
 ## 2009  1320 6298564.0 15027762.1 3000000 4096401.5   500 400000000    2
@@ -858,32 +861,36 @@ div.tocify {
 ## 19991 1999
 ## 20091 2009
 ## 20191 2019</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">bar2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(table_justot, <span class="kw">aes</span>(<span class="kw">as.factor</span>(year),median)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-2" title="2"><span class="st">      </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Obrero&quot;</span>, <span class="st">&quot;Gerente&quot;</span>))), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span>.<span class="dv">5</span>)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-3" title="3"><span class="st">      </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">group=</span><span class="st">&quot;Ocup&quot;</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.5</span>), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-4" title="4"><span class="st">      </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">18</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-5" title="5"><span class="st">      </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-6" title="6"><span class="st">      </span><span class="kw">ylab</span>(<span class="st">&#39;Salario (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-7" title="7"><span class="st">      </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-8" title="8"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="co"># quitar nombre leyenda, autoexplicativo +</span></a>
-<a class="sourceLine" id="cb50-10" title="10"></a>
-<a class="sourceLine" id="cb50-11" title="11">bar2</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">bar2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(table_justot, <span class="kw">aes</span>(<span class="kw">as.factor</span>(year),median)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-2" title="2"><span class="st">      </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Obrero&quot;</span>, <span class="st">&quot;Gerente&quot;</span>))), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span>.<span class="dv">5</span>)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-3" title="3"><span class="st">      </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">group=</span><span class="st">&quot;Ocup&quot;</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.5</span>), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-4" title="4"><span class="st">      </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">18</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-5" title="5"><span class="st">      </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-6" title="6"><span class="st">      </span><span class="kw">ylab</span>(<span class="st">&#39;Salario (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-7" title="7"><span class="st">      </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-8" title="8"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="co"># quitar nombre leyenda, autoexplicativo +</span></a>
+<a class="sourceLine" id="cb51-10" title="10"></a>
+<a class="sourceLine" id="cb51-11" title="11">bar2</a></code></pre></div>
 <p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># Horizontal</span></a>
-<a class="sourceLine" id="cb51-2" title="2"></a>
-<a class="sourceLine" id="cb51-3" title="3">table_justot<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_justot<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Gerente&quot;</span>, <span class="st">&quot;Obrero&quot;</span>))</a>
-<a class="sourceLine" id="cb51-4" title="4"></a>
-<a class="sourceLine" id="cb51-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_justot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Salario justo (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb51-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># Horizontal</span></a>
+<a class="sourceLine" id="cb52-2" title="2"></a>
+<a class="sourceLine" id="cb52-3" title="3">table_justot<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_justot<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Gerente&quot;</span>, <span class="st">&quot;Obrero&quot;</span>))</a>
+<a class="sourceLine" id="cb52-4" title="4"></a>
+<a class="sourceLine" id="cb52-5" title="5">salario_justo &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>table_justot, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Salario justo (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb52-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a>
+<a class="sourceLine" id="cb52-15" title="15"></a>
+<a class="sourceLine" id="cb52-16" title="16"> <span class="kw">ggsave</span>(salario_justo,<span class="dt">filename =</span> <span class="st">&quot;images/salario_justo.png&quot;</span>,<span class="dt">device =</span> <span class="st">&quot;png&quot;</span>,<span class="dt">width =</span> <span class="dv">30</span>,<span class="dt">height =</span> <span class="dv">15</span>,<span class="dt">dpi =</span> <span class="st">&quot;retina&quot;</span>,<span class="dt">units =</span> <span class="st">&quot;cm&quot;</span>)</a>
+<a class="sourceLine" id="cb52-17" title="17"> </a>
+<a class="sourceLine" id="cb52-18" title="18"> salario_justo</a></code></pre></div>
 <p><img src="analysis_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
 </div>
 </div>
@@ -891,15 +898,15 @@ div.tocify {
 <h2><span class="header-section-number">3.3</span> Brechas salariales.</h2>
 <div id="brecha-percivida" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Brecha percivida</h3>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">table_gap_perc&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_perc),</a>
-<a class="sourceLine" id="cb52-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_perc),</a>
-<a class="sourceLine" id="cb52-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_perc))</a>
-<a class="sourceLine" id="cb52-4" title="4"></a>
-<a class="sourceLine" id="cb52-5" title="5"><span class="kw">rownames</span>(table_gap_perc) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb52-6" title="6"></a>
-<a class="sourceLine" id="cb52-7" title="7">table_gap_perc &lt;-<span class="st"> </span>table_gap_perc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb52-8" title="8"></a>
-<a class="sourceLine" id="cb52-9" title="9">table_gap_perc</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">table_gap_perc&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_perc),</a>
+<a class="sourceLine" id="cb53-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_perc),</a>
+<a class="sourceLine" id="cb53-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_perc))</a>
+<a class="sourceLine" id="cb53-4" title="4"></a>
+<a class="sourceLine" id="cb53-5" title="5"><span class="kw">rownames</span>(table_gap_perc) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb53-6" title="6"></a>
+<a class="sourceLine" id="cb53-7" title="7">table_gap_perc &lt;-<span class="st"> </span>table_gap_perc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb53-8" title="8"></a>
+<a class="sourceLine" id="cb53-9" title="9">table_gap_perc</a></code></pre></div>
 <pre><code>##         n   mean      sd median trimmed  min       max
 ## 1999  914  89.62  323.95  33.33   42.68 0.01   5524.86
 ## 2009 1337 603.63 6496.84  32.14   42.39 0.04 133333.33
@@ -907,29 +914,29 @@ div.tocify {
 </div>
 <div id="brecha-justa" class="section level3">
 <h3><span class="header-section-number">3.3.2</span> Brecha justa</h3>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">table_gap_just&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_just),</a>
-<a class="sourceLine" id="cb54-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_just),</a>
-<a class="sourceLine" id="cb54-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_just))</a>
-<a class="sourceLine" id="cb54-4" title="4"></a>
-<a class="sourceLine" id="cb54-5" title="5"><span class="kw">rownames</span>(table_gap_just) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb54-6" title="6"></a>
-<a class="sourceLine" id="cb54-7" title="7">table_gap_just &lt;-<span class="st"> </span>table_gap_just <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb54-8" title="8"></a>
-<a class="sourceLine" id="cb54-9" title="9">table_gap_just</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1">table_gap_just&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_just),</a>
+<a class="sourceLine" id="cb55-2" title="2">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_just),</a>
+<a class="sourceLine" id="cb55-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_just))</a>
+<a class="sourceLine" id="cb55-4" title="4"></a>
+<a class="sourceLine" id="cb55-5" title="5"><span class="kw">rownames</span>(table_gap_just) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb55-6" title="6"></a>
+<a class="sourceLine" id="cb55-7" title="7">table_gap_just &lt;-<span class="st"> </span>table_gap_just <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb55-8" title="8"></a>
+<a class="sourceLine" id="cb55-9" title="9">table_gap_just</a></code></pre></div>
 <pre><code>##         n   mean      sd median trimmed  min   max
 ## 1999  854  24.62  103.04   10.0   13.85 0.02  2000
 ## 2009 1318 192.32 2158.49   10.0   14.05 0.00 40000
 ## 2019  977  66.42  764.77    7.5    9.42 0.08 14000</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># Add occupation &amp; year to tables</span></a>
-<a class="sourceLine" id="cb56-2" title="2"></a>
-<a class="sourceLine" id="cb56-3" title="3">table_gap_perc<span class="op">$</span>ocup &lt;-<span class="st">  </span><span class="dv">1</span> <span class="co"># as.factor(c(&quot;Obrero&quot;))</span></a>
-<a class="sourceLine" id="cb56-4" title="4">table_gap_perc<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb56-5" title="5"></a>
-<a class="sourceLine" id="cb56-6" title="6">table_gap_just<span class="op">$</span>ocup &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># as.factor(c(&quot;Gerente&quot;))</span></a>
-<a class="sourceLine" id="cb56-7" title="7">table_gap_just<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb56-8" title="8"></a>
-<a class="sourceLine" id="cb56-9" title="9">table_gap_total &lt;-<span class="kw">rbind</span>(table_gap_perc,table_gap_just)</a>
-<a class="sourceLine" id="cb56-10" title="10"><span class="kw">str</span>(table_gap_total)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># Add occupation &amp; year to tables</span></a>
+<a class="sourceLine" id="cb57-2" title="2"></a>
+<a class="sourceLine" id="cb57-3" title="3">table_gap_perc<span class="op">$</span>ocup &lt;-<span class="st">  </span><span class="dv">1</span> <span class="co"># as.factor(c(&quot;Obrero&quot;))</span></a>
+<a class="sourceLine" id="cb57-4" title="4">table_gap_perc<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb57-5" title="5"></a>
+<a class="sourceLine" id="cb57-6" title="6">table_gap_just<span class="op">$</span>ocup &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># as.factor(c(&quot;Gerente&quot;))</span></a>
+<a class="sourceLine" id="cb57-7" title="7">table_gap_just<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1999</span>,<span class="dv">2009</span>,<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb57-8" title="8"></a>
+<a class="sourceLine" id="cb57-9" title="9">table_gap_total &lt;-<span class="kw">rbind</span>(table_gap_perc,table_gap_just)</a>
+<a class="sourceLine" id="cb57-10" title="10"><span class="kw">str</span>(table_gap_total)</a></code></pre></div>
 <pre><code>## Classes &#39;psych&#39;, &#39;describe&#39; and &#39;data.frame&#39;:    6 obs. of  9 variables:
 ##  $ n      : num  914 1337 1037 854 1318 ...
 ##  $ mean   : num  89.6 603.6 280 24.6 192.3 ...
@@ -940,7 +947,7 @@ div.tocify {
 ##  $ max    : num  5525 133333 60000 2000 40000 ...
 ##  $ ocup   : num  1 1 1 2 2 2
 ##  $ year   : num  1999 2009 2019 1999 2009 ...</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">table_gap_total</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1">table_gap_total</a></code></pre></div>
 <pre><code>##          n   mean      sd median trimmed  min       max ocup year
 ## 1999   914  89.62  323.95  33.33   42.68 0.01   5524.86    1 1999
 ## 2009  1337 603.63 6496.84  32.14   42.39 0.04 133333.33    1 2009
@@ -948,48 +955,52 @@ div.tocify {
 ## 19991  854  24.62  103.04  10.00   13.85 0.02   2000.00    2 1999
 ## 20091 1318 192.32 2158.49  10.00   14.05 0.00  40000.00    2 2009
 ## 20191  977  66.42  764.77   7.50    9.42 0.08  14000.00    2 2019</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">bar3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(table_gap_total, <span class="kw">aes</span>(<span class="kw">as.factor</span>(year),median)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-2" title="2"><span class="st">      </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;justa &quot;</span>, <span class="st">&quot;percibida&quot;</span>))), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span>.<span class="dv">5</span>)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-3" title="3"><span class="st">      </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">group=</span><span class="st">&quot;Ocup&quot;</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.5</span>), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-4" title="4"><span class="st">      </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">18</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-5" title="5"><span class="st">      </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-6" title="6"><span class="st">      </span><span class="kw">ylab</span>(<span class="st">&#39;Brecha (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-7" title="7"><span class="st">      </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-8" title="8"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="co"># quitar nombre leyenda, autoexplicativo +</span></a>
-<a class="sourceLine" id="cb60-10" title="10"></a>
-<a class="sourceLine" id="cb60-11" title="11">bar3</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1">bar3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(table_gap_total, <span class="kw">aes</span>(<span class="kw">as.factor</span>(year),median)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-2" title="2"><span class="st">      </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;justa &quot;</span>, <span class="st">&quot;percibida&quot;</span>))), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span>.<span class="dv">5</span>)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-3" title="3"><span class="st">      </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">group=</span><span class="st">&quot;Ocup&quot;</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.5</span>), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-4" title="4"><span class="st">      </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">18</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-5" title="5"><span class="st">      </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-6" title="6"><span class="st">      </span><span class="kw">ylab</span>(<span class="st">&#39;Brecha (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-7" title="7"><span class="st">      </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-8" title="8"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="co"># quitar nombre leyenda, autoexplicativo +</span></a>
+<a class="sourceLine" id="cb61-10" title="10"></a>
+<a class="sourceLine" id="cb61-11" title="11">bar3</a></code></pre></div>
 <p><img src="analysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># Horizontal</span></a>
-<a class="sourceLine" id="cb61-2" title="2"></a>
-<a class="sourceLine" id="cb61-3" title="3">table_gap_total<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_gap_total<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;justa&quot;</span>, <span class="st">&quot;percibida&quot;</span>))</a>
-<a class="sourceLine" id="cb61-4" title="4"></a>
-<a class="sourceLine" id="cb61-5" title="5"> <span class="kw">ggplot</span>(<span class="dt">data=</span>table_gap_total, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Brecha (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># Horizontal</span></a>
+<a class="sourceLine" id="cb62-2" title="2"></a>
+<a class="sourceLine" id="cb62-3" title="3">table_gap_total<span class="op">$</span>ocup2 &lt;-<span class="st"> </span><span class="kw">factor</span>(table_gap_total<span class="op">$</span>ocup, <span class="dt">levels=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;justa&quot;</span>, <span class="st">&quot;percibida&quot;</span>))</a>
+<a class="sourceLine" id="cb62-4" title="4"></a>
+<a class="sourceLine" id="cb62-5" title="5"> brechas &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>table_gap_total, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(<span class="kw">as.factor</span>(year),<span class="op">-</span>median), <span class="dt">y=</span>median, <span class="dt">fill=</span>ocup2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-6" title="6"><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&#39;dodge&#39;</span>, <span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-7" title="7"><span class="st">     </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span><span class="kw">format</span>(median, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">scientific =</span> <span class="ot">FALSE</span>), <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">hjust=</span><span class="op">-</span><span class="fl">0.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-8" title="8"><span class="st">     </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">12</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-9" title="9"><span class="st">     </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-10" title="10"><span class="st">     </span><span class="kw">ylab</span>(<span class="st">&#39;Brecha (mediana)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&#39;Años&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-11" title="11"><span class="st">     </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Paired&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-12" title="12"><span class="st">     </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-13" title="13"><span class="st">     </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot; &quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-14" title="14"><span class="st">    </span><span class="kw">coord_flip</span>()</a>
+<a class="sourceLine" id="cb62-15" title="15"> </a>
+<a class="sourceLine" id="cb62-16" title="16"> <span class="kw">ggsave</span>(brechas,<span class="dt">filename =</span> <span class="st">&quot;images/Brechas.png&quot;</span>,<span class="dt">device =</span> <span class="st">&quot;png&quot;</span>,<span class="dt">width =</span> <span class="dv">30</span>,<span class="dt">height =</span> <span class="dv">15</span>,<span class="dt">dpi =</span> <span class="st">&quot;retina&quot;</span>,<span class="dt">units =</span> <span class="st">&quot;cm&quot;</span>)</a>
+<a class="sourceLine" id="cb62-17" title="17"></a>
+<a class="sourceLine" id="cb62-18" title="18">brechas</a></code></pre></div>
 <p><img src="analysis_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
 </div>
 </div>
 </div>
 <div id="tablas" class="section level1">
 <h1><span class="header-section-number">4</span> Tablas</h1>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># Tabla 1</span></a>
-<a class="sourceLine" id="cb62-2" title="2"></a>
-<a class="sourceLine" id="cb62-3" title="3">table1&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_perc),</a>
-<a class="sourceLine" id="cb62-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_perc),</a>
-<a class="sourceLine" id="cb62-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_perc))</a>
-<a class="sourceLine" id="cb62-6" title="6"></a>
-<a class="sourceLine" id="cb62-7" title="7"><span class="kw">rownames</span>(table1) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb62-8" title="8">table1 &lt;-<span class="st"> </span>table1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb62-9" title="9"></a>
-<a class="sourceLine" id="cb62-10" title="10"><span class="kw">kable</span>(table1,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Brecha total de salario percibido por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># Tabla 1</span></a>
+<a class="sourceLine" id="cb63-2" title="2"></a>
+<a class="sourceLine" id="cb63-3" title="3">table1&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_perc),</a>
+<a class="sourceLine" id="cb63-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_perc),</a>
+<a class="sourceLine" id="cb63-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_perc))</a>
+<a class="sourceLine" id="cb63-6" title="6"></a>
+<a class="sourceLine" id="cb63-7" title="7"><span class="kw">rownames</span>(table1) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb63-8" title="8">table1 &lt;-<span class="st"> </span>table1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb63-9" title="9"></a>
+<a class="sourceLine" id="cb63-10" title="10"><span class="kw">kable</span>(table1,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Brecha total de salario percibido por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Brecha total de salario percibido por año
@@ -1102,16 +1113,16 @@ max
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># Tabla 2</span></a>
-<a class="sourceLine" id="cb63-2" title="2"></a>
-<a class="sourceLine" id="cb63-3" title="3">table2&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_just),</a>
-<a class="sourceLine" id="cb63-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_just),</a>
-<a class="sourceLine" id="cb63-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_just))</a>
-<a class="sourceLine" id="cb63-6" title="6"></a>
-<a class="sourceLine" id="cb63-7" title="7"><span class="kw">rownames</span>(table2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb63-8" title="8">table2 &lt;-<span class="st"> </span>table2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb63-9" title="9"></a>
-<a class="sourceLine" id="cb63-10" title="10"><span class="kw">kable</span>(table2,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de salario justo por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># Tabla 2</span></a>
+<a class="sourceLine" id="cb64-2" title="2"></a>
+<a class="sourceLine" id="cb64-3" title="3">table2&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(salarios99<span class="op">$</span>gap_just),</a>
+<a class="sourceLine" id="cb64-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(salarios09<span class="op">$</span>gap_just),</a>
+<a class="sourceLine" id="cb64-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(salarios19<span class="op">$</span>gap_just))</a>
+<a class="sourceLine" id="cb64-6" title="6"></a>
+<a class="sourceLine" id="cb64-7" title="7"><span class="kw">rownames</span>(table2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb64-8" title="8">table2 &lt;-<span class="st"> </span>table2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb64-9" title="9"></a>
+<a class="sourceLine" id="cb64-10" title="10"><span class="kw">kable</span>(table2,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de salario justo por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Tabla: Brecha total de salario justo por año
@@ -1224,39 +1235,39 @@ max
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># # Tabla 3 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb64-2" title="2"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-3" title="3"><span class="co"># table3&lt;- rbind(psych::describe(sal99$gap_just),</span></a>
-<a class="sourceLine" id="cb64-4" title="4"><span class="co">#                psych::describe(sal09$gap_just),</span></a>
-<a class="sourceLine" id="cb64-5" title="5"><span class="co">#                psych::describe(sal19$gap_just))</span></a>
-<a class="sourceLine" id="cb64-6" title="6"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-7" title="7"><span class="co"># rownames(table3) &lt;- c(&quot;1999&quot;,&quot;2009&quot;,&quot;2019&quot;)</span></a>
-<a class="sourceLine" id="cb64-8" title="8"><span class="co"># table3 &lt;- table3 %&gt;% select(n,mean,sd,median,trimmed,min,max)</span></a>
-<a class="sourceLine" id="cb64-9" title="9"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-10" title="10"><span class="co"># kable(table3,row.names = TRUE, digits = 2,caption = &quot;Tabla: Brecha total de salario justo por año&quot;) %&gt;% kable_styling() %&gt;%</span></a>
-<a class="sourceLine" id="cb64-11" title="11"><span class="co"># footnote(general = &quot;Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo&quot;)</span></a>
-<a class="sourceLine" id="cb64-12" title="12"></a>
-<a class="sourceLine" id="cb64-13" title="13"><span class="co"># # Tabla 4 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb64-14" title="14"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-15" title="15"><span class="co"># table4&lt;- rbind(psych::describe(sal99$gap_perc),</span></a>
-<a class="sourceLine" id="cb64-16" title="16"><span class="co">#                psych::describe(sal09$gap_perc),</span></a>
-<a class="sourceLine" id="cb64-17" title="17"><span class="co">#                psych::describe(sal19$gap_perc))</span></a>
-<a class="sourceLine" id="cb64-18" title="18"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-19" title="19"><span class="co"># rownames(table4) &lt;- c(&quot;1999&quot;,&quot;2009&quot;,&quot;2019&quot;)</span></a>
-<a class="sourceLine" id="cb64-20" title="20"><span class="co"># table4 &lt;- table4 %&gt;% select(n,mean,sd,median,trimmed,min,max)</span></a>
-<a class="sourceLine" id="cb64-21" title="21"><span class="co">#</span></a>
-<a class="sourceLine" id="cb64-22" title="22"><span class="co"># kable(table4,row.names = TRUE, digits = 2,caption = &quot;Tabla: Brecha total de salario percibido por año&quot;) %&gt;% kable_styling() %&gt;%</span></a>
-<a class="sourceLine" id="cb64-23" title="23"><span class="co"># footnote(general = &quot;Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo&quot;)</span></a>
-<a class="sourceLine" id="cb64-24" title="24"><span class="co"># ```</span></a>
-<a class="sourceLine" id="cb64-25" title="25"></a>
-<a class="sourceLine" id="cb64-26" title="26"><span class="co">## Brecha estimada (log)</span></a></code></pre></div>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># Tabla 1 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb65-2" title="2">table1b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios99<span class="op">$</span>gap_perc)),</a>
-<a class="sourceLine" id="cb65-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios09<span class="op">$</span>gap_perc)),</a>
-<a class="sourceLine" id="cb65-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios19<span class="op">$</span>gap_perc)))</a>
-<a class="sourceLine" id="cb65-5" title="5"><span class="kw">rownames</span>(table1b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb65-6" title="6">table1b &lt;-<span class="st"> </span>table1b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb65-7" title="7"><span class="kw">kable</span>(table1b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Brecha total de ln(salario percibido) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># # Tabla 3 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-3" title="3"><span class="co"># table3&lt;- rbind(psych::describe(sal99$gap_just),</span></a>
+<a class="sourceLine" id="cb65-4" title="4"><span class="co">#                psych::describe(sal09$gap_just),</span></a>
+<a class="sourceLine" id="cb65-5" title="5"><span class="co">#                psych::describe(sal19$gap_just))</span></a>
+<a class="sourceLine" id="cb65-6" title="6"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-7" title="7"><span class="co"># rownames(table3) &lt;- c(&quot;1999&quot;,&quot;2009&quot;,&quot;2019&quot;)</span></a>
+<a class="sourceLine" id="cb65-8" title="8"><span class="co"># table3 &lt;- table3 %&gt;% select(n,mean,sd,median,trimmed,min,max)</span></a>
+<a class="sourceLine" id="cb65-9" title="9"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-10" title="10"><span class="co"># kable(table3,row.names = TRUE, digits = 2,caption = &quot;Tabla: Brecha total de salario justo por año&quot;) %&gt;% kable_styling() %&gt;%</span></a>
+<a class="sourceLine" id="cb65-11" title="11"><span class="co"># footnote(general = &quot;Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo&quot;)</span></a>
+<a class="sourceLine" id="cb65-12" title="12"></a>
+<a class="sourceLine" id="cb65-13" title="13"><span class="co"># # Tabla 4 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb65-14" title="14"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-15" title="15"><span class="co"># table4&lt;- rbind(psych::describe(sal99$gap_perc),</span></a>
+<a class="sourceLine" id="cb65-16" title="16"><span class="co">#                psych::describe(sal09$gap_perc),</span></a>
+<a class="sourceLine" id="cb65-17" title="17"><span class="co">#                psych::describe(sal19$gap_perc))</span></a>
+<a class="sourceLine" id="cb65-18" title="18"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-19" title="19"><span class="co"># rownames(table4) &lt;- c(&quot;1999&quot;,&quot;2009&quot;,&quot;2019&quot;)</span></a>
+<a class="sourceLine" id="cb65-20" title="20"><span class="co"># table4 &lt;- table4 %&gt;% select(n,mean,sd,median,trimmed,min,max)</span></a>
+<a class="sourceLine" id="cb65-21" title="21"><span class="co">#</span></a>
+<a class="sourceLine" id="cb65-22" title="22"><span class="co"># kable(table4,row.names = TRUE, digits = 2,caption = &quot;Tabla: Brecha total de salario percibido por año&quot;) %&gt;% kable_styling() %&gt;%</span></a>
+<a class="sourceLine" id="cb65-23" title="23"><span class="co"># footnote(general = &quot;Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo&quot;)</span></a>
+<a class="sourceLine" id="cb65-24" title="24"><span class="co"># ```</span></a>
+<a class="sourceLine" id="cb65-25" title="25"></a>
+<a class="sourceLine" id="cb65-26" title="26"><span class="co">## Brecha estimada (log)</span></a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># Tabla 1 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb66-2" title="2">table1b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios99<span class="op">$</span>gap_perc)),</a>
+<a class="sourceLine" id="cb66-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios09<span class="op">$</span>gap_perc)),</a>
+<a class="sourceLine" id="cb66-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios19<span class="op">$</span>gap_perc)))</a>
+<a class="sourceLine" id="cb66-5" title="5"><span class="kw">rownames</span>(table1b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb66-6" title="6">table1b &lt;-<span class="st"> </span>table1b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb66-7" title="7"><span class="kw">kable</span>(table1b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Brecha total de ln(salario percibido) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Brecha total de ln(salario percibido) por año
@@ -1369,13 +1380,13 @@ max
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># Tabla 2 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb66-2" title="2">table2b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios99<span class="op">$</span>gap_just)),</a>
-<a class="sourceLine" id="cb66-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios09<span class="op">$</span>gap_just)),</a>
-<a class="sourceLine" id="cb66-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios19<span class="op">$</span>gap_just)))</a>
-<a class="sourceLine" id="cb66-5" title="5"><span class="kw">rownames</span>(table2b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb66-6" title="6">table2b &lt;-<span class="st"> </span>table2b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb66-7" title="7"><span class="kw">kable</span>(table2b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario justo) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># Tabla 2 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb67-2" title="2">table2b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios99<span class="op">$</span>gap_just)),</a>
+<a class="sourceLine" id="cb67-3" title="3">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios09<span class="op">$</span>gap_just)),</a>
+<a class="sourceLine" id="cb67-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(salarios19<span class="op">$</span>gap_just)))</a>
+<a class="sourceLine" id="cb67-5" title="5"><span class="kw">rownames</span>(table2b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb67-6" title="6">table2b &lt;-<span class="st"> </span>table2b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb67-7" title="7"><span class="kw">kable</span>(table2b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario justo) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>()</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Tabla: Brecha total de ln(salario justo) por año
@@ -1488,17 +1499,17 @@ max
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># Tabla 3 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb67-2" title="2"></a>
-<a class="sourceLine" id="cb67-3" title="3">table3b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal99<span class="op">$</span>gap_just)),</a>
-<a class="sourceLine" id="cb67-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal09<span class="op">$</span>gap_just)),</a>
-<a class="sourceLine" id="cb67-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal19<span class="op">$</span>gap_just)))</a>
-<a class="sourceLine" id="cb67-6" title="6"></a>
-<a class="sourceLine" id="cb67-7" title="7"><span class="kw">rownames</span>(table3b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb67-8" title="8">table3b &lt;-<span class="st"> </span>table3b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb67-9" title="9"></a>
-<a class="sourceLine" id="cb67-10" title="10"><span class="kw">kable</span>(table3b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario justo) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb67-11" title="11"><span class="kw">footnote</span>(<span class="dt">general =</span> <span class="st">&quot;Calculo realizado sin casos extremos superiores e inferiores </span><span class="ch">\n</span><span class="st"> Media recortada sin el 5% de cada extremo&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># Tabla 3 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb68-2" title="2"></a>
+<a class="sourceLine" id="cb68-3" title="3">table3b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal99<span class="op">$</span>gap_just)),</a>
+<a class="sourceLine" id="cb68-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal09<span class="op">$</span>gap_just)),</a>
+<a class="sourceLine" id="cb68-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal19<span class="op">$</span>gap_just)))</a>
+<a class="sourceLine" id="cb68-6" title="6"></a>
+<a class="sourceLine" id="cb68-7" title="7"><span class="kw">rownames</span>(table3b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb68-8" title="8">table3b &lt;-<span class="st"> </span>table3b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb68-9" title="9"></a>
+<a class="sourceLine" id="cb68-10" title="10"><span class="kw">kable</span>(table3b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario justo) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb68-11" title="11"><span class="kw">footnote</span>(<span class="dt">general =</span> <span class="st">&quot;Calculo realizado sin casos extremos superiores e inferiores </span><span class="ch">\n</span><span class="st"> Media recortada sin el 5% de cada extremo&quot;</span>)</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Tabla: Brecha total de ln(salario justo) por año
@@ -1623,17 +1634,17 @@ max
 </tr>
 </tfoot>
 </table>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># Tabla 4 ****************************************************************************************</span></a>
-<a class="sourceLine" id="cb68-2" title="2"></a>
-<a class="sourceLine" id="cb68-3" title="3">table4b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal99<span class="op">$</span>gap_perc)),</a>
-<a class="sourceLine" id="cb68-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal09<span class="op">$</span>gap_perc)),</a>
-<a class="sourceLine" id="cb68-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal19<span class="op">$</span>gap_perc)))</a>
-<a class="sourceLine" id="cb68-6" title="6"></a>
-<a class="sourceLine" id="cb68-7" title="7"><span class="kw">rownames</span>(table4b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
-<a class="sourceLine" id="cb68-8" title="8">table4b &lt;-<span class="st"> </span>table4b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
-<a class="sourceLine" id="cb68-9" title="9"></a>
-<a class="sourceLine" id="cb68-10" title="10"><span class="kw">kable</span>(table4b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario percibido) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb68-11" title="11"><span class="kw">footnote</span>(<span class="dt">general =</span> <span class="st">&quot;Calculo realizado sin casos extremos superiores e inferiores </span><span class="ch">\n</span><span class="st"> Media recortada sin el 5% de cada extremo&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># Tabla 4 ****************************************************************************************</span></a>
+<a class="sourceLine" id="cb69-2" title="2"></a>
+<a class="sourceLine" id="cb69-3" title="3">table4b&lt;-<span class="st"> </span><span class="kw">rbind</span>(psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal99<span class="op">$</span>gap_perc)),</a>
+<a class="sourceLine" id="cb69-4" title="4">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal09<span class="op">$</span>gap_perc)),</a>
+<a class="sourceLine" id="cb69-5" title="5">               psych<span class="op">::</span><span class="kw">describe</span>(<span class="kw">log</span>(sal19<span class="op">$</span>gap_perc)))</a>
+<a class="sourceLine" id="cb69-6" title="6"></a>
+<a class="sourceLine" id="cb69-7" title="7"><span class="kw">rownames</span>(table4b) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1999&quot;</span>,<span class="st">&quot;2009&quot;</span>,<span class="st">&quot;2019&quot;</span>)</a>
+<a class="sourceLine" id="cb69-8" title="8">table4b &lt;-<span class="st"> </span>table4b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(n,mean,sd,median,trimmed,min,max)</a>
+<a class="sourceLine" id="cb69-9" title="9"></a>
+<a class="sourceLine" id="cb69-10" title="10"><span class="kw">kable</span>(table4b,<span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="dt">digits =</span> <span class="dv">2</span>,<span class="dt">caption =</span> <span class="st">&quot;Tabla: Brecha total de ln(salario percibido) por año&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb69-11" title="11"><span class="kw">footnote</span>(<span class="dt">general =</span> <span class="st">&quot;Calculo realizado sin casos extremos superiores e inferiores </span><span class="ch">\n</span><span class="st"> Media recortada sin el 5% de cada extremo&quot;</span>)</a></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Tabla: Brecha total de ln(salario percibido) por año
@@ -1788,41 +1799,41 @@ ggplot() +
 <li><p>v7: Recompensas: En Chile las personas son remuneradas por su inteligencia y capacidades (rinte)</p></li>
 <li><p>v8: Hoy en día, para llegar hasta el nivel más alto en Chile, hay que ser corrupto. (corru)</p></li>
 </ul>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">merit99 &lt;-<span class="st"> </span>cl99 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(v4<span class="op">:</span>v8,v49<span class="op">:</span>v55)</a>
-<a class="sourceLine" id="cb69-2" title="2"></a>
-<a class="sourceLine" id="cb69-3" title="3">merit99<span class="op">$</span>V4 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v4,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb69-4" title="4">merit99<span class="op">$</span>v5 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v5,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb69-5" title="5">merit99<span class="op">$</span>v6 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v6,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb69-6" title="6">merit99<span class="op">$</span>v7 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v7,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb69-7" title="7">merit99<span class="op">$</span>v8 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v8,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb69-8" title="8"></a>
-<a class="sourceLine" id="cb69-9" title="9">merit99<span class="op">$</span>v4 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v4,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb69-10" title="10">merit99<span class="op">$</span>v5 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v5,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb69-11" title="11">merit99<span class="op">$</span>v6 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v6,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb69-12" title="12">merit99<span class="op">$</span>v7 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v7,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb69-13" title="13">merit99<span class="op">$</span>v8 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v8,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb69-14" title="14"></a>
-<a class="sourceLine" id="cb69-15" title="15"></a>
-<a class="sourceLine" id="cb69-16" title="16">merit99 &lt;-<span class="st"> </span><span class="kw">rename</span>(merit99,</a>
-<a class="sourceLine" id="cb69-17" title="17">                  <span class="dt">wfami =</span> v4,</a>
-<a class="sourceLine" id="cb69-18" title="18">                  <span class="dt">knope =</span> v5,</a>
-<a class="sourceLine" id="cb69-19" title="19">                  <span class="dt">refor =</span> v6,</a>
-<a class="sourceLine" id="cb69-20" title="20">                  <span class="dt">rinte =</span> v7,</a>
-<a class="sourceLine" id="cb69-21" title="21">                  <span class="dt">corru =</span> v8)</a>
-<a class="sourceLine" id="cb69-22" title="22"></a>
-<a class="sourceLine" id="cb69-23" title="23">poly99a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(wfami,knope,refor,rinte,corru)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly99a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">merit99 &lt;-<span class="st"> </span>cl99 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(v4<span class="op">:</span>v8,v49<span class="op">:</span>v55)</a>
+<a class="sourceLine" id="cb70-2" title="2"></a>
+<a class="sourceLine" id="cb70-3" title="3">merit99<span class="op">$</span>V4 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v4,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb70-4" title="4">merit99<span class="op">$</span>v5 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v5,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb70-5" title="5">merit99<span class="op">$</span>v6 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v6,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb70-6" title="6">merit99<span class="op">$</span>v7 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v7,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb70-7" title="7">merit99<span class="op">$</span>v8 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v8,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb70-8" title="8"></a>
+<a class="sourceLine" id="cb70-9" title="9">merit99<span class="op">$</span>v4 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v4,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb70-10" title="10">merit99<span class="op">$</span>v5 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v5,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb70-11" title="11">merit99<span class="op">$</span>v6 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v6,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb70-12" title="12">merit99<span class="op">$</span>v7 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v7,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb70-13" title="13">merit99<span class="op">$</span>v8 &lt;-<span class="st"> </span>sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v8,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb70-14" title="14"></a>
+<a class="sourceLine" id="cb70-15" title="15"></a>
+<a class="sourceLine" id="cb70-16" title="16">merit99 &lt;-<span class="st"> </span><span class="kw">rename</span>(merit99,</a>
+<a class="sourceLine" id="cb70-17" title="17">                  <span class="dt">wfami =</span> v4,</a>
+<a class="sourceLine" id="cb70-18" title="18">                  <span class="dt">knope =</span> v5,</a>
+<a class="sourceLine" id="cb70-19" title="19">                  <span class="dt">refor =</span> v6,</a>
+<a class="sourceLine" id="cb70-20" title="20">                  <span class="dt">rinte =</span> v7,</a>
+<a class="sourceLine" id="cb70-21" title="21">                  <span class="dt">corru =</span> v8)</a>
+<a class="sourceLine" id="cb70-22" title="22"></a>
+<a class="sourceLine" id="cb70-23" title="23">poly99a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(wfami,knope,refor,rinte,corru)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly99a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-18-1.png" alt="**Correlación Policórica para Batería de _Percepción_ de Meritocracia para Chile ISSP 1999**" width="75%" />
 <p class="caption">
 <strong>Correlación Policórica para Batería de <em>Percepción</em> de Meritocracia para Chile ISSP 1999</strong>
 </p>
 </div>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">library</span>(GPArotation)</a>
-<a class="sourceLine" id="cb71-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(wfami,knope,refor,rinte)),</a>
-<a class="sourceLine" id="cb71-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
-<a class="sourceLine" id="cb71-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb71-5" title="5">               <span class="dt">title=</span><span class="st">&quot;Analisis Factorial 1999 Percepcion&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">library</span>(GPArotation)</a>
+<a class="sourceLine" id="cb72-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(wfami,knope,refor,rinte)),</a>
+<a class="sourceLine" id="cb72-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
+<a class="sourceLine" id="cb72-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb72-5" title="5">               <span class="dt">title=</span><span class="st">&quot;Analisis Factorial 1999 Percepcion&quot;</span>)</a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <caption style="font-weight: bold; text-align:left;">
 Analisis Factorial 1999 Percepcion
@@ -1894,18 +1905,18 @@ Cronbach’s α
 </td>
 </tr>
 </table>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">m1per99 &lt;-<span class="st"> &#39;</span></a>
-<a class="sourceLine" id="cb72-2" title="2"><span class="st">gah_nmerit=~wfami+knope+corru</span></a>
-<a class="sourceLine" id="cb72-3" title="3"><span class="st">recom=~refor+rinte</span></a>
-<a class="sourceLine" id="cb72-4" title="4"><span class="st">&#39;</span></a>
-<a class="sourceLine" id="cb72-5" title="5">fit1 &lt;-<span class="st"> </span><span class="kw">cfa</span>(<span class="dt">model =</span> m1per99,<span class="dt">data =</span> merit99)</a></code></pre></div>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1">semPlot<span class="op">::</span><span class="kw">semPaths</span>(fit1, <span class="st">&quot;std&quot;</span>,</a>
-<a class="sourceLine" id="cb73-2" title="2">                  <span class="dt">edge.color =</span> <span class="st">&quot;black&quot;</span>,</a>
-<a class="sourceLine" id="cb73-3" title="3">                  <span class="dt">style =</span> <span class="st">&quot;ram&quot;</span>,</a>
-<a class="sourceLine" id="cb73-4" title="4">                  <span class="dt">exoVar =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb73-5" title="5">                  <span class="dt">intercepts =</span> F,</a>
-<a class="sourceLine" id="cb73-6" title="6">                  <span class="dt">thresholds =</span> F,</a>
-<a class="sourceLine" id="cb73-7" title="7">                  <span class="dt">fade =</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1">m1per99 &lt;-<span class="st"> &#39;</span></a>
+<a class="sourceLine" id="cb73-2" title="2"><span class="st">gah_nmerit=~wfami+knope+corru</span></a>
+<a class="sourceLine" id="cb73-3" title="3"><span class="st">recom=~refor+rinte</span></a>
+<a class="sourceLine" id="cb73-4" title="4"><span class="st">&#39;</span></a>
+<a class="sourceLine" id="cb73-5" title="5">fit1 &lt;-<span class="st"> </span><span class="kw">cfa</span>(<span class="dt">model =</span> m1per99,<span class="dt">data =</span> merit99)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">semPlot<span class="op">::</span><span class="kw">semPaths</span>(fit1, <span class="st">&quot;std&quot;</span>,</a>
+<a class="sourceLine" id="cb74-2" title="2">                  <span class="dt">edge.color =</span> <span class="st">&quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb74-3" title="3">                  <span class="dt">style =</span> <span class="st">&quot;ram&quot;</span>,</a>
+<a class="sourceLine" id="cb74-4" title="4">                  <span class="dt">exoVar =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb74-5" title="5">                  <span class="dt">intercepts =</span> F,</a>
+<a class="sourceLine" id="cb74-6" title="6">                  <span class="dt">thresholds =</span> F,</a>
+<a class="sourceLine" id="cb74-7" title="7">                  <span class="dt">fade =</span>F)</a></code></pre></div>
 <p><img src="analysis_files/figure-html/plot%20CFA%201-1.png" width="672" /></p>
 </div>
 <div id="preferencia" class="section level3">
@@ -1919,46 +1930,46 @@ Cronbach’s α
 <li><p>v54:Importancia para pagar: Lo bien que él/ella realiza su trabajo (gdwrk)</p></li>
 <li><p>v55:Importancia para pagar: Cuánto se esfuerza él ella en realizar su trabajo (effor)</p></li>
 </ul>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">merit99<span class="op">$</span>v49 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v49,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-2" title="2">merit99<span class="op">$</span>v50 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v50,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-3" title="3">merit99<span class="op">$</span>v51 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v51,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-4" title="4">merit99<span class="op">$</span>v52 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v52,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-5" title="5">merit99<span class="op">$</span>v53 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v53,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-6" title="6">merit99<span class="op">$</span>v54 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v54,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-7" title="7">merit99<span class="op">$</span>v55 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v55,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-8" title="8"></a>
-<a class="sourceLine" id="cb74-9" title="9">merit99<span class="op">$</span>v49 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v49,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-10" title="10">merit99<span class="op">$</span>v50 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v50,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-11" title="11">merit99<span class="op">$</span>v51 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v51,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-12" title="12">merit99<span class="op">$</span>v52 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v52,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-13" title="13">merit99<span class="op">$</span>v53 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v53,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-14" title="14">merit99<span class="op">$</span>v54 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v54,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-15" title="15">merit99<span class="op">$</span>v55 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v55,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
-<a class="sourceLine" id="cb74-16" title="16"></a>
-<a class="sourceLine" id="cb74-17" title="17"></a>
-<a class="sourceLine" id="cb74-18" title="18">merit99 &lt;-<span class="st"> </span><span class="kw">rename</span>(merit99,</a>
-<a class="sourceLine" id="cb74-19" title="19">                  <span class="dt">respo=</span>v49,</a>
-<a class="sourceLine" id="cb74-20" title="20">                  <span class="dt">neduc=</span>v50,</a>
-<a class="sourceLine" id="cb74-21" title="21">                  <span class="dt">suprv=</span>v51,</a>
-<a class="sourceLine" id="cb74-22" title="22">                  <span class="dt">mafam=</span>v52,</a>
-<a class="sourceLine" id="cb74-23" title="23">                  <span class="dt">hchil=</span>v53,</a>
-<a class="sourceLine" id="cb74-24" title="24">                  <span class="dt">gdwrk=</span>v54,</a>
-<a class="sourceLine" id="cb74-25" title="25">                  <span class="dt">effor=</span>v55)</a>
-<a class="sourceLine" id="cb74-26" title="26"></a>
-<a class="sourceLine" id="cb74-27" title="27"></a>
-<a class="sourceLine" id="cb74-28" title="28">poly99b&lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly99b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">merit99<span class="op">$</span>v49 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v49,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-2" title="2">merit99<span class="op">$</span>v50 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v50,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-3" title="3">merit99<span class="op">$</span>v51 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v51,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-4" title="4">merit99<span class="op">$</span>v52 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v52,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-5" title="5">merit99<span class="op">$</span>v53 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v53,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-6" title="6">merit99<span class="op">$</span>v54 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v54,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-7" title="7">merit99<span class="op">$</span>v55 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit99<span class="op">$</span>v55,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb75-8" title="8"></a>
+<a class="sourceLine" id="cb75-9" title="9">merit99<span class="op">$</span>v49 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v49,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-10" title="10">merit99<span class="op">$</span>v50 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v50,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-11" title="11">merit99<span class="op">$</span>v51 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v51,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-12" title="12">merit99<span class="op">$</span>v52 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v52,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-13" title="13">merit99<span class="op">$</span>v53 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v53,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-14" title="14">merit99<span class="op">$</span>v54 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v54,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-15" title="15">merit99<span class="op">$</span>v55 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit99<span class="op">$</span>v55,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)</a>
+<a class="sourceLine" id="cb75-16" title="16"></a>
+<a class="sourceLine" id="cb75-17" title="17"></a>
+<a class="sourceLine" id="cb75-18" title="18">merit99 &lt;-<span class="st"> </span><span class="kw">rename</span>(merit99,</a>
+<a class="sourceLine" id="cb75-19" title="19">                  <span class="dt">respo=</span>v49,</a>
+<a class="sourceLine" id="cb75-20" title="20">                  <span class="dt">neduc=</span>v50,</a>
+<a class="sourceLine" id="cb75-21" title="21">                  <span class="dt">suprv=</span>v51,</a>
+<a class="sourceLine" id="cb75-22" title="22">                  <span class="dt">mafam=</span>v52,</a>
+<a class="sourceLine" id="cb75-23" title="23">                  <span class="dt">hchil=</span>v53,</a>
+<a class="sourceLine" id="cb75-24" title="24">                  <span class="dt">gdwrk=</span>v54,</a>
+<a class="sourceLine" id="cb75-25" title="25">                  <span class="dt">effor=</span>v55)</a>
+<a class="sourceLine" id="cb75-26" title="26"></a>
+<a class="sourceLine" id="cb75-27" title="27"></a>
+<a class="sourceLine" id="cb75-28" title="28">poly99b&lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly99b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-20-1.png" alt="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 1999**" width="75%" />
 <p class="caption">
 <strong>Correlación Policórica para Batería de <em>Preferencias</em> en Meritocracia para Chile ISSP 1999</strong>
 </p>
 </div>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="kw">library</span>(GPArotation)</a>
-<a class="sourceLine" id="cb76-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),</a>
-<a class="sourceLine" id="cb76-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
-<a class="sourceLine" id="cb76-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb76-5" title="5">               <span class="dt">title=</span><span class="st">&quot;Analisis Factorial 1999 Preferencia&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">library</span>(GPArotation)</a>
+<a class="sourceLine" id="cb77-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit99,<span class="kw">c</span>(respo,neduc,suprv,mafam,hchil,gdwrk,effor)),</a>
+<a class="sourceLine" id="cb77-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
+<a class="sourceLine" id="cb77-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb77-5" title="5">               <span class="dt">title=</span><span class="st">&quot;Analisis Factorial 1999 Preferencia&quot;</span>)</a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <caption style="font-weight: bold; text-align:left;">
 Analisis Factorial 1999 Preferencia
@@ -2090,13 +2101,13 @@ Cronbach’s α
 </td>
 </tr>
 </table>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">m1pref99 &lt;-<span class="st"> &#39;</span></a>
-<a class="sourceLine" id="cb77-2" title="2"><span class="st">resp=~respo+neduc+suprv</span></a>
-<a class="sourceLine" id="cb77-3" title="3"><span class="st">fami=~mafam+hchil</span></a>
-<a class="sourceLine" id="cb77-4" title="4"><span class="st">merit=~gdwrk+effor</span></a>
-<a class="sourceLine" id="cb77-5" title="5"><span class="st">&#39;</span></a>
-<a class="sourceLine" id="cb77-6" title="6">fit2 &lt;-<span class="st"> </span><span class="kw">cfa</span>(<span class="dt">model =</span> m1pref99,<span class="dt">data =</span> merit99, <span class="dt">ordered =</span> <span class="kw">c</span>(<span class="st">&quot;respo&quot;</span>,<span class="st">&quot;neduc&quot;</span>,<span class="st">&quot;suprv&quot;</span>,<span class="st">&quot;mafam&quot;</span>,<span class="st">&quot;hchil&quot;</span>,<span class="st">&quot;gdwrk&quot;</span>,<span class="st">&quot;effor&quot;</span>))</a>
-<a class="sourceLine" id="cb77-7" title="7"><span class="kw">summary</span>(fit2, <span class="dt">fit.measures=</span><span class="ot">TRUE</span>, <span class="dt">standardized=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">m1pref99 &lt;-<span class="st"> &#39;</span></a>
+<a class="sourceLine" id="cb78-2" title="2"><span class="st">resp=~respo+neduc+suprv</span></a>
+<a class="sourceLine" id="cb78-3" title="3"><span class="st">fami=~mafam+hchil</span></a>
+<a class="sourceLine" id="cb78-4" title="4"><span class="st">merit=~gdwrk+effor</span></a>
+<a class="sourceLine" id="cb78-5" title="5"><span class="st">&#39;</span></a>
+<a class="sourceLine" id="cb78-6" title="6">fit2 &lt;-<span class="st"> </span><span class="kw">cfa</span>(<span class="dt">model =</span> m1pref99,<span class="dt">data =</span> merit99, <span class="dt">ordered =</span> <span class="kw">c</span>(<span class="st">&quot;respo&quot;</span>,<span class="st">&quot;neduc&quot;</span>,<span class="st">&quot;suprv&quot;</span>,<span class="st">&quot;mafam&quot;</span>,<span class="st">&quot;hchil&quot;</span>,<span class="st">&quot;gdwrk&quot;</span>,<span class="st">&quot;effor&quot;</span>))</a>
+<a class="sourceLine" id="cb78-7" title="7"><span class="kw">summary</span>(fit2, <span class="dt">fit.measures=</span><span class="ot">TRUE</span>, <span class="dt">standardized=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## lavaan 0.6-3 ended normally after 24 iterations
 ## 
 ##   Optimization method                           NLMINB
@@ -2253,59 +2264,59 @@ Cronbach’s α
 <li><p>V15: Importancia para surgir: la religión que tengan las personas (relig)</p></li>
 <li><p>V16: Importancia para surgir: el sexo de las personas, ser hombre o mujer (gendr)</p></li>
 </ul>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">merit09 &lt;-<span class="st"> </span>cl09 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(v6<span class="op">:</span>v16,v47<span class="op">:</span>v52)</a>
-<a class="sourceLine" id="cb79-2" title="2"></a>
-<a class="sourceLine" id="cb79-3" title="3">merit09<span class="op">$</span>v6  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v6 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
-<a class="sourceLine" id="cb79-4" title="4">merit09<span class="op">$</span>v7  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v7 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-5" title="5">merit09<span class="op">$</span>v8  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v8 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-6" title="6">merit09<span class="op">$</span>v9  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v9 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-7" title="7">merit09<span class="op">$</span>v10 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v10,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-8" title="8">merit09<span class="op">$</span>v11 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v11,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-9" title="9">merit09<span class="op">$</span>v12 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v12,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-10" title="10">merit09<span class="op">$</span>v13 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v13,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-11" title="11">merit09<span class="op">$</span>v14 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v14,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-12" title="12">merit09<span class="op">$</span>v15 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v15,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-13" title="13">merit09<span class="op">$</span>v16 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v16,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb79-14" title="14"></a>
-<a class="sourceLine" id="cb79-15" title="15">merit09<span class="op">$</span>v6  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v6 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-16" title="16">merit09<span class="op">$</span>v7  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v7 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-17" title="17">merit09<span class="op">$</span>v8  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v8 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-18" title="18">merit09<span class="op">$</span>v9  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v9 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-19" title="19">merit09<span class="op">$</span>v10 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v10,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-20" title="20">merit09<span class="op">$</span>v11 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v11,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-21" title="21">merit09<span class="op">$</span>v12 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v12,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-22" title="22">merit09<span class="op">$</span>v13 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v13,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-23" title="23">merit09<span class="op">$</span>v14 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v14,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-24" title="24">merit09<span class="op">$</span>v15 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v15,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-25" title="25">merit09<span class="op">$</span>v16 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v16,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb79-26" title="26"></a>
-<a class="sourceLine" id="cb79-27" title="27">merit09&lt;-<span class="st"> </span><span class="kw">rename</span>(merit09,</a>
-<a class="sourceLine" id="cb79-28" title="28">                 <span class="dt">wfami=</span>v6 ,</a>
-<a class="sourceLine" id="cb79-29" title="29">                 <span class="dt">edpar=</span>v7 ,</a>
-<a class="sourceLine" id="cb79-30" title="30">                 <span class="dt">slfed=</span>v8 ,</a>
-<a class="sourceLine" id="cb79-31" title="31">                 <span class="dt">ambit=</span>v9 ,</a>
-<a class="sourceLine" id="cb79-32" title="32">                 <span class="dt">hwork=</span>v10,</a>
-<a class="sourceLine" id="cb79-33" title="33">                 <span class="dt">knope=</span>v11,</a>
-<a class="sourceLine" id="cb79-34" title="34">                 <span class="dt">polco=</span>v12,</a>
-<a class="sourceLine" id="cb79-35" title="35">                 <span class="dt">corru=</span>v13,</a>
-<a class="sourceLine" id="cb79-36" title="36">                 <span class="dt">etnic=</span>v14,</a>
-<a class="sourceLine" id="cb79-37" title="37">                 <span class="dt">relig=</span>v15,</a>
-<a class="sourceLine" id="cb79-38" title="38">                 <span class="dt">gendr=</span>v16)</a>
-<a class="sourceLine" id="cb79-39" title="39"></a>
-<a class="sourceLine" id="cb79-40" title="40"></a>
-<a class="sourceLine" id="cb79-41" title="41">poly09a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly09a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">merit09 &lt;-<span class="st"> </span>cl09 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(v6<span class="op">:</span>v16,v47<span class="op">:</span>v52)</a>
+<a class="sourceLine" id="cb80-2" title="2"></a>
+<a class="sourceLine" id="cb80-3" title="3">merit09<span class="op">$</span>v6  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v6 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
+<a class="sourceLine" id="cb80-4" title="4">merit09<span class="op">$</span>v7  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v7 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-5" title="5">merit09<span class="op">$</span>v8  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v8 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-6" title="6">merit09<span class="op">$</span>v9  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v9 ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-7" title="7">merit09<span class="op">$</span>v10 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v10,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-8" title="8">merit09<span class="op">$</span>v11 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v11,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-9" title="9">merit09<span class="op">$</span>v12 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v12,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-10" title="10">merit09<span class="op">$</span>v13 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v13,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-11" title="11">merit09<span class="op">$</span>v14 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v14,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-12" title="12">merit09<span class="op">$</span>v15 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v15,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-13" title="13">merit09<span class="op">$</span>v16 &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v16,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb80-14" title="14"></a>
+<a class="sourceLine" id="cb80-15" title="15">merit09<span class="op">$</span>v6  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v6 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-16" title="16">merit09<span class="op">$</span>v7  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v7 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-17" title="17">merit09<span class="op">$</span>v8  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v8 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-18" title="18">merit09<span class="op">$</span>v9  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v9 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-19" title="19">merit09<span class="op">$</span>v10 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v10,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-20" title="20">merit09<span class="op">$</span>v11 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v11,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-21" title="21">merit09<span class="op">$</span>v12 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v12,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-22" title="22">merit09<span class="op">$</span>v13 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v13,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-23" title="23">merit09<span class="op">$</span>v14 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v14,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-24" title="24">merit09<span class="op">$</span>v15 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v15,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-25" title="25">merit09<span class="op">$</span>v16 &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v16,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb80-26" title="26"></a>
+<a class="sourceLine" id="cb80-27" title="27">merit09&lt;-<span class="st"> </span><span class="kw">rename</span>(merit09,</a>
+<a class="sourceLine" id="cb80-28" title="28">                 <span class="dt">wfami=</span>v6 ,</a>
+<a class="sourceLine" id="cb80-29" title="29">                 <span class="dt">edpar=</span>v7 ,</a>
+<a class="sourceLine" id="cb80-30" title="30">                 <span class="dt">slfed=</span>v8 ,</a>
+<a class="sourceLine" id="cb80-31" title="31">                 <span class="dt">ambit=</span>v9 ,</a>
+<a class="sourceLine" id="cb80-32" title="32">                 <span class="dt">hwork=</span>v10,</a>
+<a class="sourceLine" id="cb80-33" title="33">                 <span class="dt">knope=</span>v11,</a>
+<a class="sourceLine" id="cb80-34" title="34">                 <span class="dt">polco=</span>v12,</a>
+<a class="sourceLine" id="cb80-35" title="35">                 <span class="dt">corru=</span>v13,</a>
+<a class="sourceLine" id="cb80-36" title="36">                 <span class="dt">etnic=</span>v14,</a>
+<a class="sourceLine" id="cb80-37" title="37">                 <span class="dt">relig=</span>v15,</a>
+<a class="sourceLine" id="cb80-38" title="38">                 <span class="dt">gendr=</span>v16)</a>
+<a class="sourceLine" id="cb80-39" title="39"></a>
+<a class="sourceLine" id="cb80-40" title="40"></a>
+<a class="sourceLine" id="cb80-41" title="41">poly09a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly09a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-22-1.png" alt="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2009**" width="75%" />
 <p class="caption">
 <strong>Correlación Policórica para Batería de <em>Percepción</em> en Meritocracia para Chile ISSP 2009</strong>
 </p>
 </div>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">library</span>(GPArotation)</a>
-<a class="sourceLine" id="cb81-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,polco,corru,etnic,relig,gendr)),</a>
-<a class="sourceLine" id="cb81-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
-<a class="sourceLine" id="cb81-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb81-5" title="5">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2009 Percepcion&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="kw">library</span>(GPArotation)</a>
+<a class="sourceLine" id="cb82-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,polco,corru,etnic,relig,gendr)),</a>
+<a class="sourceLine" id="cb82-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
+<a class="sourceLine" id="cb82-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb82-5" title="5">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2009 Percepcion&quot;</span>)</a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <caption style="font-weight: bold; text-align:left;">
 Analisis Factorial 2009 Percepcion
@@ -2526,43 +2537,43 @@ Cronbach’s α
 <li><p>V51:Importancia para pagar: lo bien que él o ella realiza su tabajo (gdwrk)</p></li>
 <li><p>V52:Importancia para pagar: Lo que él o ella se esfuerza al realizar su trabajo (effor)</p></li>
 </ul>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">merit09<span class="op">$</span>v47  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v47,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
-<a class="sourceLine" id="cb82-2" title="2">merit09<span class="op">$</span>v48  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v48,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb82-3" title="3">merit09<span class="op">$</span>v49  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v49,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb82-4" title="4">merit09<span class="op">$</span>v50  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v50,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb82-5" title="5">merit09<span class="op">$</span>v51  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v51,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb82-6" title="6">merit09<span class="op">$</span>v52  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v52,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb82-7" title="7"></a>
-<a class="sourceLine" id="cb82-8" title="8"></a>
-<a class="sourceLine" id="cb82-9" title="9">merit09<span class="op">$</span>v47  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v47 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-10" title="10">merit09<span class="op">$</span>v48  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v48 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-11" title="11">merit09<span class="op">$</span>v49  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v49 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-12" title="12">merit09<span class="op">$</span>v50  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v50 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-13" title="13">merit09<span class="op">$</span>v51  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v51 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-14" title="14">merit09<span class="op">$</span>v52  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v52 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb82-15" title="15"></a>
-<a class="sourceLine" id="cb82-16" title="16">merit09&lt;-<span class="st"> </span><span class="kw">rename</span>(merit09,</a>
-<a class="sourceLine" id="cb82-17" title="17">                 <span class="dt">respo=</span>v47,</a>
-<a class="sourceLine" id="cb82-18" title="18">                 <span class="dt">neduc=</span>v48,</a>
-<a class="sourceLine" id="cb82-19" title="19">                 <span class="dt">mafam=</span>v49,</a>
-<a class="sourceLine" id="cb82-20" title="20">                 <span class="dt">hchil=</span>v50,</a>
-<a class="sourceLine" id="cb82-21" title="21">                 <span class="dt">gdwrk=</span>v51,</a>
-<a class="sourceLine" id="cb82-22" title="22">                 <span class="dt">effor=</span>v52)</a>
-<a class="sourceLine" id="cb82-23" title="23"></a>
-<a class="sourceLine" id="cb82-24" title="24"></a>
-<a class="sourceLine" id="cb82-25" title="25">poly09b &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(respo,neduc,mafam,hchil,gdwrk,effor)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly09b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">merit09<span class="op">$</span>v47  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v47,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
+<a class="sourceLine" id="cb83-2" title="2">merit09<span class="op">$</span>v48  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v48,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb83-3" title="3">merit09<span class="op">$</span>v49  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v49,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb83-4" title="4">merit09<span class="op">$</span>v50  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v50,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb83-5" title="5">merit09<span class="op">$</span>v51  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v51,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb83-6" title="6">merit09<span class="op">$</span>v52  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit09<span class="op">$</span>v52,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb83-7" title="7"></a>
+<a class="sourceLine" id="cb83-8" title="8"></a>
+<a class="sourceLine" id="cb83-9" title="9">merit09<span class="op">$</span>v47  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v47 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-10" title="10">merit09<span class="op">$</span>v48  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v48 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-11" title="11">merit09<span class="op">$</span>v49  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v49 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-12" title="12">merit09<span class="op">$</span>v50  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v50 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-13" title="13">merit09<span class="op">$</span>v51  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v51 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-14" title="14">merit09<span class="op">$</span>v52  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit09<span class="op">$</span>v52 ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb83-15" title="15"></a>
+<a class="sourceLine" id="cb83-16" title="16">merit09&lt;-<span class="st"> </span><span class="kw">rename</span>(merit09,</a>
+<a class="sourceLine" id="cb83-17" title="17">                 <span class="dt">respo=</span>v47,</a>
+<a class="sourceLine" id="cb83-18" title="18">                 <span class="dt">neduc=</span>v48,</a>
+<a class="sourceLine" id="cb83-19" title="19">                 <span class="dt">mafam=</span>v49,</a>
+<a class="sourceLine" id="cb83-20" title="20">                 <span class="dt">hchil=</span>v50,</a>
+<a class="sourceLine" id="cb83-21" title="21">                 <span class="dt">gdwrk=</span>v51,</a>
+<a class="sourceLine" id="cb83-22" title="22">                 <span class="dt">effor=</span>v52)</a>
+<a class="sourceLine" id="cb83-23" title="23"></a>
+<a class="sourceLine" id="cb83-24" title="24"></a>
+<a class="sourceLine" id="cb83-25" title="25">poly09b &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(respo,neduc,mafam,hchil,gdwrk,effor)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly09b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-24-1.png" alt="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2009**" width="75%" />
 <p class="caption">
 <strong>Correlación Policórica para Batería de <em>Preferencias</em> en Meritocracia para Chile ISSP 2009</strong>
 </p>
 </div>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">library</span>(GPArotation)</a>
-<a class="sourceLine" id="cb84-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(respo,neduc,mafam,hchil,gdwrk,effor)),</a>
-<a class="sourceLine" id="cb84-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
-<a class="sourceLine" id="cb84-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb84-5" title="5">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2009 Preferencia&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1"><span class="kw">library</span>(GPArotation)</a>
+<a class="sourceLine" id="cb85-2" title="2">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit09,<span class="kw">c</span>(respo,neduc,mafam,hchil,gdwrk,effor)),</a>
+<a class="sourceLine" id="cb85-3" title="3">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
+<a class="sourceLine" id="cb85-4" title="4">               <span class="dt">nmbr.fctr =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb85-5" title="5">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2009 Preferencia&quot;</span>)</a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <caption style="font-weight: bold; text-align:left;">
 Analisis Factorial 2009 Preferencia
@@ -2676,58 +2687,58 @@ Cronbach’s α
 <li><p>M2_P1_10: Para surgir en la vida: la religión de las personas</p></li>
 <li><p>M2_P1_11: Para surgir en la vida: el sexo de las personas</p></li>
 </ul>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">merit19 &lt;-<span class="st"> </span>cl19 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(m2_p1_<span class="dv">1</span><span class="op">:</span>m2_p1_<span class="dv">11</span>,m2_p14_<span class="dv">1</span><span class="op">:</span>m2_p14_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb85-2" title="2"></a>
-<a class="sourceLine" id="cb85-3" title="3">merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
-<a class="sourceLine" id="cb85-4" title="4">merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-5" title="5">merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-6" title="6">merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-7" title="7">merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-8" title="8">merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-9" title="9">merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-10" title="10">merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-11" title="11">merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-12" title="12">merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-13" title="13">merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb85-14" title="14"></a>
-<a class="sourceLine" id="cb85-15" title="15">merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">1</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-16" title="16">merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">2</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-17" title="17">merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">3</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-18" title="18">merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">4</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-19" title="19">merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">5</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-20" title="20">merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">6</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-21" title="21">merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">7</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-22" title="22">merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">8</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-23" title="23">merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">9</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-24" title="24">merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">10</span>,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-25" title="25">merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">11</span>,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb85-26" title="26"></a>
-<a class="sourceLine" id="cb85-27" title="27">merit19&lt;-<span class="st"> </span><span class="kw">rename</span>(merit19,</a>
-<a class="sourceLine" id="cb85-28" title="28">                 <span class="dt">ambit=</span>m2_p1_<span class="dv">1</span> ,</a>
-<a class="sourceLine" id="cb85-29" title="29">                 <span class="dt">wfami=</span>m2_p1_<span class="dv">2</span> ,</a>
-<a class="sourceLine" id="cb85-30" title="30">                 <span class="dt">edpar=</span>m2_p1_<span class="dv">3</span> ,</a>
-<a class="sourceLine" id="cb85-31" title="31">                 <span class="dt">slfed=</span>m2_p1_<span class="dv">4</span> ,</a>
-<a class="sourceLine" id="cb85-32" title="32">                 <span class="dt">hwork=</span>m2_p1_<span class="dv">5</span> ,</a>
-<a class="sourceLine" id="cb85-33" title="33">                 <span class="dt">knope=</span>m2_p1_<span class="dv">6</span> ,</a>
-<a class="sourceLine" id="cb85-34" title="34">                 <span class="dt">polco=</span>m2_p1_<span class="dv">7</span> ,</a>
-<a class="sourceLine" id="cb85-35" title="35">                 <span class="dt">corru=</span>m2_p1_<span class="dv">8</span> ,</a>
-<a class="sourceLine" id="cb85-36" title="36">                 <span class="dt">etnic=</span>m2_p1_<span class="dv">9</span> ,</a>
-<a class="sourceLine" id="cb85-37" title="37">                 <span class="dt">relig=</span>m2_p1_<span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb85-38" title="38">                 <span class="dt">gendr=</span>m2_p1_<span class="dv">11</span> )</a>
-<a class="sourceLine" id="cb85-39" title="39"></a>
-<a class="sourceLine" id="cb85-40" title="40"></a>
-<a class="sourceLine" id="cb85-41" title="41">poly19a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly19a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">merit19 &lt;-<span class="st"> </span>cl19 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(m2_p1_<span class="dv">1</span><span class="op">:</span>m2_p1_<span class="dv">11</span>,m2_p14_<span class="dv">1</span><span class="op">:</span>m2_p14_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb86-2" title="2"></a>
+<a class="sourceLine" id="cb86-3" title="3">merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
+<a class="sourceLine" id="cb86-4" title="4">merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-5" title="5">merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-6" title="6">merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-7" title="7">merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-8" title="8">merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-9" title="9">merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-10" title="10">merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-11" title="11">merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-12" title="12">merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-13" title="13">merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> ,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb86-14" title="14"></a>
+<a class="sourceLine" id="cb86-15" title="15">merit19<span class="op">$</span>m2_p1_<span class="dv">1</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">1</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-16" title="16">merit19<span class="op">$</span>m2_p1_<span class="dv">2</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">2</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-17" title="17">merit19<span class="op">$</span>m2_p1_<span class="dv">3</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">3</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-18" title="18">merit19<span class="op">$</span>m2_p1_<span class="dv">4</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">4</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-19" title="19">merit19<span class="op">$</span>m2_p1_<span class="dv">5</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">5</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-20" title="20">merit19<span class="op">$</span>m2_p1_<span class="dv">6</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">6</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-21" title="21">merit19<span class="op">$</span>m2_p1_<span class="dv">7</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">7</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-22" title="22">merit19<span class="op">$</span>m2_p1_<span class="dv">8</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">8</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-23" title="23">merit19<span class="op">$</span>m2_p1_<span class="dv">9</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">9</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-24" title="24">merit19<span class="op">$</span>m2_p1_<span class="dv">10</span> &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">10</span>,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-25" title="25">merit19<span class="op">$</span>m2_p1_<span class="dv">11</span> &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p1_<span class="dv">11</span>,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb86-26" title="26"></a>
+<a class="sourceLine" id="cb86-27" title="27">merit19&lt;-<span class="st"> </span><span class="kw">rename</span>(merit19,</a>
+<a class="sourceLine" id="cb86-28" title="28">                 <span class="dt">ambit=</span>m2_p1_<span class="dv">1</span> ,</a>
+<a class="sourceLine" id="cb86-29" title="29">                 <span class="dt">wfami=</span>m2_p1_<span class="dv">2</span> ,</a>
+<a class="sourceLine" id="cb86-30" title="30">                 <span class="dt">edpar=</span>m2_p1_<span class="dv">3</span> ,</a>
+<a class="sourceLine" id="cb86-31" title="31">                 <span class="dt">slfed=</span>m2_p1_<span class="dv">4</span> ,</a>
+<a class="sourceLine" id="cb86-32" title="32">                 <span class="dt">hwork=</span>m2_p1_<span class="dv">5</span> ,</a>
+<a class="sourceLine" id="cb86-33" title="33">                 <span class="dt">knope=</span>m2_p1_<span class="dv">6</span> ,</a>
+<a class="sourceLine" id="cb86-34" title="34">                 <span class="dt">polco=</span>m2_p1_<span class="dv">7</span> ,</a>
+<a class="sourceLine" id="cb86-35" title="35">                 <span class="dt">corru=</span>m2_p1_<span class="dv">8</span> ,</a>
+<a class="sourceLine" id="cb86-36" title="36">                 <span class="dt">etnic=</span>m2_p1_<span class="dv">9</span> ,</a>
+<a class="sourceLine" id="cb86-37" title="37">                 <span class="dt">relig=</span>m2_p1_<span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb86-38" title="38">                 <span class="dt">gendr=</span>m2_p1_<span class="dv">11</span> )</a>
+<a class="sourceLine" id="cb86-39" title="39"></a>
+<a class="sourceLine" id="cb86-40" title="40"></a>
+<a class="sourceLine" id="cb86-41" title="41">poly19a &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(wfami,edpar,slfed,ambit,hwork,knope,polco,corru,etnic,relig,gendr)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly19a<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-26-1.png" alt="**Correlación Policórica para Batería de _Percepción_ en Meritocracia para Chile ISSP 2019**" width="75%" />
 <p class="caption">
 <strong>Correlación Policórica para Batería de <em>Percepción</em> en Meritocracia para Chile ISSP 2019</strong>
 </p>
 </div>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(wfami,edpar,slfed,hwork,polco,corru,etnic,relig,gendr)),</a>
-<a class="sourceLine" id="cb87-2" title="2">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
-<a class="sourceLine" id="cb87-3" title="3">               <span class="dt">nmbr.fctr =</span> <span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb87-4" title="4">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2019 Percepción&quot;)</span></a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">sjPlot<span class="op">::</span><span class="kw">sjt.fa</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(wfami,edpar,slfed,hwork,polco,corru,etnic,relig,gendr)),</a>
+<a class="sourceLine" id="cb88-2" title="2">               <span class="dt">method =</span> <span class="st">&quot;wls&quot;</span>,</a>
+<a class="sourceLine" id="cb88-3" title="3">               <span class="dt">nmbr.fctr =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb88-4" title="4">               <span class="dt">title =</span> <span class="st">&quot;Analisis Factorial 2019 Percepción&quot;)</span></a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <caption style="font-weight: bold; text-align:left;">
 Analisis Factorial 2019 Percepción
@@ -2923,27 +2934,27 @@ Cronbach’s α
 <li><p>M2_P14_3: Importancia para ganar: El que la persona tenga hijos que mantener</p></li>
 <li><p>M2_P14_4: Importancia para ganar: Lo bien que él o ella realiza su trabajo</p></li>
 </ul>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
-<a class="sourceLine" id="cb88-2" title="2">merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb88-3" title="3">merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb88-4" title="4">merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb88-5" title="5"></a>
-<a class="sourceLine" id="cb88-6" title="6"></a>
-<a class="sourceLine" id="cb88-7" title="7"></a>
-<a class="sourceLine" id="cb88-8" title="8">merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">1</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb88-9" title="9">merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">2</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb88-10" title="10">merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">3</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb88-11" title="11">merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">4</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
-<a class="sourceLine" id="cb88-12" title="12"></a>
-<a class="sourceLine" id="cb88-13" title="13">merit19&lt;-<span class="st"> </span><span class="kw">rename</span>(merit19,</a>
-<a class="sourceLine" id="cb88-14" title="14">                <span class="dt">respo=</span>m2_p14_<span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb88-15" title="15">                <span class="dt">neduc=</span>m2_p14_<span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb88-16" title="16">                <span class="dt">hchil=</span>m2_p14_<span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb88-17" title="17">                <span class="dt">gdwrk=</span>m2_p14_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb88-18" title="18"></a>
-<a class="sourceLine" id="cb88-19" title="19"></a>
-<a class="sourceLine" id="cb88-20" title="20">poly19b &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(respo,neduc,hchil,gdwrk)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly19b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1">merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>) <span class="co"># Recodificación missing</span></a>
+<a class="sourceLine" id="cb89-2" title="2">merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb89-3" title="3">merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb89-4" title="4">merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>  &lt;-<span class="st"> </span>car<span class="op">::</span><span class="kw">recode</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>,<span class="st">&quot;c(8,9)=NA&quot;</span>,<span class="dt">as.numeric =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb89-5" title="5"></a>
+<a class="sourceLine" id="cb89-6" title="6"></a>
+<a class="sourceLine" id="cb89-7" title="7"></a>
+<a class="sourceLine" id="cb89-8" title="8">merit19<span class="op">$</span>m2_p14_<span class="dv">1</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">1</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb89-9" title="9">merit19<span class="op">$</span>m2_p14_<span class="dv">2</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">2</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb89-10" title="10">merit19<span class="op">$</span>m2_p14_<span class="dv">3</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">3</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb89-11" title="11">merit19<span class="op">$</span>m2_p14_<span class="dv">4</span>  &lt;-sjmisc<span class="op">::</span><span class="kw">rec</span>(merit19<span class="op">$</span>m2_p14_<span class="dv">4</span> ,<span class="dt">rec=</span><span class="st">&quot;rev&quot;</span>)<span class="co"># invertir sentido escala</span></a>
+<a class="sourceLine" id="cb89-12" title="12"></a>
+<a class="sourceLine" id="cb89-13" title="13">merit19&lt;-<span class="st"> </span><span class="kw">rename</span>(merit19,</a>
+<a class="sourceLine" id="cb89-14" title="14">                <span class="dt">respo=</span>m2_p14_<span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb89-15" title="15">                <span class="dt">neduc=</span>m2_p14_<span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb89-16" title="16">                <span class="dt">hchil=</span>m2_p14_<span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb89-17" title="17">                <span class="dt">gdwrk=</span>m2_p14_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb89-18" title="18"></a>
+<a class="sourceLine" id="cb89-19" title="19"></a>
+<a class="sourceLine" id="cb89-20" title="20">poly19b &lt;-<span class="st"> </span>psych<span class="op">::</span><span class="kw">polychoric</span>(<span class="kw">select</span>(merit19,<span class="kw">c</span>(respo,neduc,hchil,gdwrk)),<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(poly19b<span class="op">$</span>rho,<span class="dt">order =</span> <span class="st">&quot;AOE&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="analysis_files/figure-html/unnamed-chunk-28-1.png" alt="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2019**" width="75%" />
 <p class="caption">
