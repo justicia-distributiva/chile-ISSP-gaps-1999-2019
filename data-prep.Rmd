@@ -68,3 +68,293 @@ for (i in bases) {
 
 ```
 
+
+# database for analysis 1999 - 2009 
+
+* This dataset includes all 3 waves with salary gaps variables, goverment responsibility on inequality, and meritocracy perception and preferences
+
+```{r pregunta redistribucion}
+load("data/dataproc/cl99.RData")
+load("data/dataproc/cl09.RData")
+load("data/dataproc/cl19.RData")
+```
+
+```{r agno 1999}
+dat99 <- cl99 %>% dplyr::select(v3,
+                         v21,v16, # Salario percibio obrero y gerente
+                         v31,v26, # Salario justo    obrero y gerente
+                         v35,     # redistribucion
+                         v4:v8,v49:v55) # Meritocracia
+
+#--- missing meritocracia -------------------------------------------------#
+# Percepcion
+dat99$v4 <- car::recode(dat99$v4,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v5 <- car::recode(dat99$v5,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v6 <- car::recode(dat99$v6,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v7 <- car::recode(dat99$v7,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v8 <- car::recode(dat99$v8,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v4 <- sjmisc::rec(dat99$v4,rec="rev")
+dat99$v5 <- sjmisc::rec(dat99$v5,rec="rev")
+dat99$v6 <- sjmisc::rec(dat99$v6,rec="rev")
+dat99$v7 <- sjmisc::rec(dat99$v7,rec="rev")
+dat99$v8 <- sjmisc::rec(dat99$v8,rec="rev")
+
+# Preferencia
+dat99$v49 <- car::recode(dat99$v49,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v50 <- car::recode(dat99$v50,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v51 <- car::recode(dat99$v51,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v52 <- car::recode(dat99$v52,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v53 <- car::recode(dat99$v53,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v54 <- car::recode(dat99$v54,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v55 <- car::recode(dat99$v55,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v49 <-sjmisc::rec(dat99$v49,rec="rev")
+dat99$v50 <-sjmisc::rec(dat99$v50,rec="rev")
+dat99$v51 <-sjmisc::rec(dat99$v51,rec="rev")
+dat99$v52 <-sjmisc::rec(dat99$v52,rec="rev")
+dat99$v53 <-sjmisc::rec(dat99$v53,rec="rev")
+dat99$v54 <-sjmisc::rec(dat99$v54,rec="rev")
+dat99$v55 <-sjmisc::rec(dat99$v55,rec="rev")
+
+# Redistribucion
+dat99$v35 <- car::recode(dat99$v35,"c(8,9)=NA",as.numeric = TRUE)
+dat99$v35 <- sjmisc::rec(dat99$v35,rec="rev")
+
+# Rename variables
+dat99 <- dplyr::rename(dat99,
+               pais=v3,
+               salperger=v16,
+               salperobr=v21,
+               saljusger=v26,
+               saljusobr=v31,
+               wfami = v4,
+               knope = v5,
+               refor = v6,
+               rinte = v7,
+               corru = v8,
+               respo=v49,
+               neduc=v50,
+               suprv=v51,
+               mafam=v52,
+               hchil=v53,
+               gdwrk=v54,
+               effor=v55,
+               redis=v35)
+#--- missing brechas -------------------------------------------------#
+names(dat99)
+dat99[2:5][dat99[2:5] >= 99999999998] <- NA
+
+dat99 <- dat99 %>%
+  mutate(salperobr=replace(salperobr, salperobr <= 40000 | salperobr>= 1000000, NA)) %>%
+  mutate(salperger=replace(salperger, salperger <= 250000 | salperger>= 100000001, NA)) %>%
+  mutate(saljusobr=replace(saljusobr, saljusobr <= 40000, NA)) %>%
+  mutate(saljusger=replace(saljusger, saljusger <= 100000, NA))
+
+#---Brecha salarial percibida
+dat99$gap_perc   <-  as.numeric(dat99$salperger/dat99$salperobr) # diferencia total
+dat99$lngap_perc <-  as.numeric(log(dat99$gap_perc))                 # diferencia log
+
+#---Brecha salarial justa
+dat99$gap_just   <-  as.numeric(dat99$saljusger/dat99$saljusobr) # diferencia total
+dat99$lngap_just <-  as.numeric(log(dat99$gap_just))                # diferencia log
+
+
+dim(na.omit(dat99))
+
+```
+
+```{r agno 2009}
+dat09 <- cl09 %>% dplyr::select(v5,
+                         v23,v25, # Salario percibido obrero y gerente
+                         v28,v30, # Salario justo     obrero y gerente
+                         v33, # redistribucion
+                         v6:v16,v47:v52) # meritocracia 
+
+
+#--- missing meritocracia -------------------------------------------------#
+# Percepcion
+dat09$v6  <- car::recode(dat09$v6 ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+dat09$v7  <- car::recode(dat09$v7 ,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v8  <- car::recode(dat09$v8 ,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v9  <- car::recode(dat09$v9 ,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v10 <- car::recode(dat09$v10,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v11 <- car::recode(dat09$v11,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v12 <- car::recode(dat09$v12,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v13 <- car::recode(dat09$v13,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v14 <- car::recode(dat09$v14,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v15 <- car::recode(dat09$v15,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v16 <- car::recode(dat09$v16,"c(8,9)=NA",as.numeric = TRUE)
+
+dat09$v6  <-sjmisc::rec(dat09$v6 ,rec="rev")# invertir sentido escala
+dat09$v7  <-sjmisc::rec(dat09$v7 ,rec="rev")# invertir sentido escala
+dat09$v8  <-sjmisc::rec(dat09$v8 ,rec="rev")# invertir sentido escala
+dat09$v9  <-sjmisc::rec(dat09$v9 ,rec="rev")# invertir sentido escala
+dat09$v10 <-sjmisc::rec(dat09$v10,rec="rev")# invertir sentido escala
+dat09$v11 <-sjmisc::rec(dat09$v11,rec="rev")# invertir sentido escala
+dat09$v12 <-sjmisc::rec(dat09$v12,rec="rev")# invertir sentido escala
+dat09$v13 <-sjmisc::rec(dat09$v13,rec="rev")# invertir sentido escala
+dat09$v14 <-sjmisc::rec(dat09$v14,rec="rev")# invertir sentido escala
+dat09$v15 <-sjmisc::rec(dat09$v15,rec="rev")# invertir sentido escala
+dat09$v16 <-sjmisc::rec(dat09$v16,rec="rev")# invertir sentido escala
+
+# Preferencia
+dat09$v47  <- car::recode(dat09$v47,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+dat09$v48  <- car::recode(dat09$v48,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v49  <- car::recode(dat09$v49,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v50  <- car::recode(dat09$v50,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v51  <- car::recode(dat09$v51,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v52  <- car::recode(dat09$v52,"c(8,9)=NA",as.numeric = TRUE)
+
+
+dat09$v47  <-sjmisc::rec(dat09$v47 ,rec="rev")# invertir sentido escala
+dat09$v48  <-sjmisc::rec(dat09$v48 ,rec="rev")# invertir sentido escala
+dat09$v49  <-sjmisc::rec(dat09$v49 ,rec="rev")# invertir sentido escala
+dat09$v50  <-sjmisc::rec(dat09$v50 ,rec="rev")# invertir sentido escala
+dat09$v51  <-sjmisc::rec(dat09$v51 ,rec="rev")# invertir sentido escala
+dat09$v52  <-sjmisc::rec(dat09$v52 ,rec="rev")# invertir sentido escala
+
+# Redistribucion
+dat09$v33 <- car::recode(dat09$v33,"c(8,9)=NA",as.numeric = TRUE)
+dat09$v33 <- sjmisc::rec(dat09$v33,rec="rev")
+
+# Rename variables
+dat09 <- dplyr::rename(dat09,
+                pais=v5,
+                salperger=v23,
+                salperobr=v25,
+                saljusger=v28,
+                saljusobr=v30,
+                wfami=v6 ,
+                edpar=v7 ,
+                slfed=v8 ,
+                ambit=v9 ,
+                hwork=v10,
+                knope=v11,
+                polco=v12,
+                corru=v13,
+                etnic=v14,
+                relig=v15,
+                gendr=v16,
+                respo=v47,
+                neduc=v48,
+                mafam=v49,
+                hchil=v50,
+                gdwrk=v51,
+                effor=v52,
+                redis= v33)
+
+#--- missing brechas -------------------------------------------------#
+dat09 <- dat09 %>%
+  mutate(salperobr=replace(salperobr, salperobr <= 40000 | salperobr>= 1000000, NA)) %>%
+  mutate(salperger=replace(salperger, salperger <= 250000 | salperger>= 100000001, NA)) %>%
+  mutate(saljusobr=replace(saljusobr, saljusobr <= 40000, NA)) %>%
+  mutate(saljusger=replace(saljusger, saljusger <= 100000, NA))
+
+#---Brecha salarial percibida
+dat09$gap_perc   <-  as.numeric(dat09$salperger/dat09$salperobr) # diferencia total
+dat09$lngap_perc <-  as.numeric(log(dat09$gap_perc))                # diferencia log
+
+#---Brecha salarial justa
+dat09$gap_just   <-  as.numeric(dat09$saljusger/dat09$saljusobr) # diferencia total
+dat09$lngap_just <-  as.numeric(log(dat09$gap_just))                # diferencia log
+
+dim(na.omit(dat09))
+
+```
+
+```{r agno 2019}
+dat19 <- cl19 %>% dplyr::select(m2_p2_presidente,m2_p2_obrero,  # Salario percibio obrero y gerente
+                         m2_p3_presidente,m2_p3_obrero,  # Salario justo    obrero y gerente
+                         m2_p4_2, # redistribucion
+                         m2_p1_1:m2_p1_11,m2_p14_1:m2_p14_4)  # meritocracia 
+
+#--- missing meritocracia -------------------------------------------------#
+# Percepcion
+dat19$m2_p1_1  <- car::recode(dat19$m2_p1_1  ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+dat19$m2_p1_2  <- car::recode(dat19$m2_p1_2  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_3  <- car::recode(dat19$m2_p1_3  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_4  <- car::recode(dat19$m2_p1_4  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_5  <- car::recode(dat19$m2_p1_5  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_6  <- car::recode(dat19$m2_p1_6  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_7  <- car::recode(dat19$m2_p1_7  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_8  <- car::recode(dat19$m2_p1_8  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_9  <- car::recode(dat19$m2_p1_9  ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_10 <- car::recode(dat19$m2_p1_10 ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_11 <- car::recode(dat19$m2_p1_11 ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p1_1  <-sjmisc::rec(dat19$m2_p1_1 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_2  <-sjmisc::rec(dat19$m2_p1_2 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_3  <-sjmisc::rec(dat19$m2_p1_3 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_4  <-sjmisc::rec(dat19$m2_p1_4 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_5  <-sjmisc::rec(dat19$m2_p1_5 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_6  <-sjmisc::rec(dat19$m2_p1_6 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_7  <-sjmisc::rec(dat19$m2_p1_7 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_8  <-sjmisc::rec(dat19$m2_p1_8 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_9  <-sjmisc::rec(dat19$m2_p1_9 ,rec="rev")# invertir sentido escala
+dat19$m2_p1_10 <-sjmisc::rec(dat19$m2_p1_10,rec="rev")# invertir sentido escala
+dat19$m2_p1_11 <-sjmisc::rec(dat19$m2_p1_11,rec="rev")# invertir sentido escala
+
+# Preferencia
+dat19$m2_p14_1  <- car::recode(dat19$m2_p14_1,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
+dat19$m2_p14_2  <- car::recode(dat19$m2_p14_2,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p14_3  <- car::recode(dat19$m2_p14_3,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p14_4  <- car::recode(dat19$m2_p14_4,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p14_1  <-sjmisc::rec(dat19$m2_p14_1 ,rec="rev")# invertir sentido escala
+dat19$m2_p14_2  <-sjmisc::rec(dat19$m2_p14_2 ,rec="rev")# invertir sentido escala
+dat19$m2_p14_3  <-sjmisc::rec(dat19$m2_p14_3 ,rec="rev")# invertir sentido escala
+dat19$m2_p14_4  <-sjmisc::rec(dat19$m2_p14_4 ,rec="rev")# invertir sentido escala
+
+#Redistribucion
+dat19$m2_p4_2 <- car::recode(dat19$m2_p4_2 ,"c(8,9)=NA",as.numeric = TRUE)
+dat19$m2_p4_2  <-sjmisc::rec(dat19$m2_p4_2 ,rec="rev")# invertir sentido escala
+
+# Rename variables
+dat19 <- dplyr::rename(dat19,
+                salperger=m2_p2_presidente,
+                salperobr=m2_p2_obrero,
+                saljusger=m2_p3_presidente,
+                saljusobr=m2_p3_obrero,
+                ambit=m2_p1_1 ,
+                wfami=m2_p1_2 ,
+                edpar=m2_p1_3 ,
+                slfed=m2_p1_4 ,
+                hwork=m2_p1_5 ,
+                knope=m2_p1_6 ,
+                polco=m2_p1_7 ,
+                corru=m2_p1_8 ,
+                etnic=m2_p1_9 ,
+                relig=m2_p1_10,
+                gendr=m2_p1_11,
+                respo=m2_p14_1,
+                neduc=m2_p14_2,
+                hchil=m2_p14_3,
+                gdwrk=m2_p14_4,
+                redis = m2_p4_2)
+#--- missing brechas -------------------------------------------------#
+dat19 <- dat19 %>%
+  mutate(salperobr=replace(salperobr, salperobr <= 40000 | salperobr>= 1000000, NA)) %>%
+  mutate(salperger=replace(salperger, salperger <= 250000 | salperger>= 100000001, NA)) %>%
+  mutate(saljusobr=replace(saljusobr, saljusobr <= 40000, NA)) %>%
+  mutate(saljusger=replace(saljusger, saljusger <= 100000, NA))
+
+#---Brecha salarial percibida
+dat19$gap_perc   <-  as.numeric(dat19$salperger/dat19$salperobr) # diferencia total
+dat19$lngap_perc <-  as.numeric(log(dat19$gap_perc))                  # diferencia log
+
+
+#---Brecha salarial justa
+dat19$gap_just   <-  as.numeric(dat19$saljusger/dat19$saljusobr) # diferencia total
+dat19$lngap_just <-  as.numeric(log(dat19$gap_just))                # diferencia log
+
+```
+
+```{r bind datasets}
+dat99$year <- 1999
+dat09$year <- 2009
+dat19$year <- 2019
+
+clw3<- bind_rows(dat99,dat09)
+clw3<- bind_rows(clw3,dat19)
+clw3 <- clw3 %>%  select(year,"salperobr","salperger","saljusobr","saljusger","gap_perc","lngap_perc","gap_just","lngap_just",everything())
+
+save(clw3,file = "data/dataproc/issp9919.RData")
+```
+
