@@ -9,6 +9,40 @@ output:
         number_sections: true
 
 ---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE, cache = TRUE, eval=F)
+options(scipen=999)
+rm(list=ls())
+```
+
+
+```{r}
+library(ggplot2)
+
+  library(dplyr)
+  library(sjlabelled)
+  library(sjPlot)
+  library(ggplot2)
+  library(knitr)
+  library(kableExtra)
+  library(GPArotation)
+  library(lavaan)
+  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
+
+load(file = "data/dataproc/cl09.RData")
+load(file = "data/dataproc/cl99.RData")
+load(file = "data/dataproc/cl19.RData")
+
+
+
+
+
+
+
+```
+
 <div style="text-align: justify">
 
 Los estudios de desigualdad y justicia social han sido nutridos por múltiples perspectivas. Desde la filosofía política, se han dado amplios debates respecto a cuál es la manera normativamente correcta de distribuir los recursos, debate en el cual participan autores como Dworking o Sen. Al respecto, Rawls (1971) señala que los estudios sobre la justicia social deben considerar en su análisis las creencias concretas que poseen los sujetos, no para quedarse ciegamente con ellas, sino para generar un “equilibrio reflexivo”.  Desde esta línea teórica del estudio de la desigualdad, se desprende la importancia de conocer los criterios de justicia de la población. 
@@ -70,6 +104,7 @@ Como puede verse en el grafico 2, tanto en los salarios percibidos como en los s
 
 Pero ¿Cuál es el salario que consideran justo?  Si tomamos como referencia el año actual, podemos decir que el salario considerado justo para un obrero es de $500.000. Este valor, a diferencia del salario mínimo, se encuentra sobre la línea de la pobreza para una familia de 4 personas, la cual es equivalente a $440.000. Así, con el salario considerado justo para un obrero, alcanza para poder pagar las cosas necesarias, y sobran $60.000 pesos para algunas cosas que no son incluidos en la línea de la pobreza, tales como ahorro, alcohol y servicios consumidos mayoritariamente por el 10% mas rico de la población. Con esto, no queremos decir que las personas son conscientes de la línea de la pobreza establecida periódicamente por el ministerio de desarrollo social, sino que, las personas poseen una idea de cuanto es necesario para vivir y para disfrutar de los ingresos. 
 Respecto al salario considerado justo para los gerentes, podemos ver que es la mitad de lo percibido, es decir, el general de las personas cree que lo que ganan los gerentes en el país esta sobrevalorado, recibiendo el doble de lo justo.  
+
 En suma, podemos decir en términos absolutos que la población chilena considera que los recursos están mal repartidos. Mientras que el obrero gana prácticamente la mitad de lo que debería, los gerentes ganan el doble. Esta situación puede implicar un sentimiento de injusticia respecto a la distribución de los recursos, lo cual, se transforma en un ambiente propenso para estallidos sociales. 
 Para analizar la distribución de los recursos de manera relativa evaluaremos la relación entre la brecha salarial percibida y la brecha considerada justa.
 
