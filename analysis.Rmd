@@ -30,7 +30,6 @@ library(knitr)
 library(kableExtra)
 library(GPArotation)
 library(lavaan)
-library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
 ```
 
 
@@ -1041,14 +1040,15 @@ plot01a<- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_perc)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial percibida")+
    labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
        subtitle = "1999",
        caption = "Fuente: Elaboración propia a partir de datos ISSP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1063,14 +1063,15 @@ plot01b<-ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_perc)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm')  +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial percibida")+
    labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
        subtitle = "2009",
        caption = "Fuente: Elaboración propia a partir de datos ISSP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1084,14 +1085,15 @@ plot01c<-ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_perc)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm')  +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial percibida")+
    labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
        subtitle = "2019",
        caption = "Fuente: Elaboración propia a partir de datos CEP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1104,14 +1106,15 @@ plot01d<-ggplot(data=clw3, aes(ess, y=lngap_perc)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial percibida")+
    labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
        subtitle = "1999 - 2019",
        caption = "Fuente: Elaboración propia a partir de datos CEP-ISSP") +
   theme_classic(base_size = 17) +
    theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1129,14 +1132,15 @@ plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial justa")+
    labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
        subtitle = "1999",
        caption = "Fuente: Elaboración propia a partir de datos ISSP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1150,14 +1154,15 @@ plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial justa")+
    labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
        subtitle = "2009",
        caption = "Fuente: Elaboración propia a partir de datos ISSP") +
   theme_classic(base_size = 17) +
         theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1171,14 +1176,15 @@ plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial justa")+
    labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
        subtitle = "2019",
        caption = "Fuente: Elaboración propia a partir de datos CEP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
@@ -1192,14 +1198,15 @@ plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
   geom_jitter(width = 0.9, height = 0.9) + 
   geom_smooth(method='lm') +
-  xlab(label = NULL)+
-  ylab(label = NULL)+
+  xlab(label = "Estatus Social Subjetivo")+
+  ylab(label = "Becha salarial justa")+
    labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
        subtitle = "1999 - 2019",
        caption = "Fuente: Elaboración propia a partir de datos CEP-ISSP") +
   theme_classic(base_size = 17) +
       theme(axis.text=element_text(size=10,face = "plain"),
          axis.title.y = element_text(size=10, face="bold"),
+         axis.title.x = element_text(size=10, face="bold"),
          plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
          plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
