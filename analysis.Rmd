@@ -8,7 +8,8 @@ output:
         toc_float: true
         number_sections: true
         code_folding: show
-
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r include=FALSE}
@@ -21,17 +22,15 @@ rm(list=ls())
 # Libraries & data
 
 ```{r }
-{
-  library(dplyr)
-  library(sjlabelled)
-  library(sjPlot)
-  library(ggplot2)
-  library(knitr)
-  library(kableExtra)
-  library(GPArotation)
-  library(lavaan)
-  library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
-}
+library(dplyr)
+library(sjlabelled)
+library(sjPlot)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(GPArotation)
+library(lavaan)
+library(Cairo);options(shiny.usecairo=TRUE) # Para la calidad de los plots
 ```
 
 
@@ -1025,3 +1024,188 @@ poly19b <- psych::polychoric(select(merit19,c(respo,neduc,hchil,gdwrk)),na.rm = 
 ```{r out.width='75%', fig.align='center',fig.cap="**Correlación Policórica para Batería de _Preferencias_ en Meritocracia para Chile ISSP 2019**"}
 corrplot::corrplot.mixed(poly19b$rho,order = "AOE")
 ```
+
+
+# Subjective Social Status and Salary Gaps
+
+```{r data ess-gaps}
+load(file = "data/dataproc/issp9919.RData")
+labess <-  c("Más bajo",2,3,4,5,6,7,8,9,"Más alto")
+```
+
+## Subjective status and percieved salary gap
+
+```{r scatter ess-lnperc}
+plot01a<- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_perc)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
+       subtitle = "1999",
+       caption = "Fuente: Elaboración propia a partir de datos ISSP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot01a
+ggsave(plot01a,filename = "images/ess_lnperc99.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+
+plot01b<-ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_perc)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm')  +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
+       subtitle = "2009",
+       caption = "Fuente: Elaboración propia a partir de datos ISSP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot01b
+ggsave(plot01b,filename = "images/ess_lnperc09.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+plot01c<-ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_perc)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm')  +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
+       subtitle = "2019",
+       caption = "Fuente: Elaboración propia a partir de datos CEP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot01c
+ggsave(plot01c,filename = "images/ess_lnperc19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+plot01d<-ggplot(data=clw3, aes(ess, y=lngap_perc)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial percibida según Estatus Social Subjetivo",
+       subtitle = "1999 - 2019",
+       caption = "Fuente: Elaboración propia a partir de datos CEP-ISSP") +
+  theme_classic(base_size = 17) +
+   theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot01d
+ggsave(plot01d,filename = "images/ess_lnperc99_19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+```
+
+## Subjective status and just salary gap
+
+```{r scatter ess-lnjust}
+plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
+       subtitle = "1999",
+       caption = "Fuente: Elaboración propia a partir de datos ISSP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot02a
+ggsave(plot02a,filename = "images/ess_lnjust99.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
+       subtitle = "2009",
+       caption = "Fuente: Elaboración propia a partir de datos ISSP") +
+  theme_classic(base_size = 17) +
+        theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot02b
+ggsave(plot02b,filename = "images/ess_lnjust09.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
+       subtitle = "2019",
+       caption = "Fuente: Elaboración propia a partir de datos CEP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot02c
+ggsave(plot02c,filename = "images/ess_lnjust19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
+  geom_point() +
+  scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
+  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_smooth(method='lm') +
+  xlab(label = NULL)+
+  ylab(label = NULL)+
+   labs(title = "Brecha salarial justa según Estatus Social Subjetivo",
+       subtitle = "1999 - 2019",
+       caption = "Fuente: Elaboración propia a partir de datos CEP-ISSP") +
+  theme_classic(base_size = 17) +
+      theme(axis.text=element_text(size=10,face = "plain"),
+         axis.title.y = element_text(size=10, face="bold"),
+         plot.title=element_text(hjust=0.5,size = 12,face = "bold"),
+         plot.subtitle=element_text(hjust=0.5,size = 10,face = "bold"),
+         plot.caption = element_text(hjust=1,size = 10,face = "plain"),
+         panel.grid = element_blank(),
+         panel.border = element_blank())
+plot02d
+ggsave(plot02d,filename = "images/ess_lnjust19_19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+```
+
