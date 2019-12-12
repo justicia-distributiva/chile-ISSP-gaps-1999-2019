@@ -602,7 +602,7 @@ table_ed4
 ```{r}
 table_ed_gapper<-rbind(table_ed1,table_ed2,table_ed3,table_ed4)
 
-table_ed_gapper$ocup2 <- factor(table_ed_gapper$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Univercitario o más"))
+table_ed_gapper$ocup2 <- factor(table_ed_gapper$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Universitario o más"))
 
 # Horizontal
 
@@ -695,7 +695,7 @@ table_ed4_jus
 ```{r}
 table_ed_gapjus<-rbind(table_ed1_jus,table_ed2_jus,table_ed3_jus,table_ed4_jus)
 
-table_ed_gapjus$ocup2 <- factor(table_ed_gapjus$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Univercitario o más"))
+table_ed_gapjus$ocup2 <- factor(table_ed_gapjus$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Universitario o más"))
 
 # Horizontal
 
