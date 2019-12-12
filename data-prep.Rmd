@@ -124,7 +124,7 @@ dat99$v55 <-sjmisc::rec(dat99$v55,rec="rev")
 dat99$v35 <- car::recode(dat99$v35,"c(8,9)=NA",as.numeric = TRUE)
 dat99$v35 <- sjmisc::rec(dat99$v35,rec="rev")
 #Educacion
-dat99$x_degr <- car::recode(dat99$x_degr, "c(9)=NA", as.numeric=TRUE)
+dat99$x_degr <- car::recode(dat99$x_degr, "c(3009)=NA", as.numeric=TRUE)
 
 # Rename variables
 dat99 <- dplyr::rename(dat99,
@@ -166,7 +166,7 @@ dim(na.omit(dat99))
 
 #---Recodificacion Educacion
 
-dat99 <- mutate(dat99, educ_rec = car::recode(dat99$educ, "3001:3004 = 1; 3005:3006 = 2;3008=2; 3010 = 3;3007 = 4; else = 3009"))             
+dat99 <- mutate(dat99, educ_rec = car::recode(dat99$educ, "3001:3004 = 1; 3005:3006 = 2;3008=2; 3010 = 3;3007 = 4"))             
 table(dat99$educ_rec)                                        
 
 
