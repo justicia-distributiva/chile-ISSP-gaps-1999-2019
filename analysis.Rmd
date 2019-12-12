@@ -474,6 +474,245 @@ brechas
 ```
 
 
+# Brechas percibidas y justas segun nivel educativo
+
+```{r}
+load(file = "data/dataproc/cl09.RData")
+load(file = "data/dataproc/cl99.RData")
+load(file = "data/dataproc/cl19.RData")
+load(file = "data/dataproc/issp9919.RData")
+
+
+
+library("dplyr")
+library("corrplot")
+library("ggplot2")
+
+```
+
+```{r}
+ed_gap<- clw3 %>% select("Educacion"=educ_rec, "Brecha_Percibida"=gap_perc, "Brecha_Justa"=gap_just,"year") %>% as.data.frame()
+```
+
+
+```{r}
+ed1_gap99 = ed_gap %>%  filter(Educacion == 1) %>% as.data.frame()
+ed1_gap99 = ed1_gap99 %>% filter(year == 1999) %>% as.data.frame()
+
+ed1_gap09 = ed_gap %>%  filter(Educacion == 1) %>% as.data.frame()
+ed1_gap09 = ed1_gap09 %>% filter(year == 2009) %>% as.data.frame()
+
+ed1_gap19 = ed_gap %>%  filter(Educacion == 1) %>% as.data.frame()
+ed1_gap19 = ed1_gap19 %>% filter(year == 2019) %>% as.data.frame()
+
+table_ed1<- rbind(psych::describe(ed1_gap99$Brecha_Percibida),
+               psych::describe(ed1_gap09$Brecha_Percibida),
+               psych::describe(ed1_gap19$Brecha_Percibida))
+
+rownames(table_ed1) <- c("1999","2009","2019")
+table_ed1 <- table_ed1 %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed1$Educacion<-1
+table_ed1$years <- c(1999,2009,2019)
+
+table_ed1
+```
+
+```{r}
+ed2_gap99 = ed_gap %>%  filter(Educacion == 2) %>% as.data.frame()
+ed2_gap99 = ed2_gap99 %>% filter(year == 1999) %>% as.data.frame()
+
+ed2_gap09 = ed_gap %>%  filter(Educacion == 2) %>% as.data.frame()
+ed2_gap09 = ed2_gap09 %>% filter(year == 2009) %>% as.data.frame()
+
+ed2_gap19 = ed_gap %>%  filter(Educacion == 2) %>% as.data.frame()
+ed2_gap19 = ed2_gap19 %>% filter(year == 2019) %>% as.data.frame()
+
+table_ed2<- rbind(psych::describe(ed2_gap99$Brecha_Percibida),
+               psych::describe(ed2_gap09$Brecha_Percibida),
+               psych::describe(ed2_gap19$Brecha_Percibida))
+
+rownames(table_ed2) <- c("1999","2009","2019")
+table_ed2 <- table_ed2 %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed2$Educacion<-2
+
+table_ed2$years <- c(1999,2009,2019)
+
+
+
+table_ed2
+```
+
+```{r}
+ed3_gap99 = ed_gap %>%  filter(Educacion == 3) %>% as.data.frame()
+ed3_gap99 = ed3_gap99 %>% filter(year == 1999) %>% as.data.frame()
+
+ed3_gap09 = ed_gap %>%  filter(Educacion == 3) %>% as.data.frame()
+ed3_gap09 = ed3_gap09 %>% filter(year == 2009) %>% as.data.frame()
+
+ed3_gap19 = ed_gap %>%  filter(Educacion == 3) %>% as.data.frame()
+ed3_gap19 = ed3_gap19 %>% filter(year == 2019) %>% as.data.frame()
+
+table_ed3<- rbind(psych::describe(ed3_gap99$Brecha_Percibida),
+               psych::describe(ed3_gap09$Brecha_Percibida),
+               psych::describe(ed3_gap19$Brecha_Percibida))
+
+rownames(table_ed3) <- c("1999","2009","2019")
+table_ed3 <- table_ed3 %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed3$Educacion<-3
+
+
+table_ed3$years <- c(1999,2009,2019)
+
+
+table_ed3
+```
+
+
+```{r}
+ed4_gap99 = ed_gap %>%  filter(Educacion == 4) %>% as.data.frame()
+ed4_gap99 = ed4_gap99 %>% filter(year == 1999) %>% as.data.frame()
+
+ed4_gap09 = ed_gap %>%  filter(Educacion == 4) %>% as.data.frame()
+ed4_gap09 = ed4_gap09 %>% filter(year == 2009) %>% as.data.frame()
+
+ed4_gap19 = ed_gap %>%  filter(Educacion == 4) %>% as.data.frame()
+ed4_gap19 = ed4_gap19 %>% filter(year == 2019) %>% as.data.frame()
+
+table_ed4<- rbind(psych::describe(ed4_gap99$Brecha_Percibida),
+               psych::describe(ed4_gap09$Brecha_Percibida),
+               psych::describe(ed4_gap19$Brecha_Percibida))
+
+rownames(table_ed4) <- c("1999","2009","2019")
+table_ed4 <- table_ed4 %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed4$Educacion<-4
+
+
+table_ed4$years <- c(1999,2009,2019)
+
+table_ed4
+```
+
+
+
+### brecha percibida segun nivel educativo
+```{r}
+table_ed_gapper<-rbind(table_ed1,table_ed2,table_ed3,table_ed4)
+
+table_ed_gapper$ocup2 <- factor(table_ed_gapper$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Univercitario o más"))
+
+# Horizontal
+
+table_ed_gapper <-  ggplot(data=table_ed_gapper, aes(x=reorder(as.factor(years),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Brecha percibida segun Nivel educativo (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+table_ed_gapper
+
+ ggsave(table_ed_gapper,filename = "images/salario_per.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+
+```
+
+```{r}
+table_ed1_jus<- rbind(psych::describe(ed1_gap99$Brecha_Justa),
+               psych::describe(ed1_gap09$Brecha_Justa),
+               psych::describe(ed1_gap19$Brecha_Justa))
+
+rownames(table_ed1_jus) <- c("1999","2009","2019")
+table_ed1_jus <- table_ed1_jus %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed1_jus$Educacion<-1
+table_ed1_jus$years <- c(1999,2009,2019)
+
+table_ed1_jus
+
+```
+
+```{r}
+table_ed2_jus<- rbind(psych::describe(ed2_gap99$Brecha_Justa),
+               psych::describe(ed2_gap09$Brecha_Justa),
+               psych::describe(ed2_gap19$Brecha_Justa))
+
+rownames(table_ed2_jus) <- c("1999","2009","2019")
+table_ed2_jus <- table_ed2_jus %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed2_jus$Educacion<-2
+
+table_ed2_jus$years <- c(1999,2009,2019)
+
+
+
+table_ed2_jus
+```
+
+```{r}
+
+table_ed3_jus<- rbind(psych::describe(ed3_gap99$Brecha_Justa),
+               psych::describe(ed3_gap09$Brecha_Justa),
+               psych::describe(ed3_gap19$Brecha_Justa))
+
+rownames(table_ed3_jus) <- c("1999","2009","2019")
+table_ed3_jus <- table_ed3_jus %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed3_jus$Educacion<-3
+
+
+table_ed3_jus$years <- c(1999,2009,2019)
+
+
+table_ed3_jus
+```
+
+
+```{r}
+table_ed4_jus<- rbind(psych::describe(ed4_gap99$Brecha_Justa),
+               psych::describe(ed4_gap09$Brecha_Justa),
+               psych::describe(ed4_gap19$Brecha_Justa))
+
+rownames(table_ed4_jus) <- c("1999","2009","2019")
+table_ed4_jus <- table_ed4_jus %>% select(n,mean,sd,median,trimmed,min,max)
+
+table_ed4_jus$Educacion<-4
+
+
+table_ed4_jus$years <- c(1999,2009,2019)
+
+table_ed4_jus
+```
+
+
+
+# brecha justa segun nivel educativo
+```{r}
+table_ed_gapjus<-rbind(table_ed1_jus,table_ed2_jus,table_ed3_jus,table_ed4_jus)
+
+table_ed_gapjus$ocup2 <- factor(table_ed_gapjus$Educacion, levels=c(1,2,3,4), labels=c("Basica o menos", "Media completa", "Tecnico completa" , "Univercitario o más"))
+
+# Horizontal
+
+table_ed_gapjus <-  ggplot(data=table_ed_gapjus, aes(x=reorder(as.factor(years),-median), y=median, fill=ocup2)) +
+     geom_bar(position = 'dodge', stat='identity') +
+     geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
+     theme_bw(base_size = 12) +
+     scale_y_continuous(labels = scales::comma) +
+     ylab('Brecha percibida segun Nivel educativo (mediana)') + xlab('Años') +
+     scale_fill_brewer(palette="Paired") +
+     theme(legend.position="top") +
+     labs(fill = " ") +
+    coord_flip()
+table_ed_gapjus
+
+ ggsave(table_ed_gapjus,filename = "images/salario_per.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+```
 
 
 

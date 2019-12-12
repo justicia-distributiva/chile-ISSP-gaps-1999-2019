@@ -184,8 +184,7 @@ __Condificacion de educación__
 
 
 ```{r agno 2009}
-
-table(cl09$v44)
+table(cl09$v5)
 
 dat09 <- cl09 %>% dplyr::select(v5,
                          v23,v25, # Salario percibido obrero y gerente
@@ -241,7 +240,7 @@ dat09$v44 <- car::recode(dat09$v44,"c(98,99)=NA",as.numeric = TRUE)
 
 # Rename variables
 dat09 <- dplyr::rename(dat09,
-                pais=v5,
+                       pais=v5,
                 salperger=v23,
                 salperobr=v25,
                 saljusger=v28,
