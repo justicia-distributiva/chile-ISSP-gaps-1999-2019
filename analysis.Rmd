@@ -611,7 +611,7 @@ table_ed_gapper <-  ggplot(data=table_ed_gapper, aes(x=reorder(as.factor(years),
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
      scale_y_continuous(labels = scales::comma) +
-     ylab('Brecha percibida segun Nivel educativo (mediana)') + xlab('Años') +
+     ylab('Brecha percibida segun nivel educativo (mediana)') + xlab('Años') +
      scale_fill_brewer(palette="Paired") +
      theme(legend.position="top") +
      labs(fill = " ") +
@@ -704,7 +704,7 @@ table_ed_gapjus <-  ggplot(data=table_ed_gapjus, aes(x=reorder(as.factor(years),
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
      scale_y_continuous(labels = scales::comma) +
-     ylab('Brecha percibida segun Nivel educativo (mediana)') + xlab('Años') +
+     ylab('Brecha justa segun nivel educativo (mediana)') + xlab('Años') +
      scale_fill_brewer(palette="Paired") +
      theme(legend.position="top") +
      labs(fill = " ") +
