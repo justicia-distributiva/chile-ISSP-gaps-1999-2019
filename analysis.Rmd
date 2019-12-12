@@ -618,7 +618,7 @@ table_ed_gapper <-  ggplot(data=table_ed_gapper, aes(x=reorder(as.factor(years),
     coord_flip()
 table_ed_gapper
 
- ggsave(table_ed_gapper,filename = "images/salario_per.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ ggsave(table_ed_gapper,filename = "images/gapper_educ.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
 
 ```
 
@@ -711,7 +711,7 @@ table_ed_gapjus <-  ggplot(data=table_ed_gapjus, aes(x=reorder(as.factor(years),
     coord_flip()
 table_ed_gapjus
 
- ggsave(table_ed_gapjus,filename = "images/salario_per.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ ggsave(table_ed_gapjus,filename = "images/gapjus_educ.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
 ```
 
 
