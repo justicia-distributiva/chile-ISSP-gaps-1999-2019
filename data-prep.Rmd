@@ -21,7 +21,7 @@ library(sjlabelled,dplyr)
 ```
 
 
-## Get data 
+## Get data
 ```{r results='hide'}
 
 issp99<- read_stata("data/dataraw/issp1999.dta")
@@ -61,7 +61,7 @@ bases=c("cl99","cl09","cl19")
 
 for (i in bases) {
   df.tmp <- get(i)
-  names(df.tmp) <- tolower(names(df.tmp)) 
+  names(df.tmp) <- tolower(names(df.tmp))
   assign(i, df.tmp)
   save(list=paste(i, sep=""), file = (paste("data/dataproc/", i,".RData", sep="")))
 }
@@ -69,7 +69,7 @@ for (i in bases) {
 ```
 
 
-# database for analysis 1999 - 2009 
+# database for analysis 1999 - 2009
 
 * This dataset includes all 3 waves with salary gaps variables, goverment responsibility on inequality, and meritocracy perception and preferences
 
@@ -91,7 +91,7 @@ dat99 <- cl99 %>% dplyr::select(v3,
                          v21,v16, # Salario percibio obrero y gerente
                          v31,v26, # Salario justo    obrero y gerente
                          v35,     # redistribucion
-                         x_degr, # Educación 
+                         x_degr, # Educación
                          v46, #Estatus subjetivo
                          v4:v8,v49:v55) # Meritocracia
 #--- missing meritocracia -------------------------------------------------#
@@ -126,6 +126,9 @@ dat99$v35 <- car::recode(dat99$v35,"c(8,9)=NA",as.numeric = TRUE)
 dat99$v35 <- sjmisc::rec(dat99$v35,rec="rev")
 #Educacion
 dat99$x_degr <- car::recode(dat99$x_degr, "c(3009)=NA", as.numeric=TRUE)
+# Estatus Subjetivo
+dat99$v46 <- car::recode(dat99$v46,"c(97,98,99)=NA",as.numeric = TRUE)
+dat99$v46 <- sjmisc::rec(dat99$v46,rec="rev")
 
 # Rename variables
 dat99 <- dplyr::rename(dat99,
@@ -147,8 +150,8 @@ dat99 <- dplyr::rename(dat99,
                gdwrk=v54,
                effor=v55,
                redis=v35,
-               estsubj=v46,
-               educ=x_degr)
+               educ=x_degr,
+               ess=v46)
 #--- missing brechas -------------------------------------------------#
 names(dat99)
 dat99[2:5][dat99[2:5] >= 99999999998] <- NA
@@ -167,13 +170,8 @@ dim(na.omit(dat99))
 
 
 #---Recodificacion Educacion
-
-dat99 <- mutate(dat99, educ_rec = car::recode(dat99$educ, "3001:3004 = 1; 3005:3006 = 2;3008=2; 3010 = 3;3007 = 4"))             
-table(dat99$educ_rec)                                        
-
-
-
-
+dat99 <- mutate(dat99, educ_rec = car::recode(dat99$educ,
+                                              "3001:3004 = 1; 3005:3006 = 2;3008=2; 3010 = 3;3007 = 4"))             
 ```
 __Condificacion de educación__
 
@@ -191,8 +189,8 @@ dat09 <- cl09 %>% dplyr::select(v5,
                          v28,v30, # Salario justo     obrero y gerente
                          v33, # redistribucion
                          cl_degr, #Educacion
-                         v44, #Estatus subjetivo
-                         v6:v16,v47:v52) # meritocracia 
+                         v44, # Estatus Subjetivo
+                         v6:v16,v47:v52) # meritocracia
 #--- missing meritocracia -------------------------------------------------#
 # Percepcion
 dat09$v6  <- car::recode(dat09$v6 ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
@@ -233,10 +231,8 @@ dat09$v52  <-sjmisc::rec(dat09$v52 ,rec="rev")# invertir sentido escala
 # Redistribucion
 dat09$v33 <- car::recode(dat09$v33,"c(8,9)=NA",as.numeric = TRUE)
 dat09$v33 <- sjmisc::rec(dat09$v33,rec="rev")
-# Estatus subj
-
-dat09$v44 <- car::recode(dat09$v44,"c(98,99)=NA",as.numeric = TRUE)
-
+# Estatus Subjetivo
+dat09$v44 <- car::recode(dat09$v44,"c(97,98,99)=NA",as.numeric = TRUE)
 
 # Rename variables
 dat09 <- dplyr::rename(dat09,
@@ -263,7 +259,7 @@ dat09 <- dplyr::rename(dat09,
                 gdwrk=v51,
                 effor=v52,
                 redis= v33,
-                estsubj= v44)
+                ess=v44)
 #--- missing brechas -------------------------------------------------#
 dat09 <- dat09 %>%
   mutate(salperobr=replace(salperobr, salperobr <= 40000 | salperobr>= 1000000, NA)) %>%
@@ -287,14 +283,12 @@ dat09$educ_rec <- car::recode(dat09$educ_rec,"c(99)=NA",as.numeric = TRUE)
 ```
 
 ```{r agno 2019}
-table(cl19$m2_p13a)
-
-  dat19 <- cl19 %>% dplyr::select(m2_p2_presidente,m2_p2_obrero,  # Salario percibio obrero y gerente
-                           m2_p3_presidente,m2_p3_obrero,  # Salario justo    obrero y gerente
-                           m2_p4_2, # redistribucion
-                           m2_p13a, #Estatus subjetivo
-                           ds_p4, # Educacion
-                           m2_p1_1:m2_p1_11,m2_p14_1:m2_p14_4) # meritocracia 
+dat19 <- cl19 %>% dplyr::select(m2_p2_presidente,m2_p2_obrero,  # Salario percibio obrero y gerente
+                         m2_p3_presidente,m2_p3_obrero,  # Salario justo    obrero y gerente
+                         m2_p4_2, # redistribucion
+                         ds_p4, # Educacion
+                         m2_p13a, #Estatus subjetivo
+                         m2_p1_1:m2_p1_11,m2_p14_1:m2_p14_4)  # meritocracia
 #--- missing meritocracia -------------------------------------------------#
 # Percepcion
 dat19$m2_p1_1  <- car::recode(dat19$m2_p1_1  ,"c(8,9)=NA",as.numeric = TRUE) # Recodificación missing
@@ -331,8 +325,9 @@ dat19$m2_p14_4  <-sjmisc::rec(dat19$m2_p14_4 ,rec="rev")# invertir sentido escal
 #Redistribucion
 dat19$m2_p4_2 <- car::recode(dat19$m2_p4_2 ,"c(8,9)=NA",as.numeric = TRUE)
 dat19$m2_p4_2  <-sjmisc::rec(dat19$m2_p4_2 ,rec="rev")# invertir sentido escala
-#Estatus subjetivo
+# Estatus subjetivo
 dat19$m2_p13a <- car::recode(dat19$m2_p13a ,"c(88,99)=NA",as.numeric = TRUE)
+
 
 # Rename variables
 dat19 <- dplyr::rename(dat19,
@@ -356,7 +351,7 @@ dat19 <- dplyr::rename(dat19,
                 hchil=m2_p14_3,
                 gdwrk=m2_p14_4,
                 redis = m2_p4_2,
-                estsubj = m2_p13a)
+                ess=m2_p13a)
 #--- missing brechas -------------------------------------------------#
 dat19 <- dat19 %>%
   mutate(salperobr=replace(salperobr, salperobr <= 40000 | salperobr>= 1000000, NA)) %>%
@@ -383,9 +378,6 @@ dat09$year <- 2009
 dat19$year <- 2019
 clw3<- bind_rows(dat99,dat09)
 clw3<- bind_rows(clw3,dat19)
-clw3 <- clw3 %>%  select(year,"salperobr","salperger","saljusobr","saljusger","gap_perc","lngap_perc","gap_just","lngap_just", "educ_rec",everything())
+clw3 <- clw3 %>%  select(year,"salperobr","salperger","saljusobr","saljusger","gap_perc","lngap_perc","gap_just","lngap_just", "educ_rec","ess",everything())
 save(clw3,file = "data/dataproc/issp9919.RData")
 ```
-
-
-
