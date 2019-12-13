@@ -26,6 +26,7 @@ library(dplyr)
 library(sjlabelled)
 library(sjPlot)
 library(ggplot2)
+library(ggpubr)
 library(knitr)
 library(kableExtra)
 library(GPArotation)
@@ -304,7 +305,7 @@ salario_per <-  ggplot(data=table_pertot, aes(x=reorder(as.factor(year),-median)
     coord_flip()
 
 salario_per
- ggsave(salario_per,filename = "images/salario_per.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ ggsave(salario_per,filename = "images/salario_per.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 
 ```
 
@@ -387,7 +388,7 @@ salario_justo <- ggplot(data=table_justot, aes(x=reorder(as.factor(year),-median
      labs(fill = " ") +
     coord_flip()
 
- ggsave(salario_justo,filename = "images/salario_justo.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ ggsave(salario_justo,filename = "images/salario_justo.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
  
  salario_justo
 
@@ -466,7 +467,7 @@ table_gap_total$ocup2 <- factor(table_gap_total$ocup, levels=c(2,1), labels=c("j
      labs(fill = " ") +
     coord_flip()
  
- ggsave(brechas,filename = "images/Brechas.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ ggsave(brechas,filename = "images/Brechas.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 
 brechas
 ```
@@ -1034,11 +1035,17 @@ labess <-  c("Más bajo",2,3,4,5,6,7,8,9,"Más alto")
 
 ## Subjective status and percieved salary gap
 
-```{r scatter ess-lnperc}
+```{r scatter ess-lnperc, results='hold'}
+#--- Year 1999---------------------------------------------------------------#
+essplot <- ggplot(data = subset(clw3,year==1999), aes(ess)) +
+  geom_histogram(alpha=0.4,binwidth = 0.5) +
+   theme_transparent() 
+essplot <- ggplotGrob(essplot)
+
 plot01a<- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_perc)) +
   geom_point() +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
-  geom_jitter(width = 0.9, height = 0.9) + 
+  geom_jitter(width = 0.9, height = 0.9) +
   geom_smooth(method='lm') +
   xlab(label = "Estatus Social Subjetivo")+
   ylab(label = "Becha salarial percibida")+
@@ -1054,9 +1061,13 @@ plot01a<- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_perc)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
+plot01a + annotation_custom(grob = essplot, xmin = 0, xmax = 10,ymin = 0.9162907, ymax = 10)
 plot01a
-ggsave(plot01a,filename = "images/ess_lnperc99.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot01a,filename = "images/ess_lnperc99.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
+#--- Year 2009---------------------------------------------------------------#
 
+essplot2 <- ggplot(data = subset(clw3,year==2009), aes(ess)) + geom_bar(alpha=0.4,binwidth = 0.5) + theme_transparent()
+essplot2 <- ggplotGrob(essplot2)
 
 plot01b<-ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_perc)) +
   geom_point() +
@@ -1077,8 +1088,14 @@ plot01b<-ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_perc)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
+plot01b <- plot01b + annotation_custom(grob = essplot2)
 plot01b
-ggsave(plot01b,filename = "images/ess_lnperc09.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot01b,filename = "images/ess_lnperc09.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
+
+#--- Year 2019---------------------------------------------------------------#
+
+essplot3 <- ggplot(data = subset(clw3,year==2019), aes(ess)) + geom_histogram(alpha=0.4,binwidth = 0.5) + theme_transparent()
+essplot3 <- ggplotGrob(essplot3)
 
 plot01c<-ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_perc)) +
   geom_point() +
@@ -1099,8 +1116,15 @@ plot01c<-ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_perc)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
+plot01c <- plot01c + annotation_custom(grob = essplot3)
 plot01c
-ggsave(plot01c,filename = "images/ess_lnperc19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot01c,filename = "images/ess_lnperc19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
+
+#--- Year 1999 to 2019---------------------------------------------------------------#
+
+essplot4 <- ggplot(data = clw3, aes(ess)) + geom_histogram(alpha=0.4,binwidth = 0.5) + theme_transparent()
+essplot4 <- ggplotGrob(essplot4)
+
 plot01d<-ggplot(data=clw3, aes(ess, y=lngap_perc)) +
   geom_point() +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
@@ -1120,8 +1144,9 @@ plot01d<-ggplot(data=clw3, aes(ess, y=lngap_perc)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
+plot01d <- plot01d  + annotation_custom(grob = essplot4,xmin = 0.03,xmax = 10.9,ymin = -1.9)
 plot01d
-ggsave(plot01d,filename = "images/ess_lnperc99_19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot01d,filename = "images/ess_lnperc99_19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 ```
 
 ## Subjective status and just salary gap
@@ -1147,7 +1172,7 @@ plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
          panel.grid = element_blank(),
          panel.border = element_blank())
 plot02a
-ggsave(plot02a,filename = "images/ess_lnjust99.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot02a,filename = "images/ess_lnjust99.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 
 plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
   geom_point() +
@@ -1169,7 +1194,7 @@ plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
          panel.grid = element_blank(),
          panel.border = element_blank())
 plot02b
-ggsave(plot02b,filename = "images/ess_lnjust09.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot02b,filename = "images/ess_lnjust09.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 
 plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
   geom_point() +
@@ -1191,7 +1216,7 @@ plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
          panel.grid = element_blank(),
          panel.border = element_blank())
 plot02c
-ggsave(plot02c,filename = "images/ess_lnjust19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot02c,filename = "images/ess_lnjust19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 
 plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
   geom_point() +
@@ -1213,6 +1238,6 @@ plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
          panel.grid = element_blank(),
          panel.border = element_blank())
 plot02d
-ggsave(plot02d,filename = "images/ess_lnjust19_19.png",device = "png",width = 30,height = 15,dpi = "retina",units = "cm")
+ggsave(plot02d,filename = "images/ess_lnjust19_19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 ```
 
