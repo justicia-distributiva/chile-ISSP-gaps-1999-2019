@@ -19,6 +19,7 @@ Los correspondientes html son generados luego de renderizar
 
 ### Estructura carpetas
 
+```
 ├── bib: contiene la el/los archivo(s) .bib
 ├── data: carpetas de datos
 │   ├── dataraw: archivos originales, readme.md documenta fuente
@@ -26,3 +27,5 @@ Los correspondientes html son generados luego de renderizar
 ├── images
 ├── outputs: versiones del paper para publicación o presentaciones
 ├── refdocs: cualquier otro documento que se pueda utilizar como referencia (papers, códigos, etc.)
+
+```
