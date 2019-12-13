@@ -783,7 +783,7 @@ kable(table2,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de sala
 ## Brecha estimada (log)
 ```
 
-```{r Tablas descriptivos ln(gaps)}
+```{r Tablas descriptivos ln(gaps), eval=FALSE, include=FALSE}
 # Tabla 1 ****************************************************************************************
 table1b<- rbind(psych::describe(log(salarios99$gap_perc)),
                psych::describe(log(salarios09$gap_perc)),
@@ -803,27 +803,27 @@ kable(table2b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(
 
 # Tabla 3 ****************************************************************************************
 
-table3b<- rbind(psych::describe(log(sal99$gap_just)),
-               psych::describe(log(sal09$gap_just)),
-               psych::describe(log(sal19$gap_just)))
-
-rownames(table3b) <- c("1999","2009","2019")
-table3b <- table3b %>% select(n,mean,sd,median,trimmed,min,max)
-
-kable(table3b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling() %>%
-footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
-
-# Tabla 4 ****************************************************************************************
-
-table4b<- rbind(psych::describe(log(sal99$gap_perc)),
-               psych::describe(log(sal09$gap_perc)),
-               psych::describe(log(sal19$gap_perc)))
-
-rownames(table4b) <- c("1999","2009","2019")
-table4b <- table4b %>% select(n,mean,sd,median,trimmed,min,max)
-
-kable(table4b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario percibido) por año") %>% kable_styling() %>%
-footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+# table3b<- rbind(psych::describe(log(sal99$gap_just)),
+#                psych::describe(log(sal09$gap_just)),
+#                psych::describe(log(sal19$gap_just)))
+# 
+# rownames(table3b) <- c("1999","2009","2019")
+# table3b <- table3b %>% select(n,mean,sd,median,trimmed,min,max)
+# 
+# kable(table3b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario justo) por año") %>% kable_styling() %>%
+# footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
+# 
+# # Tabla 4 ****************************************************************************************
+# 
+# table4b<- rbind(psych::describe(log(sal99$gap_perc)),
+#                psych::describe(log(sal09$gap_perc)),
+#                psych::describe(log(sal19$gap_perc)))
+# 
+# rownames(table4b) <- c("1999","2009","2019")
+# table4b <- table4b %>% select(n,mean,sd,median,trimmed,min,max)
+# 
+# kable(table4b,row.names = TRUE, digits = 2,caption = "Tabla: Brecha total de ln(salario percibido) por año") %>% kable_styling() %>%
+# footnote(general = "Calculo realizado sin casos extremos superiores e inferiores \n Media recortada sin el 5% de cada extremo")
 
 ```
 
@@ -1274,7 +1274,7 @@ labess <-  c("Más bajo",2,3,4,5,6,7,8,9,"Más alto")
 
 ## Subjective status and percieved salary gap
 
-```{r scatter ess-lnperc, results='hold'}
+```{r scatter ess-lnperc, results='hold',eval=FALSE}
 #--- Year 1999---------------------------------------------------------------#
 essplot <- ggplot(data = subset(clw3,year==1999), aes(ess)) +
   geom_histogram(alpha=0.4,binwidth = 0.5) +
@@ -1390,7 +1390,7 @@ ggsave(plot01d,filename = "images/ess_lnperc99_19.png",device = "png",width = 20
 
 ## Subjective status and just salary gap
 
-```{r scatter ess-lnjust}
+```{r scatter ess-lnjust, eval=FALSE}
 #--- Year 1999---------------------------------------------------------------#
 plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
   geom_point() +

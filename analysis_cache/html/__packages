@@ -3,9 +3,10 @@ dplyr
 sjlabelled
 sjPlot
 ggplot2
+magrittr
+ggpubr
 knitr
 kableExtra
 GPArotation
 lavaan
-Cairo
 corrplot
