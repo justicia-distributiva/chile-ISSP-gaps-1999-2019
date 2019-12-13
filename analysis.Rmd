@@ -378,7 +378,7 @@ bar2
 
 table_justot$ocup2 <- factor(table_justot$ocup, levels=c(2,1), labels=c("Gerente", "Obrero"))
 
-salario_justo <- ggplot(data=table_justot, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+salario_justo <- ggplot(data=table_justot, aes(x=reorder(as.factor(year),-year), y=median, fill=ocup2)) +
      geom_bar(position = 'dodge', stat='identity') +
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
@@ -457,7 +457,7 @@ bar3
 
 table_gap_total$ocup2 <- factor(table_gap_total$ocup, levels=c(2,1), labels=c("justa", "percibida"))
 
- brechas <- ggplot(data=table_gap_total, aes(x=reorder(as.factor(year),-median), y=median, fill=ocup2)) +
+ brechas <- ggplot(data=table_gap_total, aes(x=reorder(as.factor(year),-year), y=median, fill=ocup2)) +
      geom_bar(position = 'dodge', stat='identity') +
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
