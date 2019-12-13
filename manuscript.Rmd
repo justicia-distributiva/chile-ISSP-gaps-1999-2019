@@ -19,7 +19,9 @@ rm(list=ls())
 
 <div style="text-align: justify">
 
-# Cambios en la percepción y justificación de desigualdad salarial en Chile 1999-2009
+<h1> Cambios en la percepción y justificación de desigualdad salarial en Chile 1999-2009 </h1>
+
+**Juan Carlos Castillo, Luis Maldonado, Julio Iturra & Francisco Meneses**
 
 
 # Introducción
@@ -54,7 +56,7 @@ El utilizar brechas salariales posee ventajas técnicas en términos de medició
 
 A continuación, nos abocaremos a exponer las percepciones y justificaciones de los ciudadanos respecto a las diferencias salariales entre obreros y gerentes. Para ello utilizaremos la mediana reportada por los entrevistados la cual es un buen indicador de tendencia central al no estar afectado por los altos valores de los extremos.
 
-## Grafico 1:  salario percibido del obrero y el gerente entre 1999 y 2019
+**Grafico 1:  salario percibido del obrero y el gerente entre 1999 y 2019**
 
 ![](images/salario_per.png)
 
@@ -64,7 +66,7 @@ Resulta interesante que la mediana del salario el obrero coincide en todos los a
 
 El siguiente gráfico nos muestra las medianas de los salarios considerados justos para los tres puntos en el tiempo analizados:
 
-## Grafico 2: Salario justo para un obrero y un gerente entre 1999 y 2019
+**Grafico 2: Salario justo para un obrero y un gerente entre 1999 y 2019**
 
 ![](images/salario_justo.png)
 
@@ -78,7 +80,7 @@ Respecto al salario considerado justo para los gerentes, podemos ver que es la m
 
 Para analizar la distribución de los recursos de manera relativa evaluaremos la relación entre la brecha salariales percibidas y justas. Para ello se divide en cada caso el salario del gerente por el salario del obrero, y por lo tanto se obtiene una magnitud que indica cuántas veces mas se percibe que gana un gerente en relación a un obrero (brecha percibida), así como también cuántas veces debería ganar un gerente más que un obrero.
 
-## Grafico 3:  Comparacion de las brechas salariales obrero-gerente, percibida y  justa, entre 1999 y 2019
+**Grafico 3:  Comparacion de las brechas salariales obrero-gerente, percibida y  justa, entre 1999 y 2019**
 
 ![](images/Brechas.png)
 
@@ -87,5 +89,23 @@ Como muestra el gráfico 3, durante todo el periodo analizado la brecha consider
 Por su parte, las brechas consideradas justas también han disminuido, es decir, las personas cada vez justifican menores diferencias de salarios. Mientras en 1999 las personas consideraban justo que un gerente pudiera ganar 10 veces lo que un obrero, hoy solo consideran justo que gane 7,5 veces más. Dicho de otro modo, si un obrero debería ganar un salario de $500.000, un gerente debería ganar $3.750.000.
 
 En suma, en términos absolutos, podemos decir que, si bien se ha percibido un aumento de los salarios, las personas consideran injustos los sueldos tanto de los gerentes como de los obreros, los primeros por sobrevaloración y los segundos por subvaloración. Igualmente, llama la atención que la mediana del salario justo considerado para el obrero es un salario que permite estar por sobre la línea de la pobreza para una familia de 4 personas y la mediana del salario percibido para un gerente se encuentra próximo a las estimaciones de empresas especializadas en los salarios para altos cargos. Ambos puntos dan cuenta de un relativo conocimiento de la economía, que incluye una percepción correcta de los altos salarios, la desigualdad y los ingresos necesarios para vivir. En términos relativos, el 2019, si bien la brecha percibida ha disminuido, la gente percibe que estas son 3 veces mayores a las que se consideran justas. Esto nos indica que las desigualdades percibidas en Chile exceden lo que las personas están dispuestas a respaldar, lo cual genera un contexto propicio para grandes movilizaciones contra la desigualdad.
+
+# Percepción, Justificación y estatus
+
+En esta sección ...
+
+## Rol del nivel educacional
+
+...
+
+## Estatus subjetivo y brechas salariales
+
+...
+
+# Conclusión
+
+...
+
+
 
 <div/>
