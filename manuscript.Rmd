@@ -125,7 +125,7 @@ Investigaciones previas han empleado como marco interpretativo una versión exte
 
 @Schneider2015 evidenciaron que un mayor estatus subjetivo se relaciona con una mayor justificación de la desigualdad, así también se da mayor relevancia a los factores individuales para explicar pobreza y menos relevancia a factores externos. Por otro lado, @Castilloetal2019 pesquisaron la relación entre percepción de desigualdad y meritocracia, evidenciando que un mayor estatus subjetivo se relaciona con una menor percepción de desigualdad, y a su vez se relaciona con una mayor percepción de meritocracia. En una línea similar, @Vargas-Salfate2018 evidenciaron que un mayor estatus subjetivo se relaciona con una percepción positiva del sistema distributivo.
 
-![](images/ess_lnperc99_19.png)
+![](images/ess_lnperc99_19.png) 
 
 ![](images/ess_lnjust99_19.png)
 

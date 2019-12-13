@@ -1478,7 +1478,7 @@ plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
-plot02d <- plot02d + annotation_custom(grob = essplot4,xmin = 0.03,xmax = 10.9,ymin = -6)
+plot02d <- plot02d + annotation_custom(grob = essplot4,xmin = 0.03,xmax = 10.9,ymin = -5.5)
 ggsave(plot02d,filename = "images/ess_lnjust99_19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 ```
 
