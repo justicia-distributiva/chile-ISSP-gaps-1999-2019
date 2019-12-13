@@ -1152,6 +1152,7 @@ ggsave(plot01d,filename = "images/ess_lnperc99_19.png",device = "png",width = 20
 ## Subjective status and just salary gap
 
 ```{r scatter ess-lnjust}
+#--- Year 1999---------------------------------------------------------------#
 plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
   geom_point() +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
@@ -1173,7 +1174,7 @@ plot02a <- ggplot(data=subset(clw3,year==1999), aes(ess, y=lngap_just)) +
          panel.border = element_blank())
 plot02a
 ggsave(plot02a,filename = "images/ess_lnjust99.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
-
+#--- Year 2009---------------------------------------------------------------#
 plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
   geom_point() +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
@@ -1195,7 +1196,7 @@ plot02b <- ggplot(data=subset(clw3,year==2009), aes(ess, y=lngap_just)) +
          panel.border = element_blank())
 plot02b
 ggsave(plot02b,filename = "images/ess_lnjust09.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
-
+#--- Year 2019---------------------------------------------------------------#
 plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
   geom_point() +
   scale_x_discrete(limits=levels(factor(clw3$ess)),labels=labess) +
@@ -1217,6 +1218,7 @@ plot02c <- ggplot(data=subset(clw3,year==2019), aes(ess, y=lngap_just)) +
          panel.border = element_blank())
 plot02c
 ggsave(plot02c,filename = "images/ess_lnjust19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
+#--- Year 1999-2019---------------------------------------------------------------#
 
 plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
   geom_point() +
@@ -1237,7 +1239,7 @@ plot02d <- ggplot(data=clw3, aes(ess, y=lngap_just)) +
          plot.caption = element_text(hjust=1,size = 10,face = "plain"),
          panel.grid = element_blank(),
          panel.border = element_blank())
-plot02d
-ggsave(plot02d,filename = "images/ess_lnjust19_19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
+plot02d <- plot02d + annotation_custom(grob = essplot4,xmin = 0.03,xmax = 10.9,ymin = -6)
+ggsave(plot02d,filename = "images/ess_lnjust99_19.png",device = "png",width = 20,height = 15,dpi = "retina",units = "cm")
 ```
 
