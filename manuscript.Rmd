@@ -5,7 +5,6 @@ output:
     html_document:
         smart: false
         toc: true
-        toc_float: true
         number_sections: true
 bibliography: "refdocs/biblio.bib"
 csl: "refdocs/apa6.csl"
@@ -22,7 +21,7 @@ rm(list=ls())
 
 <h1> Cambios en la percepción y justificación de desigualdad salarial en Chile 1999-2009 </h1>
 
-**Juan Carlos Castillo, Luis Maldonado, Julio Iturra & Francisco Meneses**
+**Juan Carlos Castillo, Francisco Meneses, Julio Iturra & Luis Maldonado**
 
 
 # Introducción
@@ -91,13 +90,9 @@ Como muestra el gráfico 3, durante todo el período analizado la brecha conside
 
 Por su parte, las brechas consideradas justas también han disminuido. Mientras en 1999 las personas consideraban justo que un gerente pudiera ganar 10 veces lo que un obrero, hoy solo consideran justo que gane 7,5 veces más. En suma, en términos absolutos, podemos decir que, si bien se ha percibido un aumento de los salarios, las personas consideran injustos los sueldos tanto de los gerentes como de los obreros, los primeros por sobrevaloración y los segundos por subvaloración. Igualmente, llama la atención que la mediana del salario justo considerado para el obrero es un salario que permite estar por sobre la línea de la pobreza para una familia de 4 personas y la mediana del salario percibido para un gerente se encuentra próximo a las estimaciones de empresas especializadas en los salarios para altos cargos. Ambos puntos dan cuenta de un relativo conocimiento de la economía, que incluye una percepción correcta de los altos salarios, la desigualdad y los ingresos necesarios para vivir. En términos relativos, el 2019, si bien la brecha percibida ha disminuido, la gente percibe que las diferencias entre salarios de alto y bajo estatus son 3 veces mayores a las que se consideran justas. Esto nos indica que las desigualdades en Chile exceden en gran medida lo que las personas están dispuestas a tolerar, y que esto ha ido en aumento en el tiempo a pesar de una disminución en la percepción de brechas salariales.
 
-# Percepción, Justificación y estatus
+# Percepción, Justificación y educación
 
-En esta última sección se presenta el análisis de la relación entre variables de estatus socioeconómico y las brechas presentadas anteriormente. Para ello consideraremos en primer lugar el nivel educacional como un proxy de estatus objetivo, y finalmente revisaremos la variable de estatus subjetivo.
-
-## Rol del nivel educacional
-
-Para poder aproximarnos a la opinión de distintos grupos sociales en relación a brechas percibidas y justas, consideraremos distintos niveles educativos, los cuales aparecen en el gráfico siguiente:
+En esta segunda sección se presenta el análisis de la relación entre variables de estatus socioeconómico y las brechas analizadas anteriormente. Para ello consideraremos el nivel educacional como un proxy de estatus objetivo. Los niveles educacionales considerados se presentan en el siguiente gráfico en relación a la brecha percibida:
 
 **Grafico 4:  Brecha salarial percibida y nivel educacional entre 1999 y 2019**
 
@@ -112,32 +107,6 @@ Tal como nos muestra el gráfico 4, la brecha salarial que perciben los distinto
 Analizando ahora las brechas consideradas justas, se aprecia que los valores son muy distintos a las brechas percibidas. En 1999 el grupo que percibe mayores brechas considera que el gerente gana 50 veces más que el obrero, mientras considera justo que gane solo 15 veces más. El 2019 el grupo que mayor brecha percibe cree que el gerente gana 29 veces más que el obrero, mientras que considera justo solo que gane 10 veces más.  Si bien, ha disminuido la diferencia entre lo justo y lo que se percibe, aun las brechas percibidas son 3 veces más que las consideradas justas.  Podría pensarse que los grupos universitarios, en base a su esfuerzo educativo y a la mayor posibilidad de acceder a esos puestos, podrían estar más de acuerdo con las diferencias existentes, no obstante, este grupo privilegiado en la sociedad considera que las diferencias salariales son mucho mayores de lo que deberían.
 
 Dado que los grupos de menor estatus son los que perciben menor desigualdad, es posible pensar que que exponer a estos grupos a información objetiva sobre las diferencias salariales (que son mucho mayores a lo que ellos perciben), podría llevarlos a hacer una reevaluación de la justicia salarial, llevándolos a encontrarla aun más injusta. Si consideramos además que en la actualidad la información es mucho mas fluida, podemos pensar que la exposición a indicadores de desigualdad puede transformarse en una presión en contra de la desigualdad.
-
-## Estatus Social subjetivo, percepción y justificación de brechas salariales
-
-La relación entre el estatus objetivo y la percepción que tienen los individuos respecto a su posición en la estructura social ha sido un tema recurrente en sociología y psicología social. Autores clásicos como @marx1979 sugieren que la conciencia del mundo es el reflejo de las condiciones de vida objetivas de los individuos, las cuales están dadas principalmente por el lugar que ocupan en las relaciones sociales de producción. En una impronta similar, @lukacs1969 sostiene que la "conciencia de clase" es un fenómeno que trasciende las apreciaciones psicológicas individuales, en la medida que tiene un carácter relacional con la totalidad económica y social, desde donde "emerge" una conciencia colectiva que orienta las apreciaciones individuales.
-
-Desde una aproximación vinculada a la psicología social, se ha argumentado que las apreciaciones del mundo que detentan los individuos son dados por procesos de ajuste cognitivo denominados "heurísticas" [@Evans1992; @Evans2017]. @festinger1954theory sugiere que los individuos prefieren compararse con personas o grupos que consideran similares en términos de estatus, de modo tal que emplean estos grupos como referencia para reducir disonancia cognitiva, con el objetivo de realizar estimaciones más certeras de su propia situación en el la sociedad.
-
-En la literatura sobre percepción de estatus social, ha sido relevante la discusión cómo realizar la medición de este fenómeno, así como también cuáles son sus implicancias empíricas. @Evans2004 sugieren que preguntas cerradas con categorías como *clase trabajadora* se enfrentan a la dificultad de ser validadas comparativamente para ser empleada en estudios internacionales. Además, obliga a los individuos a situarse en categorías cerradas, lo cual implica la posibilidad de que el concepto como *clase social* sea interpretado desde una óptica propia de la idiosincrasia política de cada sociedad. Por otro lado, el concepto de **Estatus Social Subjetivo**, entendido como la percepción que tienen los individuos respecto a su posición en la jerarquía social, ha sido abordado empíricamente a través de la utilización de escalas abstractas que permiten a los entrevistados situarse libremente en un continuo con un límite inferior y superior, los cuales buscan representar las posiciones estatus social más bajo y más alto en la sociedad [@Castillo2013; @Evans2004; @Lindemann2014].
-
-En su trabajo reciente, @Andersson2018a pesquisó la relación entre el nivel de ingresos, educación y ocupación con el estatus social subjetivo. Se demostró que el estatus socioeconómico de los individuos estaría fuertemente asociado con la percepción de estatus social. En efecto, el autor da cuenta de lo que otras investigaciones han evidenciado respecto a que existe una tendencia a situarse en la parte media de la distribución [@Evans2004; @Castillo2013; @Lindemann2014]. Un estudio realizado en Chile por @Castillo2013 sugiere que las variables socioeconómicas como ingresos, educación y la ocupación serían relevantes en explicar el estatus subjetivo, lo cual es coherente con los hallazgos encontrados por @Evans2004 y @Lindemann2014 en contexto comparado.
-
-@slomczynski1987 evidenciaron que las percepción de estatus social puede ser medida como un factor latente que explica la percepción en torno a distintas dimensiones relacionadas con el estatus social, representadas por la educación, ingresos, prestigio ocupacional, entre otras. En una línea similar, @Manstead2018 argumenta que cuando las personas son consultadas por su posición social, es poco frecuente que emerjan conceptos como *clase social*, sino que más bien se vuelven salientes las representaciones sociales en torno determinados símbolos de estatus como las ocupaciones o las credenciales educativas.
-
-Investigaciones previas han empleado como marco interpretativo una versión extendida de la Teoría del Grupo de Referencia (*Reference Group Theory*) desarrollada por @Merton1968 para argumentar que las apreciaciones subjetivas relacionadas con el estatus social, se explicarían por las comparaciones realizadas con sus grupos más cercanos como su familia, amigos y colegas [@Evans1992; @Lindemann2014]. Es posible argumentar que las apreciaciones subjetivas respecto del estatus social podrían explicar la percepción de fenómenos tales como la desigualdad económica, bajo el supuesto de que la comparación con otros grupos contribuye a la formación de juicios y percepciones sobre el grado de legitimidad que tiene la actual distribución económica.
-
-@Schneider2015 evidenciaron que un mayor estatus subjetivo se relaciona con una mayor justificación de la desigualdad, así también se da mayor relevancia a los factores individuales para explicar pobreza y menos relevancia a factores externos. Por otro lado, @Castilloetal2019 pesquisaron la relación entre percepción de desigualdad y meritocracia, evidenciando que un mayor estatus subjetivo se relaciona con una menor percepción de desigualdad, y a su vez se relaciona con una mayor percepción de meritocracia. En una línea similar, @Vargas-Salfate2018 evidenciaron que un mayor estatus subjetivo se relaciona con una percepción positiva del sistema distributivo.
-
-Los análisis realizados con los datos del ISSP muestran algunas particularidades relevantes cuando se contrastan con
-
-**Grafico 6:  Brecha salarial percibida y estatus social subjetivo**
-
-![](images/ess_lnperc99_19.png)
-
-**Grafico 7:  Brecha salarial justa y estatus social subjetivo**
-
-![](images/ess_lnjust99_19.png)
 
 # A modo de conclusión
 
