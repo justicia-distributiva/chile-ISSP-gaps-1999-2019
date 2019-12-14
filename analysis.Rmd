@@ -398,7 +398,7 @@ salario_justo <- ggplot(data=table_justot, aes(x=reorder(as.factor(year),-year),
 
 ## Brechas salariales. 
 
-### Brecha percivida 
+### Brecha percibida 
 ```{r}
 table_gap_perc<- rbind(psych::describe(salarios99$gap_perc),
                psych::describe(salarios09$gap_perc),
@@ -605,7 +605,7 @@ table_ed_gapper$ocup2 <- factor(table_ed_gapper$Educacion, levels=c(1,2,3,4), la
 
 # Horizontal
 
-table_ed_gapper <-  ggplot(data=table_ed_gapper, aes(x=reorder(as.factor(years),-median), y=median, fill=ocup2)) +
+table_ed_gapper <-  ggplot(data=table_ed_gapper, aes(x=reorder(as.factor(years),-years), y=median, fill=ocup2)) +
      geom_bar(position = 'dodge', stat='identity') +
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
@@ -698,7 +698,7 @@ table_ed_gapjus$ocup2 <- factor(table_ed_gapjus$Educacion, levels=c(1,2,3,4), la
 
 # Horizontal
 
-table_ed_gapjus <-  ggplot(data=table_ed_gapjus, aes(x=reorder(as.factor(years),-median), y=median, fill=ocup2)) +
+table_ed_gapjus <-  ggplot(data=table_ed_gapjus, aes(x=reorder(as.factor(years),-years), y=median, fill=ocup2)) +
      geom_bar(position = 'dodge', stat='identity') +
      geom_text(aes(label=format(median, big.mark = ",", scientific = FALSE), y=0), position=position_dodge(0.9), hjust=-0.25) +
      theme_bw(base_size = 12) +
